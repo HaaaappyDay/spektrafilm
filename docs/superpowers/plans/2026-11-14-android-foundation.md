@@ -32,10 +32,10 @@
 
 **Interfaces:** Produce exactly the nine core types/interfaces plus ExportRequest/ExportResult/EditorErrorCode specified in the contract. Consumers in #11–#14 must not need alternate models.
 
-- [ ] Pin SDK/AGP/Gradle/JDK/Kotlin/Compose versions; obtain the official wrapper and verify its distribution checksum.
-- [ ] Write contract tests for 1/0/0 defaults, immutable copies, error cause/code preservation and substitution of all four repositories/services. Observe failure before adding contracts.
-- [ ] Implement contract files with ownership, range and cancellation documentation.
-- [ ] Run `cd android && ./gradlew :app:testDebugUnitTest`; expect all tests passing.
+- [x] Pin SDK/AGP/Gradle/JDK/Kotlin/Compose versions; obtain the official wrapper and verify its distribution checksum.
+- [x] Write contract tests for 1/0/0 defaults, immutable copies, error cause/code preservation and substitution of all four repositories/services. Observe failure before adding contracts.
+- [x] Implement contract files with ownership, range and cancellation documentation.
+- [x] Run `cd android && ./gradlew :app:testDebugUnitTest`; expect all tests passing.
 
 ### Task 2: Installable, accessible empty shell
 
@@ -43,9 +43,9 @@
 
 **Interfaces:** Consume the resource/theme layer only; import remains disabled until #11. No production fakes.
 
-- [ ] Write Compose tests asserting the import action is disabled and the empty state is visible after recreation; check the installed manifest has GLES 3 and no requested permissions.
-- [ ] Implement an inset-aware, scrolling Material 3 empty state with localized labels and no fake results.
-- [ ] Run assemble/lint and the device tests when connected; retain explicit not-run status if device is unavailable.
+- [x] Write Compose tests asserting the import action is disabled and the empty state is visible after recreation; check the installed manifest has GLES 3 and no requested permissions.
+- [x] Implement an inset-aware, scrolling Material 3 empty state with localized labels and no fake results.
+- [x] Run assemble/lint and the device tests when connected; retain explicit not-run status if device is unavailable.
 
 ### Task 3: CI, documentation and review
 
@@ -53,10 +53,10 @@
 
 **Interfaces:** CI uses the same wrapper/tasks as local instructions and uploads the APK and reports.
 
-- [ ] Add Android-only CI with JDK setup, assembleDebug, testDebugUnitTest, lintDebug, artifact upload and an API 29 emulator job.
-- [ ] Document versions/sources, SDK setup, exact build/device commands, test strategy and current feature boundaries.
-- [ ] Run `./gradlew :app:assembleDebug :app:testDebugUnitTest :app:lintDebug`; inspect results and APK manifest. Check a clean checkout builds via CI.
-- [ ] Independently review the branch against #10; address findings and rerun affected checks.
+- [x] Add Android-only CI with JDK setup, assembleDebug, testDebugUnitTest, lintDebug, artifact upload and an API 29 emulator job.
+- [x] Document versions/sources, SDK setup, exact build/device commands, test strategy and current feature boundaries.
+- [x] Run `./gradlew :app:assembleDebug :app:testDebugUnitTest :app:lintDebug`; inspect results and APK manifest. Check a clean checkout builds via CI.
+- [x] Independently review the branch against #10; address findings and rerun affected checks.
 - [ ] Submit PR with evidence and `Closes #10`; merge only after required verification passes. Continue with #11.
 
 ## Execution decisions

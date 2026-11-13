@@ -144,4 +144,3 @@ v2 Auto #16 is an independent backlog item and does not block v1.
 2. Inspect current main and the build environment; work within the task's file ownership.
 3. Write falsifiable tests for core math, formats and concurrency; retain meaningful device validation.
 4. Report PR links, executed commands/results and unverified items. Writing tests is not evidence that they passed.
-
