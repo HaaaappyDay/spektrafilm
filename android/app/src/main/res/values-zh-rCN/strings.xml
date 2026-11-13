@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Film Editor</string>
+    <string name="empty_title">一张照片，一种新感受。</string>
+    <string name="empty_description">用胶片色彩，为照片增添温度。</string>
+    <string name="import_photo">导入照片</string>
+    <string name="foundation_notice">照片编辑功能将在后续版本开放。</string>
+</resources>
