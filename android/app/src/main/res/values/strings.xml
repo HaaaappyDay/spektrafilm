@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Film Editor</string>
+    <string name="empty_title">A new frame, a different feeling.</string>
+    <string name="empty_description">Bring your photos to life with film color.</string>
+    <string name="import_photo">Import photo</string>
+    <string name="foundation_notice">Photo editing will be available in a later build.</string>
+</resources>

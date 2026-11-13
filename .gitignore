@@ -190,3 +190,12 @@ uv.lock
 
 # claude
 .claude
+# Android local state and build output
+android/.gradle/
+android/.kotlin/
+android/**/build/
+android/local.properties
+android/*.jks
+android/*.keystore
+android/keystore.properties
+.superpowers/
