@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import androidx.lifecycle.ViewModelStore
 import io.github.haaaappyday.filmeditor.core.*
+import io.github.haaaappyday.filmeditor.diagnostics.*
 import kotlinx.coroutines.*
 import org.junit.Assert.*
 import org.junit.Test
@@ -60,14 +61,69 @@ class EditorViewModelTest {
     }
     private suspend fun await(predicate: () -> Boolean) = withTimeout(10_000) { while (!predicate()) delay(10) }
     private suspend fun main(action: () -> Unit) = withContext(Dispatchers.Main) { action() }
-    private suspend fun create(images: ImageRepository, renderer: FilmRenderer, sessions: Sessions, exporter: PhotoExporter? = null): Pair<EditorViewModel, ViewModelStore> = withContext(Dispatchers.Main) {
-        val vm = EditorViewModel(images, presets, renderer, sessions, exporter)
+    private suspend fun create(images: ImageRepository, renderer: FilmRenderer, sessions: Sessions, exporter: PhotoExporter? = null,
+        traces: PerformanceTrace = PerformanceTrace.app): Pair<EditorViewModel, ViewModelStore> = withContext(Dispatchers.Main) {
+        val vm = EditorViewModel(images, presets, renderer, sessions, exporter, traces = traces)
         vm to ViewModelStore().apply { put("editor", vm) }
     }
     private suspend fun ready(vm: EditorViewModel) {
         await { !vm.state.value.initializing }
         main { vm.importPhoto(Uri.parse("content://fixture/first")) }
         await { vm.state.value.previewValid }
+    }
+
+    private class Traces : TraceBackend {
+        override val enabled = true
+        val begun = java.util.Collections.synchronizedList(mutableListOf<Pair<String, Int>>())
+        val ended = java.util.Collections.synchronizedList(mutableListOf<Pair<String, Int>>())
+        override fun beginAsync(name: String, cookie: Int) { begun += name to cookie }
+        override fun endAsync(name: String, cookie: Int) { ended += name to cookie }
+        override fun beginSection(name: String) = Unit
+        override fun endSection() = Unit
+    }
+
+    @Test fun previewTraceIdentityFollowsAcceptedContentAndClosesSupersededQueuedWork() = runBlocking {
+        val backend = Traces(); val renderer = Renderer()
+        val (vm, store) = create(Images(), renderer, Sessions(), traces = PerformanceTrace(backend))
+        try {
+            ready(vm)
+            assertTrue(vm.state.value.previewTraceId > 0)
+            renderer.automatic = false
+            main { vm.setExposure(.1f) }; await { renderer.calls.size == 2 }
+            main { vm.setExposure(.2f) }; await { renderer.calls.size == 3 }
+            main { vm.setExposure(.3f); vm.setExposure(.4f) }
+            val latestId = backend.begun.last { it.first.startsWith("FilmPreview:") }.second
+            renderer.calls[1].gate.complete(Unit); renderer.calls[2].gate.complete(Unit)
+            await { renderer.calls.size == 4 }
+            renderer.calls.last().gate.complete(Unit)
+            await { vm.state.value.previewValid }
+            assertEquals(.4f, vm.state.value.params.exposureEv)
+            assertEquals(latestId, vm.state.value.previewTraceId)
+            await { backend.ended.size == backend.begun.size }
+            assertEquals(5, backend.begun.count { it.first.startsWith("FilmPreview:") }) // initial +4, including never-started .3
+            assertEquals(backend.begun.toSet(), backend.ended.toSet())
+            assertEquals(backend.ended.size, backend.ended.toSet().size)
+        } finally { renderer.finishAll(); main { store.clear() } }
+    }
+
+    @Test fun exportTraceIdentityCrossesIoDispatcherAndMatchesPublishedResult() = runBlocking {
+        val backend = Traces(); val seen = CompletableDeferred<TraceSpan?>()
+        val saver = object : PhotoExporter {
+            override suspend fun export(request: ExportRequest) = withContext(Dispatchers.IO) {
+                seen.complete(currentCoroutineContext()[ExportTraceContext]?.span)
+                ExportResult(Uri.parse("content://fixture/exported"), 4, 3)
+            }
+        }
+        val (vm, store) = create(Images(), Renderer(), Sessions(), saver, PerformanceTrace(backend))
+        try {
+            ready(vm); main { vm.export() }
+            val span = seen.await()
+            assertNotNull(span)
+            await { !vm.state.value.exporting }
+            assertNotNull(vm.state.value.exportResult)
+            assertEquals(span!!.id, vm.state.value.exportTraceId)
+            assertTrue(backend.ended.contains("FilmExport:${span.id}" to span.id))
+        } finally { main { store.clear() } }
     }
 
     @Test fun cancelledOldRenderCannotOverwriteNewerResultAndWorkIsBounded() = runBlocking {

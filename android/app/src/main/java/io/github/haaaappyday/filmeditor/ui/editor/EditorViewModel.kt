@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.haaaappyday.filmeditor.core.*
+import io.github.haaaappyday.filmeditor.diagnostics.PerformanceTrace
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
@@ -18,6 +19,7 @@ class EditorViewModel(
     private val sessions: SessionPersistence,
     private val exporter: PhotoExporter? = null,
     private val prepareExport: suspend () -> Unit = {},
+    private val traces: PerformanceTrace = PerformanceTrace.app,
 ) : ViewModel() {
     private val mutableState = MutableStateFlow(EditorUiState(exportAvailable = exporter != null))
     val state: StateFlow<EditorUiState> = mutableState.asStateFlow()
