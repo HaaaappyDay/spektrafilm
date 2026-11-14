@@ -34,8 +34,10 @@ class PhotoEditingFlowTest {
     private fun shell(command: String) = ParcelFileDescriptor.AutoCloseInputStream(
         instrumentation.uiAutomation.executeShellCommand(command)).bufferedReader().use { it.readText() }
     private fun hash(file: File) = MessageDigest.getInstance("SHA-256").digest(file.readBytes()).toList()
-    private fun slider(tag: String, value: Float) = compose.onNodeWithTag(tag).performScrollTo()
-        .performSemanticsAction(SemanticsActions.SetProgress) { it(value) }
+    private fun slider(tag: String, value: Float) {
+        compose.onNodeWithTag("adjust-$tag").performScrollTo().performClick()
+        compose.onNodeWithTag(tag).performScrollTo().performSemanticsAction(SemanticsActions.SetProgress) { it(value) }
+    }
 
     @Test fun allThreeFilmsManualControlsComparisonResetAndOfflineGalleryUseRealServices() {
         val gateway = AndroidMediaStoreGateway(context)
@@ -48,8 +50,8 @@ class PhotoEditingFlowTest {
             compose.runOnUiThread { editor = ViewModelProvider(compose.activity)[EditorViewModel::class.java] }
             compose.waitUntil(20_000) { !editor.state.value.initializing }
             assertNull(editor.state.value.error)
-            compose.onNodeWithTag("export").performScrollTo().assertIsNotEnabled()
-            compose.onNodeWithTag("strength").performScrollTo().assertIsNotEnabled()
+            compose.onNodeWithTag("export").assertDoesNotExist()
+            compose.onNodeWithTag("strength").assertDoesNotExist()
             compose.onAllNodesWithText("Auto", substring = true).assertCountEquals(0)
             compose.runOnUiThread { editor.importPhoto(fixtureUri("12mp.jpg")) }
             compose.waitUntil(30_000) { editor.state.value.previewValid }
@@ -58,18 +60,21 @@ class PhotoEditingFlowTest {
             val results = JSONArray()
             assertEquals(3, editor.state.value.presets.size)
             for (preset in editor.state.value.presets) {
+                compose.onNodeWithTag("tab-adjust").performClick()
                 slider("strength", .43f); slider("exposure", .6f); slider("temperature", -35f)
-                compose.onNodeWithTag("preset-selector").performScrollTo().performClick()
-                compose.onAllNodesWithText(preset.displayName).onLast().performClick()
+                compose.onNodeWithTag("tab-films").performClick()
+                compose.onNodeWithTag("preset-${preset.id}").performScrollTo().performClick()
                 compose.waitUntil(30_000) { editor.state.value.previewValid }
                 assertEquals(EditParams(preset.id, .43f, .6f, -35f), editor.state.value.params)
-                compose.onNodeWithTag("original").performScrollTo().performClick().assertIsSelected()
+                compose.onNodeWithTag("original").performClick().assertIsSelected()
                 assertSame(editor.state.value.input, editor.state.value.displayedBitmap)
                 compose.onNodeWithTag("original").performClick().assertIsNotSelected()
                 assertSame(editor.state.value.preview, editor.state.value.displayedBitmap)
+                compose.onNodeWithTag("tab-adjust").performClick()
                 compose.onNodeWithTag("reset").performScrollTo().performClick()
                 compose.waitUntil(30_000) { editor.state.value.previewValid }
                 assertEquals(EditParams(preset.id), editor.state.value.params)
+                compose.onNodeWithTag("tab-export").performClick()
                 compose.onNodeWithTag("export").performScrollTo().assertIsEnabled().performClick()
                 compose.waitUntil(90_000) { !editor.state.value.exporting }
                 assertNull(editor.state.value.error)

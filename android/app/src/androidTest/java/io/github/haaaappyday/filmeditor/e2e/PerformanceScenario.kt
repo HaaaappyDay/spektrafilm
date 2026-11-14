@@ -128,7 +128,17 @@ class PerformanceScenario {
         .put("bounds", Rect().also(node::getBoundsInScreen).toShortString())
         .put("actions", JSONArray(node.actionList.map { it.id }))
         .put("range", node.rangeInfo?.let { JSONObject().put("min", it.min).put("max", it.max).put("current", it.current) } ?: JSONObject.NULL)
+    private fun selectControl(labelId: Int) {
+        val label = context.getString(labelId)
+        var node = visible { it.text?.toString() == label }
+        while (!node.isClickable) node = checkNotNull(node.parent)
+        check(node.isEnabled && node.performAction(AccessibilityNodeInfo.ACTION_CLICK))
+        settled()
+    }
     private fun change(index: Int): JSONObject {
+        // Navigation is setup, outside the measured slider input/presentation span.
+        selectControl(R.string.tab_adjust)
+        selectControl(R.string.film_strength)
         val label = context.getString(R.string.film_strength)
         var slider = visible { it.contentDescription?.toString() == label }
         // Material3 exposes the label as a child of the actionable SeekBar.
@@ -163,6 +173,7 @@ class PerformanceScenario {
             check(state.error == null) { "Import failed: ${state.error}" }
             state.previewValid && state.source?.id != previous && !state.importing
         }
+        await("three current-source film thumbnails") { editor.state.value.presetThumbnails.size == 3 }
         settled()
     }
     private fun snapshot(index: Int, phase: String): JSONObject {
@@ -172,6 +183,7 @@ class PerformanceScenario {
         SystemClock.sleep(100)
         PerformanceTrace.app.mark("FilmResourceSnapshot", index + 1)
         return memory().put("index", index).put("phase", phase)
+            .put("filmThumbnails", editor.state.value.presetThumbnails.size)
             .put("threads", File("/proc/self/task").list()?.size ?: JSONObject.NULL)
             .put("fileDescriptors", File("/proc/self/fd").list()?.size ?: JSONObject.NULL)
     }
@@ -188,6 +200,7 @@ class PerformanceScenario {
     }
 
     private fun exportOnce(sampler: MemorySampler): JSONObject {
+        selectControl(R.string.tab_export)
         val label = context.getString(R.string.export_photo)
         var node = visible { it.text?.toString() == label }
         while (!node.isClickable) node = checkNotNull(node.parent)
