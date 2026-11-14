@@ -215,6 +215,62 @@ class MediaStorePhotoExporterTest {
             metadata(preserved)
         } finally { h.close() }
     }
+    @Test fun failedPublishedRollbackBlocksRetryUntilThatInvocationIsCleaned() = runBlocking {
+        for (cancelAfterPublish in listOf(false, true)) {
+            val h = Harness()
+            try {
+                val source = h.source("orientation-1.jpg")
+                val originalHash = hash(File(source.localPath))
+                val request = ExportRequest(source, EditParams("kodak_portra_400"))
+                val previous = h.exporter.export(request)
+                val coordinator = ExportCoordinator(h.exporter, h.exporter::recover)
+                h.gateway.refuseDelete = true
+                if (cancelAfterPublish) {
+                    lateinit var operation: Deferred<ExportResult>
+                    h.gateway.afterPublish = { operation.cancel() }
+                    operation = async(start = CoroutineStart.LAZY) { coordinator.export(request) }
+                    operation.start()
+                    try { operation.await(); fail("Cancellation returned success") } catch (_: CancellationException) { }
+                } else {
+                    h.gateway.afterPublish = { throw IOException("Provider committed publication then failed") }
+                    try { coordinator.export(request); fail("Publication error returned success") }
+                    catch (error: EditorException) { assertEquals(EditorErrorCode.EXPORT_FAILED, error.code) }
+                }
+                h.gateway.afterPublish = null
+                val failedUri = h.gateway.created.last()
+                assertTrue(h.gateway.rows().any { it.uri == failedUri && !it.pending })
+                assertTrue(h.journal.read().isNotEmpty())
+                val inserted = h.gateway.created.size
+                try { coordinator.export(request); fail("Retry ignored unresolved published rollback") }
+                catch (error: EditorException) { assertEquals(EditorErrorCode.EXPORT_FAILED, error.code) }
+                assertEquals(inserted, h.gateway.created.size)
+                assertTrue(h.journal.read().isNotEmpty())
+                h.gateway.refuseDelete = false
+                val retried = coordinator.export(request)
+                assertEquals(setOf(previous.uri, retried.uri), h.gateway.rows().filter { it.uri in h.gateway.created }.map { it.uri }.toSet())
+                assertFalse(h.gateway.rows().any { it.uri == failedUri })
+                assertEquals(originalHash, hash(File(source.localPath)))
+                h.assertNoUnpublishedOutput(); metadata(retried)
+            } finally { h.close() }
+        }
+    }
+    @Test fun freshExporterStillPreservesPublishedOutputFromAnInterruptedFailedInvocation() = runBlocking {
+        val h = Harness()
+        try {
+            val request = ExportRequest(h.source("orientation-1.jpg"), EditParams("kodak_portra_400"))
+            h.gateway.afterPublish = { throw IOException("Post-publication failure") }
+            h.gateway.refuseDelete = true
+            try { h.exporter.export(request); fail("Publication error returned success") }
+            catch (error: EditorException) { assertEquals(EditorErrorCode.EXPORT_FAILED, error.code) }
+            val published = h.gateway.created.single()
+            h.gateway.afterPublish = null; h.gateway.refuseDelete = false
+            val restarted = MediaStorePhotoExporter(context, h.images, h.renderer, h.journal, h.gateway, File(h.root, "staging"))
+            restarted.recover()
+            assertEquals(listOf(published), h.gateway.rows().filter { it.uri in h.gateway.created }.map { it.uri })
+            assertFalse(h.gateway.rows().single { it.uri == published }.pending)
+            assertTrue(h.journal.read().isEmpty())
+        } finally { h.close() }
+    }
     @Test fun restartRecoversJournalAndInsertWindowButPreservesPublishedAndOtherMedia() = runBlocking {
         val h = Harness()
         try {
@@ -305,7 +361,7 @@ class MediaStorePhotoExporterTest {
         } finally { h.close() }
     }
     @Suppress("DEPRECATION")
-    @Test fun shellOwnedPendingAndPublishedPhotosSurviveEvenWithForgedJournalUri() = runBlocking {
+    @Test fun shellCreatedUnownedPhotosSurviveEvenWithForgedJournalUri() = runBlocking {
         val h = Harness(); val record = PendingExport.create()
         val collection = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
         val includingPending = MediaStore.setIncludePending(collection)
@@ -324,7 +380,9 @@ class MediaStorePhotoExporterTest {
             val query = "content query --uri '${MediaStore.setIncludePending(foreign)}' --projection _id:owner_package_name:is_pending:_display_name"
             val before = shell(query)
             assertTrue(before, before.contains(record.displayName) && before.contains("is_pending=1"))
-            assertTrue(before, before.contains("owner_package_name=com.android.shell"))
+            // MediaStore assigns no app owner to shell-created media on these platforms.
+            // This is an actual external row; never rewrite ownership to make a fake.
+            assertTrue(before, before.contains("owner_package_name=NULL"))
             fun assertFixtureBytes() = assertArrayEquals(jpeg, Base64.decode(
                 shell("content read --uri $foreign | base64"), Base64.DEFAULT))
             assertFixtureBytes()
