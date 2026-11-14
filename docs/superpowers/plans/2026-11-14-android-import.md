@@ -29,30 +29,31 @@
 **Files:** `image/{ImageSizing,ImageNormalizer,AndroidImageRepository}.kt`, unit `image/ImageSizingTest.kt`, instrumented `image/{ImageNormalizerTest,AndroidImageRepositoryTest}.kt`, `src/androidTest/assets/import-fixtures/`, `scripts/generate_android_import_fixtures.py`, `res/xml/data_extraction_rules.xml`.
 **Interfaces:** Implement the exact ImageRepository contract. `ImageSizing.fit(width:Int,height:Int,maxLongEdge:Int): Pair<Int,Int>`. `ImageNormalizer.inspect(file:File): ImageMetadata` and `decode(file:File,maxLongEdge:Int):Bitmap` are internal; metadata contains oriented dimensions and actual MIME.
 
-- [ ] Write sizing tests: 4000×3000→1600×1200, 6000×4000→4096×2731, small images unchanged, positive extreme-aspect result, invalid/overflow dimensions rejected.
-- [ ] Generate original synthetic fixtures with provenance: all eight EXIF orientations, transparency, sRGB/P3/untagged patches, corrupt/unsupported/tiny/extreme/12MP/48MP images. No Pillow required in ordinary Android builds.
-- [ ] Write instrumented tests for normalized pixels/dimensions/config/alpha/color space, all eight orientations at multiple caps and original hashes.
-- [ ] Write repository tests for durable copy after original removal, format spoofing, stream errors/cancellation, stale partial cleanup, active import protection and path safety.
-- [ ] Observe RED on missing implementation in CI, then implement off-main streaming/atomic finalize, bounded header/decode, explicit cleanup and normalized output.
-- [ ] Run unit/lint/connected tests; inspect actual image assertions on API29 and newer API. Explicitly reject HDR transfer functions; validate SDR gain-map base behavior before accepting it.
+- [x] Write sizing tests: 4000×3000→1600×1200, 6000×4000→4096×2731, small images unchanged, positive extreme-aspect result, invalid/overflow dimensions rejected.
+- [x] Generate original synthetic fixtures with provenance: all eight EXIF orientations, transparency, sRGB/P3/untagged patches, corrupt/unsupported/tiny/extreme/12MP/48MP images. No Pillow required in ordinary Android builds.
+- [x] Write instrumented tests for normalized pixels/dimensions/config/alpha/color space, all eight orientations at multiple caps and original hashes.
+- [x] Write repository tests for durable copy after original removal, format spoofing, stream errors/cancellation, stale partial cleanup, active import protection and path safety.
+- [x] Observe RED on missing implementation in CI, then implement off-main streaming/atomic finalize, bounded header/decode, explicit cleanup and normalized output.
+- [x] Run unit/lint/connected tests; inspect actual image assertions on API29 and newer API. Explicitly reject HDR transfer functions; validate SDR gain-map base behavior before accepting it.
 
 ### Task 2: Picker and base preview
 
 **Files:** `image/PhotoPickerLauncher.kt`, `ui/importphoto/{ImportPhotoScreen,ImportPhotoViewModel}.kt`, minimal `MainActivity.kt` wiring, strings, instrumented UI tests.
 **Interfaces:** `ImportPhotoScreen(bitmap:Bitmap?,loading:Boolean,error:EditorErrorCode?,onImport:()->Unit,onRetry:()->Unit)`; ViewModel owns the source/preview and publishes immutable state. ImageRepository remains constructor-injected.
 
-- [ ] Write tests showing loading/error/retry, enabled picker, preserved old preview on cancellation/failure, latest import wins, recreation and landscape/large-font scroll access.
-- [ ] Use PickVisualMedia(ImageOnly), whose documented system document fallback requires no broad permission.
-- [ ] Implement previews and source ownership: publish only after full import+preview success, remove unaccepted sources, retain previous good source on failure. Do not recycle displayed bitmaps; release references when no longer owned.
-- [ ] Run real UI tests; capture empty/preview portrait and landscape screenshots using generated inputs. Actual user picker cancellation must preserve state.
+- [x] Write tests showing loading/error/retry, enabled picker, preserved old preview on cancellation/failure, latest import wins, recreation and landscape/large-font scroll access.
+- [x] Use PickVisualMedia(ImageOnly), whose documented system document fallback requires no broad permission.
+- [x] Implement previews and source ownership: publish only after full import+preview success, remove unaccepted sources, retain previous good source on failure. Do not recycle displayed bitmaps; release references when no longer owned.
+- [x] Run real UI tests; capture empty/preview portrait and landscape screenshots using generated inputs. Actual user picker cancellation must preserve state.
 
 ### Task 3: Verification, review and PR
 
 **Files:** `docs/android/import-validation.md`, `android/README.md`, CI adjustments only as needed.
 
-- [ ] Run assembleDebug/testDebugUnitTest/lintDebug/connectedDebugAndroidTest; retain XML reports and screenshots.
-- [ ] Record device/API/build, fixture provenance, normalization measurements and unverified hardware cases.
-- [ ] Independent review, resolve important defects, verify final head; PR with Closes #11; merge to main and update #9.
+- [x] Run assembleDebug/testDebugUnitTest/lintDebug/connectedDebugAndroidTest; retain XML reports and screenshots.
+- [x] Record device/API/build, fixture provenance, normalization measurements and unverified hardware cases.
+- [x] Independent review, resolve important defects and verify implementation head.
+- [ ] PR with Closes #11; merge to main and update #9.
 
 ## Builder decisions
 

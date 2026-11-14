@@ -1,8 +1,9 @@
 # Photo import validation — issue #11
 
 Implementation branch: `feat/android-import`, following #10 / merged PR #17.
-Final CI results and PR link will be recorded after tests pass. This document is
-not a claim that pending tests or physical-device checks have passed.
+Verified implementation head: `de2eae9d43dc6a05d552e9e8517326e8d890b4cf`.
+[CI run 43541479578](https://github.com/HaaaappyDay/spektrafilm/actions/runs/43541479578)
+passed build, unit/lint and both emulator jobs. Physical checks remain pending.
 
 ## Behavior and engineering bounds
 
@@ -93,3 +94,39 @@ It produced 97 passes and 1 failure: an old test references the removed
 `GrainParams.mult_usm_amount`. No Python runtime or those test files change in
 #11. The obsolete test will be investigated in #12; this is not an all-green
 Python-suite claim.
+
+## Final implementation verification
+
+Environment: Linux CI, JDK17.0.21, Gradle8.13, AGP8.13.2, debug build,
+Android10/API29 and Android16/API36 x86_64 emulators. Executed commands above:
+5 unit tests, 24 instrumented tests per API, zero failures/errors. Lint has
+0 errors and 13 warnings (dependency/SDK update notices, missing development
+launcher icon and a KTX suggestion). Final editor branding belongs to #13.
+
+Measured normalization samples on both API levels (unchanged normalizer at
+`4c35561`; current head fixes only test synchronization/documentation):
+
+| Reference | Compared RGB channels | Maximum absolute code error |
+| --- | ---: | ---: |
+| All eight EXIF orientations, two caps | 192 | 0/255 |
+| Tagged sRGB/P3 and untagged patches | 45 | 1/255 |
+| White alpha composite | 12 | 0/255 |
+
+These are sampled patches, not a claim about every possible image/profile.
+Gain-map tests compare every pixel of a native32×24 known-color SDR base
+within2/255 on both APIs. 12/24/48MP sampling, byte limits, truncated payloads,
+path safety, original hashes, URI independence, cancellation cleanup and
+latest-import/error/retry/rotation behavior are included in the suite.
+
+The first SDR fix run exposed a timing flaw in the cancellation test itself:
+instant fake decoding could finish before withContext suspended, so there was
+no queued return continuation. Explicit latches now hold IO until suspension;
+the final full suite passed with those deterministic boundaries.
+
+Artifacts on the linked run contain the debug APK, JUnit/lint reports,
+per-test normalization JSON and three Compose screenshots. No personal images
+are used. Local Android tests were not run: local SDK downloads were unavailable;
+CI is the actual build/device execution environment.
+
+Verified `de2eae9` debug APK SHA256:
+`c42e1d8b79fba4069a3ea9cfac1fc70c3c2e596ba5df03c2244f0cf83226312f`.
