@@ -1,0 +1,656 @@
+{
+  "schemaVersion": 1,
+  "seed": 7639,
+  "width": 43,
+  "height": 49,
+  "cases": [
+    {
+      "presetId": "kodak_portra_400",
+      "strength": 0,
+      "exposureEv": -2,
+      "temperature": -100,
+      "expected": "kodak_portra_400-s0-e-2-t-100.rgba",
+      "sha256": "66d2178cef1bb43b05afc09ff3f03e302c8a8debb5bce87c927182eb7275041d"
+    },
+    {
+      "presetId": "kodak_portra_400",
+      "strength": 0,
+      "exposureEv": -2,
+      "temperature": 0,
+      "expected": "kodak_portra_400-s0-e-2-t0.rgba",
+      "sha256": "3028701daf794801c43250cb31b069983f1aca37b4528ae0a403e4a3e75e5bdc"
+    },
+    {
+      "presetId": "kodak_portra_400",
+      "strength": 0,
+      "exposureEv": -2,
+      "temperature": 100,
+      "expected": "kodak_portra_400-s0-e-2-t100.rgba",
+      "sha256": "bfd2b8e4c6b61e33e3d714f42e36dbd9f11cffd752e957bca7b48287c56918bf"
+    },
+    {
+      "presetId": "kodak_portra_400",
+      "strength": 0,
+      "exposureEv": 0,
+      "temperature": -100,
+      "expected": "kodak_portra_400-s0-e0-t-100.rgba",
+      "sha256": "44e9cf8bc1a52230a5ed22ec7b5820e70d4f71c3f4800ab4d5018c6e57c1c68b"
+    },
+    {
+      "presetId": "kodak_portra_400",
+      "strength": 0,
+      "exposureEv": 0,
+      "temperature": 0,
+      "expected": "kodak_portra_400-s0-e0-t0.rgba",
+      "sha256": "1eb438fe0bb1777c87c4ecec6a684e687127f8d8a967f545f41e941fa37cbdb9"
+    },
+    {
+      "presetId": "kodak_portra_400",
+      "strength": 0,
+      "exposureEv": 0,
+      "temperature": 100,
+      "expected": "kodak_portra_400-s0-e0-t100.rgba",
+      "sha256": "16651415c7069460e4838538d4fe303213b0c5a12ec7a871317e96e9dd44d140"
+    },
+    {
+      "presetId": "kodak_portra_400",
+      "strength": 0,
+      "exposureEv": 2,
+      "temperature": -100,
+      "expected": "kodak_portra_400-s0-e2-t-100.rgba",
+      "sha256": "52c75b9e084908b58697bb12521ef4aa860f4221912b672bf6422085a11ae48f"
+    },
+    {
+      "presetId": "kodak_portra_400",
+      "strength": 0,
+      "exposureEv": 2,
+      "temperature": 0,
+      "expected": "kodak_portra_400-s0-e2-t0.rgba",
+      "sha256": "5492aa7ae7c35753c16c8f85933805897cc5e72ce0f79c8c269a4265544c18a8"
+    },
+    {
+      "presetId": "kodak_portra_400",
+      "strength": 0,
+      "exposureEv": 2,
+      "temperature": 100,
+      "expected": "kodak_portra_400-s0-e2-t100.rgba",
+      "sha256": "658eb9d52ef00ea586914472df3d8f64cf2d876a8e1ddc65bf251375987d8912"
+    },
+    {
+      "presetId": "kodak_portra_400",
+      "strength": 0.5,
+      "exposureEv": -2,
+      "temperature": -100,
+      "expected": "kodak_portra_400-s0.5-e-2-t-100.rgba",
+      "sha256": "5465beed947896bbbe2d07467bd8387ab7f8f2218faedd4e262d94854d0647a0"
+    },
+    {
+      "presetId": "kodak_portra_400",
+      "strength": 0.5,
+      "exposureEv": -2,
+      "temperature": 0,
+      "expected": "kodak_portra_400-s0.5-e-2-t0.rgba",
+      "sha256": "41a239e77668419ba5ec22c3f3fe1fa8f7515cc85049f56e0a47505d2ed828a9"
+    },
+    {
+      "presetId": "kodak_portra_400",
+      "strength": 0.5,
+      "exposureEv": -2,
+      "temperature": 100,
+      "expected": "kodak_portra_400-s0.5-e-2-t100.rgba",
+      "sha256": "cfb84d8018ceed2c1b3e9542bb226bc084a4d4c8c10b8ed974f8dd6b05077063"
+    },
+    {
+      "presetId": "kodak_portra_400",
+      "strength": 0.5,
+      "exposureEv": 0,
+      "temperature": -100,
+      "expected": "kodak_portra_400-s0.5-e0-t-100.rgba",
+      "sha256": "ce810770737eed39e43fb77814da025d580d16e086d4cd4e00aecef518c6f696"
+    },
+    {
+      "presetId": "kodak_portra_400",
+      "strength": 0.5,
+      "exposureEv": 0,
+      "temperature": 0,
+      "expected": "kodak_portra_400-s0.5-e0-t0.rgba",
+      "sha256": "be009462c1db22b07a63873553af47e5af66fec4fafa43f9a400857f92e67d89"
+    },
+    {
+      "presetId": "kodak_portra_400",
+      "strength": 0.5,
+      "exposureEv": 0,
+      "temperature": 100,
+      "expected": "kodak_portra_400-s0.5-e0-t100.rgba",
+      "sha256": "726d618f31fa1404ddfd5c97c9c3722c04731a18d3e81635246689ff6d9a3556"
+    },
+    {
+      "presetId": "kodak_portra_400",
+      "strength": 0.5,
+      "exposureEv": 2,
+      "temperature": -100,
+      "expected": "kodak_portra_400-s0.5-e2-t-100.rgba",
+      "sha256": "c7f4a49e36162baba31af48d6ced11b0feca1aa8d33edfacb3b802459d27a194"
+    },
+    {
+      "presetId": "kodak_portra_400",
+      "strength": 0.5,
+      "exposureEv": 2,
+      "temperature": 0,
+      "expected": "kodak_portra_400-s0.5-e2-t0.rgba",
+      "sha256": "2d4cd057efe1f9a9177280784ea0069bba2ac656cf38ec0e15149869134af356"
+    },
+    {
+      "presetId": "kodak_portra_400",
+      "strength": 0.5,
+      "exposureEv": 2,
+      "temperature": 100,
+      "expected": "kodak_portra_400-s0.5-e2-t100.rgba",
+      "sha256": "f182655e7c1c7993f09d9b936c0e025c6b0155dd1f9e210b454aeeaaff5b1226"
+    },
+    {
+      "presetId": "kodak_portra_400",
+      "strength": 1,
+      "exposureEv": -2,
+      "temperature": -100,
+      "expected": "kodak_portra_400-s1-e-2-t-100.rgba",
+      "sha256": "cdf8f2d873d5d2aafe43e80fb7a5f8d573636503e93ef8e8330292ed6ccc1381"
+    },
+    {
+      "presetId": "kodak_portra_400",
+      "strength": 1,
+      "exposureEv": -2,
+      "temperature": 0,
+      "expected": "kodak_portra_400-s1-e-2-t0.rgba",
+      "sha256": "47d0aa355f58721b7843373d252181918cc97db7cd6e8da63da184ea2ea0fab1"
+    },
+    {
+      "presetId": "kodak_portra_400",
+      "strength": 1,
+      "exposureEv": -2,
+      "temperature": 100,
+      "expected": "kodak_portra_400-s1-e-2-t100.rgba",
+      "sha256": "da482396bd80e55b0d4380e87235d4572a2a886cd3bef84dc9261e63d9a2c5ac"
+    },
+    {
+      "presetId": "kodak_portra_400",
+      "strength": 1,
+      "exposureEv": 0,
+      "temperature": -100,
+      "expected": "kodak_portra_400-s1-e0-t-100.rgba",
+      "sha256": "4989b1883abbbd0caddffe9a2906a075c1043b893d7f7628df23571ebfd6e536"
+    },
+    {
+      "presetId": "kodak_portra_400",
+      "strength": 1,
+      "exposureEv": 0,
+      "temperature": 0,
+      "expected": "kodak_portra_400-s1-e0-t0.rgba",
+      "sha256": "d4fee5c817c215f7c6efce267f79328b4c5823be60ade0944f889dec598b498b"
+    },
+    {
+      "presetId": "kodak_portra_400",
+      "strength": 1,
+      "exposureEv": 0,
+      "temperature": 100,
+      "expected": "kodak_portra_400-s1-e0-t100.rgba",
+      "sha256": "d5c961bae6d1f36f920689fff16942b372d04da1c44efdcfe48c32b184e6a285"
+    },
+    {
+      "presetId": "kodak_portra_400",
+      "strength": 1,
+      "exposureEv": 2,
+      "temperature": -100,
+      "expected": "kodak_portra_400-s1-e2-t-100.rgba",
+      "sha256": "8e12866a7a7a6233baa2a236beb45db45371225cc508e8c6748b37b54fb98d5d"
+    },
+    {
+      "presetId": "kodak_portra_400",
+      "strength": 1,
+      "exposureEv": 2,
+      "temperature": 0,
+      "expected": "kodak_portra_400-s1-e2-t0.rgba",
+      "sha256": "045215395a5c2a73033be5cfb411f3851425b84c56da47edb58657009f7ec4b7"
+    },
+    {
+      "presetId": "kodak_portra_400",
+      "strength": 1,
+      "exposureEv": 2,
+      "temperature": 100,
+      "expected": "kodak_portra_400-s1-e2-t100.rgba",
+      "sha256": "92b2f15c8ee76863f2cb3d4d139f36c556eb4dbf6310205affbe57d1e268a137"
+    },
+    {
+      "presetId": "kodak_gold_200",
+      "strength": 0,
+      "exposureEv": -2,
+      "temperature": -100,
+      "expected": "kodak_gold_200-s0-e-2-t-100.rgba",
+      "sha256": "66d2178cef1bb43b05afc09ff3f03e302c8a8debb5bce87c927182eb7275041d"
+    },
+    {
+      "presetId": "kodak_gold_200",
+      "strength": 0,
+      "exposureEv": -2,
+      "temperature": 0,
+      "expected": "kodak_gold_200-s0-e-2-t0.rgba",
+      "sha256": "3028701daf794801c43250cb31b069983f1aca37b4528ae0a403e4a3e75e5bdc"
+    },
+    {
+      "presetId": "kodak_gold_200",
+      "strength": 0,
+      "exposureEv": -2,
+      "temperature": 100,
+      "expected": "kodak_gold_200-s0-e-2-t100.rgba",
+      "sha256": "bfd2b8e4c6b61e33e3d714f42e36dbd9f11cffd752e957bca7b48287c56918bf"
+    },
+    {
+      "presetId": "kodak_gold_200",
+      "strength": 0,
+      "exposureEv": 0,
+      "temperature": -100,
+      "expected": "kodak_gold_200-s0-e0-t-100.rgba",
+      "sha256": "44e9cf8bc1a52230a5ed22ec7b5820e70d4f71c3f4800ab4d5018c6e57c1c68b"
+    },
+    {
+      "presetId": "kodak_gold_200",
+      "strength": 0,
+      "exposureEv": 0,
+      "temperature": 0,
+      "expected": "kodak_gold_200-s0-e0-t0.rgba",
+      "sha256": "1eb438fe0bb1777c87c4ecec6a684e687127f8d8a967f545f41e941fa37cbdb9"
+    },
+    {
+      "presetId": "kodak_gold_200",
+      "strength": 0,
+      "exposureEv": 0,
+      "temperature": 100,
+      "expected": "kodak_gold_200-s0-e0-t100.rgba",
+      "sha256": "16651415c7069460e4838538d4fe303213b0c5a12ec7a871317e96e9dd44d140"
+    },
+    {
+      "presetId": "kodak_gold_200",
+      "strength": 0,
+      "exposureEv": 2,
+      "temperature": -100,
+      "expected": "kodak_gold_200-s0-e2-t-100.rgba",
+      "sha256": "52c75b9e084908b58697bb12521ef4aa860f4221912b672bf6422085a11ae48f"
+    },
+    {
+      "presetId": "kodak_gold_200",
+      "strength": 0,
+      "exposureEv": 2,
+      "temperature": 0,
+      "expected": "kodak_gold_200-s0-e2-t0.rgba",
+      "sha256": "5492aa7ae7c35753c16c8f85933805897cc5e72ce0f79c8c269a4265544c18a8"
+    },
+    {
+      "presetId": "kodak_gold_200",
+      "strength": 0,
+      "exposureEv": 2,
+      "temperature": 100,
+      "expected": "kodak_gold_200-s0-e2-t100.rgba",
+      "sha256": "658eb9d52ef00ea586914472df3d8f64cf2d876a8e1ddc65bf251375987d8912"
+    },
+    {
+      "presetId": "kodak_gold_200",
+      "strength": 0.5,
+      "exposureEv": -2,
+      "temperature": -100,
+      "expected": "kodak_gold_200-s0.5-e-2-t-100.rgba",
+      "sha256": "b9091f4732c27bab086e3bf6dfdc184ea3547e69660cf3d4f21fa16b87a9e000"
+    },
+    {
+      "presetId": "kodak_gold_200",
+      "strength": 0.5,
+      "exposureEv": -2,
+      "temperature": 0,
+      "expected": "kodak_gold_200-s0.5-e-2-t0.rgba",
+      "sha256": "5ab825c8cd384ef101911864472934ed45d1d5b2fc81c089bdd27e6bdcd14976"
+    },
+    {
+      "presetId": "kodak_gold_200",
+      "strength": 0.5,
+      "exposureEv": -2,
+      "temperature": 100,
+      "expected": "kodak_gold_200-s0.5-e-2-t100.rgba",
+      "sha256": "166d91b77974af97d92da24550c7aa1e7eed30a772a0eed8df5b282b31ded623"
+    },
+    {
+      "presetId": "kodak_gold_200",
+      "strength": 0.5,
+      "exposureEv": 0,
+      "temperature": -100,
+      "expected": "kodak_gold_200-s0.5-e0-t-100.rgba",
+      "sha256": "e7255f59a8106537f242a77a6f3b765c758009583c4d93a1a4353057ccbe542e"
+    },
+    {
+      "presetId": "kodak_gold_200",
+      "strength": 0.5,
+      "exposureEv": 0,
+      "temperature": 0,
+      "expected": "kodak_gold_200-s0.5-e0-t0.rgba",
+      "sha256": "04aa2c0f8eb11b06383abd70098059f5afa22443d66f4dd59789aadea281f1f4"
+    },
+    {
+      "presetId": "kodak_gold_200",
+      "strength": 0.5,
+      "exposureEv": 0,
+      "temperature": 100,
+      "expected": "kodak_gold_200-s0.5-e0-t100.rgba",
+      "sha256": "8e7342623ef85250281d0bcc006ea749099fa83dabc809d1bd439c984573a7fd"
+    },
+    {
+      "presetId": "kodak_gold_200",
+      "strength": 0.5,
+      "exposureEv": 2,
+      "temperature": -100,
+      "expected": "kodak_gold_200-s0.5-e2-t-100.rgba",
+      "sha256": "65c3498b895214372d6a2ee07fe4c803879ed6af3df1458a83d2b512a857f166"
+    },
+    {
+      "presetId": "kodak_gold_200",
+      "strength": 0.5,
+      "exposureEv": 2,
+      "temperature": 0,
+      "expected": "kodak_gold_200-s0.5-e2-t0.rgba",
+      "sha256": "8f6c2bcd03c7d329220acd3a60b14009a886c789f0497d698d96ed108e9e2b4c"
+    },
+    {
+      "presetId": "kodak_gold_200",
+      "strength": 0.5,
+      "exposureEv": 2,
+      "temperature": 100,
+      "expected": "kodak_gold_200-s0.5-e2-t100.rgba",
+      "sha256": "86915772d882b7dc5daaea4cd8058e4d500d8622bd705d98b9130d6ba16dd8c4"
+    },
+    {
+      "presetId": "kodak_gold_200",
+      "strength": 1,
+      "exposureEv": -2,
+      "temperature": -100,
+      "expected": "kodak_gold_200-s1-e-2-t-100.rgba",
+      "sha256": "64688fe8dba82547f9c3b48d7250ea58a9273a1af6538a45e1dbf444cd961a20"
+    },
+    {
+      "presetId": "kodak_gold_200",
+      "strength": 1,
+      "exposureEv": -2,
+      "temperature": 0,
+      "expected": "kodak_gold_200-s1-e-2-t0.rgba",
+      "sha256": "cfb6833fc3df8b392038f52a892fd5faea20335557670757db656f711e855432"
+    },
+    {
+      "presetId": "kodak_gold_200",
+      "strength": 1,
+      "exposureEv": -2,
+      "temperature": 100,
+      "expected": "kodak_gold_200-s1-e-2-t100.rgba",
+      "sha256": "a4654becf59d26dab4968be5919c4d390884fc5873022fee82572603edb67226"
+    },
+    {
+      "presetId": "kodak_gold_200",
+      "strength": 1,
+      "exposureEv": 0,
+      "temperature": -100,
+      "expected": "kodak_gold_200-s1-e0-t-100.rgba",
+      "sha256": "42ea0649f61a97e3c28cdc0dc0422df915e5724259da59dc71a4b3889f58208a"
+    },
+    {
+      "presetId": "kodak_gold_200",
+      "strength": 1,
+      "exposureEv": 0,
+      "temperature": 0,
+      "expected": "kodak_gold_200-s1-e0-t0.rgba",
+      "sha256": "6d3dbc898e752d2404f34a3abed45f1dce864be6fb1c248b2354818912007280"
+    },
+    {
+      "presetId": "kodak_gold_200",
+      "strength": 1,
+      "exposureEv": 0,
+      "temperature": 100,
+      "expected": "kodak_gold_200-s1-e0-t100.rgba",
+      "sha256": "6de63beb16c352d68b97e0ac58ce0c63669e92439a5652021cc4a800cf97ab25"
+    },
+    {
+      "presetId": "kodak_gold_200",
+      "strength": 1,
+      "exposureEv": 2,
+      "temperature": -100,
+      "expected": "kodak_gold_200-s1-e2-t-100.rgba",
+      "sha256": "5e831d9f6c41face4ee741e763635ceefcfd66ad4274ddea2d6e049305a73f43"
+    },
+    {
+      "presetId": "kodak_gold_200",
+      "strength": 1,
+      "exposureEv": 2,
+      "temperature": 0,
+      "expected": "kodak_gold_200-s1-e2-t0.rgba",
+      "sha256": "8297e0e5aafae41f89e25ab9962b7687bc903e94486ab0ef315f7438345ec155"
+    },
+    {
+      "presetId": "kodak_gold_200",
+      "strength": 1,
+      "exposureEv": 2,
+      "temperature": 100,
+      "expected": "kodak_gold_200-s1-e2-t100.rgba",
+      "sha256": "6ea12f7b2f049c6f673f76a73d418eadcae1d1a7ea697c61c7dc9456be947472"
+    },
+    {
+      "presetId": "kodak_ektar_100",
+      "strength": 0,
+      "exposureEv": -2,
+      "temperature": -100,
+      "expected": "kodak_ektar_100-s0-e-2-t-100.rgba",
+      "sha256": "66d2178cef1bb43b05afc09ff3f03e302c8a8debb5bce87c927182eb7275041d"
+    },
+    {
+      "presetId": "kodak_ektar_100",
+      "strength": 0,
+      "exposureEv": -2,
+      "temperature": 0,
+      "expected": "kodak_ektar_100-s0-e-2-t0.rgba",
+      "sha256": "3028701daf794801c43250cb31b069983f1aca37b4528ae0a403e4a3e75e5bdc"
+    },
+    {
+      "presetId": "kodak_ektar_100",
+      "strength": 0,
+      "exposureEv": -2,
+      "temperature": 100,
+      "expected": "kodak_ektar_100-s0-e-2-t100.rgba",
+      "sha256": "bfd2b8e4c6b61e33e3d714f42e36dbd9f11cffd752e957bca7b48287c56918bf"
+    },
+    {
+      "presetId": "kodak_ektar_100",
+      "strength": 0,
+      "exposureEv": 0,
+      "temperature": -100,
+      "expected": "kodak_ektar_100-s0-e0-t-100.rgba",
+      "sha256": "44e9cf8bc1a52230a5ed22ec7b5820e70d4f71c3f4800ab4d5018c6e57c1c68b"
+    },
+    {
+      "presetId": "kodak_ektar_100",
+      "strength": 0,
+      "exposureEv": 0,
+      "temperature": 0,
+      "expected": "kodak_ektar_100-s0-e0-t0.rgba",
+      "sha256": "1eb438fe0bb1777c87c4ecec6a684e687127f8d8a967f545f41e941fa37cbdb9"
+    },
+    {
+      "presetId": "kodak_ektar_100",
+      "strength": 0,
+      "exposureEv": 0,
+      "temperature": 100,
+      "expected": "kodak_ektar_100-s0-e0-t100.rgba",
+      "sha256": "16651415c7069460e4838538d4fe303213b0c5a12ec7a871317e96e9dd44d140"
+    },
+    {
+      "presetId": "kodak_ektar_100",
+      "strength": 0,
+      "exposureEv": 2,
+      "temperature": -100,
+      "expected": "kodak_ektar_100-s0-e2-t-100.rgba",
+      "sha256": "52c75b9e084908b58697bb12521ef4aa860f4221912b672bf6422085a11ae48f"
+    },
+    {
+      "presetId": "kodak_ektar_100",
+      "strength": 0,
+      "exposureEv": 2,
+      "temperature": 0,
+      "expected": "kodak_ektar_100-s0-e2-t0.rgba",
+      "sha256": "5492aa7ae7c35753c16c8f85933805897cc5e72ce0f79c8c269a4265544c18a8"
+    },
+    {
+      "presetId": "kodak_ektar_100",
+      "strength": 0,
+      "exposureEv": 2,
+      "temperature": 100,
+      "expected": "kodak_ektar_100-s0-e2-t100.rgba",
+      "sha256": "658eb9d52ef00ea586914472df3d8f64cf2d876a8e1ddc65bf251375987d8912"
+    },
+    {
+      "presetId": "kodak_ektar_100",
+      "strength": 0.5,
+      "exposureEv": -2,
+      "temperature": -100,
+      "expected": "kodak_ektar_100-s0.5-e-2-t-100.rgba",
+      "sha256": "78a4c9beb959a17be4452aa551b532a58e4eb1dc86ca351ce3b66139be856b2d"
+    },
+    {
+      "presetId": "kodak_ektar_100",
+      "strength": 0.5,
+      "exposureEv": -2,
+      "temperature": 0,
+      "expected": "kodak_ektar_100-s0.5-e-2-t0.rgba",
+      "sha256": "beda3164813d03d05844835871ae8409588cad70bae0d697d18443122bd34ec0"
+    },
+    {
+      "presetId": "kodak_ektar_100",
+      "strength": 0.5,
+      "exposureEv": -2,
+      "temperature": 100,
+      "expected": "kodak_ektar_100-s0.5-e-2-t100.rgba",
+      "sha256": "5101cf89f8b777add46a6f98b049ecf34e7338374075e66cee4808a870f16712"
+    },
+    {
+      "presetId": "kodak_ektar_100",
+      "strength": 0.5,
+      "exposureEv": 0,
+      "temperature": -100,
+      "expected": "kodak_ektar_100-s0.5-e0-t-100.rgba",
+      "sha256": "cf80f724efe9f72a0b0d774166d176719f0f8f4280c14639b01176db4141a0c6"
+    },
+    {
+      "presetId": "kodak_ektar_100",
+      "strength": 0.5,
+      "exposureEv": 0,
+      "temperature": 0,
+      "expected": "kodak_ektar_100-s0.5-e0-t0.rgba",
+      "sha256": "3636a279847fefbc69070dd03a1c58affe59a9133da20174445465ae108e89c0"
+    },
+    {
+      "presetId": "kodak_ektar_100",
+      "strength": 0.5,
+      "exposureEv": 0,
+      "temperature": 100,
+      "expected": "kodak_ektar_100-s0.5-e0-t100.rgba",
+      "sha256": "502b7838d7a45231a8352e699a4c58add554599a87029bd5062693d753296d5c"
+    },
+    {
+      "presetId": "kodak_ektar_100",
+      "strength": 0.5,
+      "exposureEv": 2,
+      "temperature": -100,
+      "expected": "kodak_ektar_100-s0.5-e2-t-100.rgba",
+      "sha256": "68397211f6dd1ded295745e10b16693f926ffc2760fb474bb5e78e4d41e339be"
+    },
+    {
+      "presetId": "kodak_ektar_100",
+      "strength": 0.5,
+      "exposureEv": 2,
+      "temperature": 0,
+      "expected": "kodak_ektar_100-s0.5-e2-t0.rgba",
+      "sha256": "70bb0d7be715097b1cb68ca382e7dfd992fd9698fbe76b682bd4aaa441b86ae5"
+    },
+    {
+      "presetId": "kodak_ektar_100",
+      "strength": 0.5,
+      "exposureEv": 2,
+      "temperature": 100,
+      "expected": "kodak_ektar_100-s0.5-e2-t100.rgba",
+      "sha256": "4a2330394c031dcd07721725f00950d56b6372c3fba3718a3bad34f0cdcf6922"
+    },
+    {
+      "presetId": "kodak_ektar_100",
+      "strength": 1,
+      "exposureEv": -2,
+      "temperature": -100,
+      "expected": "kodak_ektar_100-s1-e-2-t-100.rgba",
+      "sha256": "cad2fd407da3c31db97ec9a16bd346a74ac70a20656b47ebc9dc83a74e5bcb2f"
+    },
+    {
+      "presetId": "kodak_ektar_100",
+      "strength": 1,
+      "exposureEv": -2,
+      "temperature": 0,
+      "expected": "kodak_ektar_100-s1-e-2-t0.rgba",
+      "sha256": "61337745ad3d8348a00be42e4e0d061bad3390e15d13365ec0f84860e5d2060e"
+    },
+    {
+      "presetId": "kodak_ektar_100",
+      "strength": 1,
+      "exposureEv": -2,
+      "temperature": 100,
+      "expected": "kodak_ektar_100-s1-e-2-t100.rgba",
+      "sha256": "b5280bf5a2eceac1b47ef0c688ddb6895aa9bc4567c2262753e465b7b454de56"
+    },
+    {
+      "presetId": "kodak_ektar_100",
+      "strength": 1,
+      "exposureEv": 0,
+      "temperature": -100,
+      "expected": "kodak_ektar_100-s1-e0-t-100.rgba",
+      "sha256": "6447f12c5c277fdab1b01af4bbe18c71dd0f7f9548dd406a002e4adc855472ed"
+    },
+    {
+      "presetId": "kodak_ektar_100",
+      "strength": 1,
+      "exposureEv": 0,
+      "temperature": 0,
+      "expected": "kodak_ektar_100-s1-e0-t0.rgba",
+      "sha256": "0d7aaaab430274d52452f25038df55af807131663057d703832b9502e92e5b36"
+    },
+    {
+      "presetId": "kodak_ektar_100",
+      "strength": 1,
+      "exposureEv": 0,
+      "temperature": 100,
+      "expected": "kodak_ektar_100-s1-e0-t100.rgba",
+      "sha256": "aaff625b5c4cc6160416ff466b26be9b9079a29b0fdce1940bc0a1f6d6bff7a4"
+    },
+    {
+      "presetId": "kodak_ektar_100",
+      "strength": 1,
+      "exposureEv": 2,
+      "temperature": -100,
+      "expected": "kodak_ektar_100-s1-e2-t-100.rgba",
+      "sha256": "273e69cf0e8f79095bec6c6647713cf6aecc1d1bfec39a4cfc6e9585268dbfa0"
+    },
+    {
+      "presetId": "kodak_ektar_100",
+      "strength": 1,
+      "exposureEv": 2,
+      "temperature": 0,
+      "expected": "kodak_ektar_100-s1-e2-t0.rgba",
+      "sha256": "9297d166f1107c63066995a0ac8f4135fa6c546fe470f58fb52d3a525e513663"
+    },
+    {
+      "presetId": "kodak_ektar_100",
+      "strength": 1,
+      "exposureEv": 2,
+      "temperature": 100,
+      "expected": "kodak_ektar_100-s1-e2-t100.rgba",
+      "sha256": "c61b25a36096f2bcfae3025ad7150eec4b662bdac13373de1eaca692f0f269ae"
+    }
+  ]
+}

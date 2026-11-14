@@ -1,0 +1,6 @@
+Android v1 generated assets, schema 1
+Generated from spektrafilm by Andrea Volpato and contributors; https://github.com/andreavolpato/spektrafilm. See LICENSE.txt.
+Generated/modified artifact: three 33^3 sRGB-to-sRGB combined film/print LUTs.
+Explicit native SDR headroom (stops_above_midgray=None); no automatic, spatial or stochastic effects.
+Runtime/model source unchanged. Full effective settings, source commit and dependency versions: manifest.json.
+The project source uses GPLv3; this directory preserves the separate asset license verbatim in LICENSE.txt.
