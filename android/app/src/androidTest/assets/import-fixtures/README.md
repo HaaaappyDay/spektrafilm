@@ -20,4 +20,3 @@ Android Gainmap + JPEG encoding: solid 32x24 RGB(100,140,170), neutral gain map,
 HDR ratio2. Source run43540056192. Pass --native-gainmap /path/to/its/output.jpg to
 regenerate the complete fixture set including this native sample. Android builds
 use committed bytes; API29 can then test the same container as newer Android.
-

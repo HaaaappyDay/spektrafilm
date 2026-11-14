@@ -6,6 +6,7 @@ is tracked in [issue #9](https://github.com/HaaaappyDay/spektrafilm/issues/9).
 ## Current milestone
 
 Photo import (#11): select a static SDR JPEG/PNG and view its normalized preview.
+Gain-map JPEGs use their SDR base; direct HLG/PQ inputs are rejected.
 The source is copied privately without modifying the original. Failed/cancelled
 imports keep the old photo; retry is available. There are no simulated film or
 save operations. Presets, manual adjustments and gallery export arrive in #12–#14.

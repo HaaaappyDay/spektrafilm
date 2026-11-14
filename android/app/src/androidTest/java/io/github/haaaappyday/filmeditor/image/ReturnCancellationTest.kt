@@ -10,6 +10,7 @@ import java.io.ByteArrayInputStream
 import java.io.File
 import java.util.UUID
 import java.util.concurrent.LinkedBlockingQueue
+import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.CoroutineContext
 
@@ -32,12 +33,17 @@ class ReturnCancellationTest {
 
     @Test fun cancelledDeliveryDeletesAnAlreadyFinalizedSource() {
         val root = directory()
-        val repo = AndroidImageRepository(context, directory = { root }, openInput = { ByteArrayInputStream(bytes()) })
+        val enteredSuspension = CountDownLatch(1)
+        val repo = AndroidImageRepository(context, directory = { root }, openInput = {
+            check(enteredSuspension.await(10, TimeUnit.SECONDS))
+            ByteArrayInputStream(bytes())
+        })
         val caller = CallerQueue()
         val scope = CoroutineScope(SupervisorJob() + caller)
         val result = scope.async { repo.importImage(Uri.EMPTY) }
         try {
             caller.next().run() // enter import and suspend on IO
+            enteredSuspension.countDown()
             val delivery = caller.next() // IO finished; do not deliver yet
             assertEquals(1, root.listFiles()!!.count { it.extension == "source" })
             result.cancel()
@@ -45,7 +51,7 @@ class ReturnCancellationTest {
             caller.finish(result)
             assertTrue(result.isCancelled)
             assertTrue(root.listFiles()!!.isEmpty())
-        } finally { scope.cancel(); root.deleteRecursively() }
+        } finally { enteredSuspension.countDown(); scope.cancel(); root.deleteRecursively() }
     }
 
     @Test fun cancelledDeliveryRecyclesDecodedBitmapWithoutDeletingItsSource() = runBlocking {
@@ -53,12 +59,19 @@ class ReturnCancellationTest {
         val original = AndroidImageRepository(context, directory = { root }, openInput = { ByteArrayInputStream(bytes()) })
         val source = original.importImage(Uri.EMPTY)
         val bitmap = Bitmap.createBitmap(80, 60, Bitmap.Config.ARGB_8888)
-        val repo = AndroidImageRepository(context, directory = { root }, decodeBitmap = { _, _ -> bitmap })
+        val enteredSuspension = CountDownLatch(1)
+        val repo = AndroidImageRepository(context, directory = { root }, decodeBitmap = { _, _ ->
+            // withContext may finish inline if this fake returns before getResult suspends.
+            // Hold IO until the caller's initial runnable has actually returned.
+            check(enteredSuspension.await(10, TimeUnit.SECONDS))
+            bitmap
+        })
         val caller = CallerQueue()
         val scope = CoroutineScope(SupervisorJob() + caller)
         val result = scope.async { repo.decode(source, 1600) }
         try {
             caller.next().run()
+            enteredSuspension.countDown()
             val delivery = caller.next()
             assertFalse(bitmap.isRecycled)
             result.cancel()
@@ -66,6 +79,6 @@ class ReturnCancellationTest {
             caller.finish(result)
             assertTrue(bitmap.isRecycled)
             assertTrue(File(source.localPath).exists())
-        } finally { scope.cancel(); if (!bitmap.isRecycled) bitmap.recycle(); root.deleteRecursively() }
+        } finally { enteredSuspension.countDown(); scope.cancel(); if (!bitmap.isRecycled) bitmap.recycle(); root.deleteRecursively() }
     }
 }

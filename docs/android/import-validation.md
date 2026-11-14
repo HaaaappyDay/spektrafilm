@@ -10,8 +10,9 @@ not a claim that pending tests or physical-device checks have passed.
   document picker. No broad storage/gallery permissions are added.
 - Actual content, not provider MIME/extension, determines JPEG/PNG acceptance.
   Animated PNG is explicitly rejected even when a platform returns its first
-  frame as a static image. HDR transfer functions and detected gain maps are
-  rejected rather than advertised as verified SDR conversion.
+  frame as a static image. Direct HLG/PQ transfer functions are rejected. A
+  gain-map JPEG uses its SDR base: the gain map is detached from the owned
+  decoded bitmap before compositing. This is not an HDR tone-mapping pipeline.
 - Inputs are streamed into UUID `.part` files under `noBackupFilesDir/sources`,
   fsynced, validated and renamed in the same directory. Original bytes remain
   untouched. An app-private `.source` survives loss of the initial URI grant.
@@ -47,7 +48,10 @@ The script writes only to `--out`; ordinary Android builds never invoke Python.
 - Transparency: exact encoded-sRGB white composite, ±1 quantization tolerance.
 - 12/24/48MP JPEGs, tiny and extreme-aspect PNGs exercise real decoder sizing.
   Large solid images test sampling/allocation, not worst-case entropy/runtime.
-- Corrupt/truncated/animated/unsupported samples. Test-only ContentProvider
+- A native Android-generated gain-map JPEG has known RGB(100,140,170) SDR
+  base pixels. The exact same committed container is checked on both APIs;
+  newer Android also verifies the fixture really contains a gain map.
+- Corrupt/header-truncated/payload-truncated/animated/unsupported samples. Test-only ContentProvider
   exposes genuine content:// URIs, lies about MIME and supports revoked access.
 
 ## Checks
@@ -63,3 +67,29 @@ CI runs API 29 and 36 x86_64 emulators, debug builds, and collects JUnit XML,
 normalization/import/UI results and generated-photo screenshots. No physical
 vivo X200 Pro mini evidence exists until ADB is connected. Main-thread latency,
 GL rendering and final end-to-end performance are evaluated in later issues.
+
+## Review and earlier evidence
+
+Independent branch review identified three important evidence gaps: cleanup at
+coroutine dispatcher-return cancellation, actual gain-map input on older/newer
+Android, and payload (rather than only header) truncation. Dedicated tests now
+cover each. No critical production defect was identified by that review.
+
+- [Boundary validation run](https://github.com/HaaaappyDay/spektrafilm/actions/runs/43540056192):
+  build, 5 unit tests, lint, and 22 device tests per API passed. At that revision,
+  detected gain maps were deliberately rejected.
+- [SDR-base red run](https://github.com/HaaaappyDay/spektrafilm/actions/runs/43540674722):
+  build/API29 passed; API36 ran 23 tests with exactly 2 failures at the old
+  gain-map rejection. Both new tests require known SDR-base pixels. This proves
+  the acceptance tests fail before the compatibility change.
+- Compose captures from that run were inspected: portrait shows the complete
+  asymmetric reference image and size, landscape preserves the image ratio in
+  a scrolling viewport, and read failure retains the image with a retry action.
+  The final editor's compact/adaptive controls remain #13 work.
+
+A separate existing Python LUT baseline was run in preparation for #12:
+`pytest tests/lut_creator/test_cube_format.py tests/lut_creator/test_builders.py tests/test_lut_mode.py`.
+It produced 97 passes and 1 failure: an old test references the removed
+`GrainParams.mult_usm_amount`. No Python runtime or those test files change in
+#11. The obsolete test will be investigated in #12; this is not an all-green
+Python-suite claim.
