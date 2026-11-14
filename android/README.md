@@ -5,16 +5,21 @@ is tracked in [issue #9](https://github.com/HaaaappyDay/spektrafilm/issues/9).
 
 ## Current milestone
 
-Photo import (#11): select a static SDR JPEG/PNG and view its normalized preview.
-Gain-map JPEGs use their SDR base; direct HLG/PQ inputs are rejected.
-The source is copied privately without modifying the original. Failed/cancelled
-imports keep the old photo; retry is available. There are no simulated film or
-save operations. Presets, manual adjustments and gallery export arrive in #12–#14.
+Editor (#13, dependent on renderer #12): import a static SDR JPEG/PNG, choose
+Portra 400, Gold 200 or Ektar 100, adjust film strength/exposure/temperature,
+compare with the normalized original and reset the selected film's controls.
+Gain-map JPEGs use their SDR base; direct HLG/PQ inputs are rejected. The source
+is copied privately without modifying the original. Failed/cancelled imports
+keep the old photo; retry is available. Gallery export remains disabled until
+#14 supplies the real PhotoExporter; no simulated save success is shown.
 
 See [import validation](../docs/android/import-validation.md) for size limits,
 color/orientation behavior, synthetic fixture provenance and verification status.
-Full edit-session process restoration is introduced with #13; this milestone
-retains the current preview across Activity recreation only.
+The editor preserves source/parameters across rotation and restores the last
+committed private session by decoding/rendering again after process death.
+See [color validation](../docs/android/color-validation.md) for the numerical
+reference and outstanding physical-GPU gate, and
+[editor validation](../docs/android/editor-validation.md) for state/UI evidence.
 
 ## Reproducible build
 
@@ -101,6 +106,6 @@ is not copied. Gallery export is pending #14; the import repository already supp
 
 Film modeling powered by [spektrafilm](https://github.com/andreavolpato/spektrafilm),
 by Andrea Volpato and contributors. Preserve the repository's [GPLv3 license](../LICENSE)
-and [asset license text](../SPEKTRAFILM_LICENSE.txt). Actual generated presets and
-their attribution/license manifest will be committed in #12. The Python reference
-implementation and its existing behavior remain unchanged.
+and [asset license text](../SPEKTRAFILM_LICENSE.txt). Generated presets, their
+attribution/license manifest and bake reports are in `app/src/main/assets/presets/`.
+The Python reference implementation and its existing behavior remain unchanged.
