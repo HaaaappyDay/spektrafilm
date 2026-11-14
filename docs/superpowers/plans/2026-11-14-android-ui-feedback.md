@@ -27,9 +27,9 @@
 
 Files: ui/editor/BeforeAfterPreview.kt; ui/editor/EditorScreenTest.kt.
 Interfaces: keep BeforeAfterPreview(state, modifier); actual image remains exposed by localized photo_preview description.
-- [ ] Add a state-transition test comparing exact photo bounds while rendering/importing/exporting/initializing/original states change at font scales1 and2. Run EditorScreenTest; expect RED on the current conditional progress bar.
-- [ ] Reserve a fixed10dp progress slot and constrain footer status to one line. Preserve visibility/live-region feedback and complete image fitting.
-- [ ] Run EditorScreenTest and EditorActivityTest; expect PASS and inspect portrait/landscape screenshots. Commit and open dependent PR with Closes #24.
+- [x] Add a state-transition test comparing exact photo bounds while rendering/importing/exporting/initializing/original states change at font scales1 and2. Run EditorScreenTest; expect RED on the current conditional progress bar.
+- [x] Reserve a fixed10dp progress slot and constrain footer status to one line. Preserve visibility/live-region feedback and complete image fitting.
+- [x] Run EditorScreenTest and EditorActivityTest; expect PASS and inspect portrait/landscape screenshots. Commit and open dependent PR with Closes #24.
 
 ### Task 2: Temporary long-press comparison (#25)
 
