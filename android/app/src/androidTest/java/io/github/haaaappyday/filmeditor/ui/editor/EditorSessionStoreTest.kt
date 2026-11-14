@@ -25,6 +25,8 @@ class EditorSessionStoreTest {
             val store = EditorSessionStore(context, state, files)
             val edit = StoredEdit(source(files), EditParams("kodak_gold_200", .37f, -.7f, 31f))
             store.save(edit); assertEquals(edit, store.load())
+            File(state, "editor.json.new").writeText("{interrupted staging")
+            assertEquals(edit, store.load())
             val atomic = AtomicFile(File(state, "editor.json"))
             atomic.startWrite().use { it.write("{interrupted".toByteArray()) } // process died before finishWrite
             assertEquals(edit, EditorSessionStore(context, state, files).load())
@@ -70,10 +72,10 @@ class EditorSessionStoreTest {
         val root = root(); val files = File(root, "sources"); val state = File(root, "state")
         try {
             var rejectCommit = false
-            val store = EditorSessionStore(context, state, files, finishWrite = { atomic, stream ->
-                // AtomicFile reports no exception when its commit fails. Model a failed
-                // commit which leaves the previous snapshot recoverable on both APIs.
-                if (rejectCommit) atomic.failWrite(stream) else atomic.finishWrite(stream)
+            val store = EditorSessionStore(context, state, files, commit = { pending, committed ->
+                // Model a failed commit that returns normally, as AtomicFile can.
+                // Read-back must detect it before callers may retire the old source.
+                if (!rejectCommit) Os.rename(pending.absolutePath, committed.absolutePath)
             })
             val previous = StoredEdit(source(files), EditParams("kodak_portra_400"))
             store.save(previous); assertEquals(previous, store.load())

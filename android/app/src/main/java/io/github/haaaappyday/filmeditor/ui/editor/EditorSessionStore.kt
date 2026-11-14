@@ -26,7 +26,7 @@ class EditorSessionStore(
     context: Context,
     private val directory: File = File(context.applicationContext.noBackupFilesDir, "editor-session"),
     private val sourcesDirectory: File = File(context.applicationContext.noBackupFilesDir, "sources"),
-    private val finishWrite: (AtomicFile, FileOutputStream) -> Unit = { atomic, stream -> atomic.finishWrite(stream) },
+    private val commit: (File, File) -> Unit = { pending, committed -> Os.rename(pending.absolutePath, committed.absolutePath) },
 ) : SessionPersistence {
     private val file = AtomicFile(File(directory, "editor.json"))
 
@@ -59,6 +59,7 @@ class EditorSessionStore(
             storageMutex.withLock {
                 if (edit == null) {
                     file.delete()
+                    File(directory, "editor.json.new").delete() // API29 AtomicFile only knows .bak
                     check(listOf("editor.json", "editor.json.bak", "editor.json.new").none { File(directory, it).exists() })
                     if (directory.isDirectory) syncDirectory()
                     return@withLock
@@ -66,18 +67,18 @@ class EditorSessionStore(
                 validate(edit)
                 check(directory.isDirectory || directory.mkdirs())
                 val bytes = encode(edit).toString().toByteArray(Charsets.UTF_8)
-                val stream = file.startWrite()
+                // Recover an interrupted legacy/API29 write before staging a new one.
+                if (File(directory, "editor.json.bak").exists()) file.openRead().close()
+                val pending = File(directory, "editor.json.new")
                 try {
-                    stream.write(bytes)
-                    // AtomicFile logs sync/close/rename failures instead of throwing.
-                    // A reported commit permits deletion of the previous source, so
-                    // explicitly sync and verify the recoverable snapshot first.
-                    stream.fd.sync()
-                    finishWrite(file, stream)
+                    // Platform AtomicFile silently ignores commit errors and API29's
+                    // rollback can delete an already recovered snapshot. Stage beside
+                    // the destination and use a throwing, same-filesystem atomic rename.
+                    FileOutputStream(pending).use { stream -> stream.write(bytes); stream.fd.sync() }
+                    commit(pending, file.baseFile)
                     check(file.openRead().use { it.readBytes() }.contentEquals(bytes)) { "Session commit failed" }
                     syncDirectory()
-                }
-                catch (error: Throwable) { file.failWrite(stream); throw error }
+                } finally { pending.delete() }
             }
         }
     }
