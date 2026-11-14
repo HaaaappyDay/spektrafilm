@@ -1,10 +1,10 @@
-# Android v1 acceptance — in progress
+# Android v1 acceptance — complete
 
 Tracking: [#15](https://github.com/HaaaappyDay/spektrafilm/issues/15),
 [parent #9](https://github.com/HaaaappyDay/spektrafilm/issues/9).
 The integrated emulator and physical functional flows pass. Physical preview,
-export, and bounded resource checks pass. Final review and prerequisite merges
-remain incomplete.
+export, and bounded resource checks pass. Independent review completed with no
+findings; implementation PRs #17–22 and UI PRs #26–29 are merged.
 
 ## Current editor feedback candidate
 
@@ -48,7 +48,22 @@ contains an independently CI-signed debug APK with SHA256
 `f0801fb944aa2d8a9d72ca56d30afbc076c2430bc8397cc171c06dca37a19fe1`.
 Its provenance is the tested merge/run above; its embedded source field is
 `unrecorded`, unlike the locally built APK. Do not interchange those identities.
-Review and merges are still pending.
+Independent review of `dfdf65a..118575b` found no Critical, Important, or Minor
+issues. The reviewer reproduced the physical trace report and verified source,
+APK, trace, and test-result identities. The locally built debug APK identified
+by `edc697958e5e6d736ca40245d61e70f3c76532887af3f6fd4ff14daf1343a705`
+is installed on the vivo; isolated test packages were removed after validation.
+
+The final evidence/host-readiness head `118575b` passed all five jobs in
+[CI run 43607294643](https://github.com/HaaaappyDay/spektrafilm/actions/runs/43607294643).
+Its first API 29 attempt failed two tests with OutOfMemoryError and a reported
+16 MiB Java heap, despite a 512 MiB memory class. A fresh-job retry, without
+source changes, passed all 88 tests with a 512 MiB heap. The underlying emulator
+startup cause is not established. [Attempt identities and XML hashes](v1-evidence/ui-71ca4ac/integration-ci.json)
+retain both outcomes; no application memory limits or acceptance thresholds were
+changed. This head has the same Android application sources as `71ca4ac`.
+[CI follow-up #30](https://github.com/HaaaappyDay/spektrafilm/issues/30) tracks
+the remaining investigation separately from completed v1 acceptance.
 
 ### Physical performance result
 
@@ -114,13 +129,14 @@ The complete XML/HTML, phase logs and images are CI artifacts.
 The debug APK is in the CI artifact
 `android-debug-683d15eb8495205f0e6defd48cad2c6d6985a8ac`, version `0.1.0`/`1`.
 SHA256: `ed855c35e9813fb3baee1e9da0b3744bca7cfc85ff4b3dc00335c7a650d1a154`.
-This identifies the tested development candidate; the final delivery build will
-be recorded after performance work and review.
+This identifies the earlier development candidate. The final delivery APK
+identities are recorded in the current-candidate section above.
 
-## Requirement coverage
+## Historical requirement coverage (683d15e)
 
 “Pass” in this table means the three emulator runtimes above, at the stated
-commit. Physical checks remain separately incomplete.
+commit. Physical checks were incomplete for that earlier candidate; the final
+candidate evidence above supersedes that delivery status.
 
 | Requirement | Evidence | Status |
 | --- | --- | --- |
@@ -228,7 +244,7 @@ command. Its locally debug-signed APK has SHA256
 version `0.1.0`/`1`, with embedded commit `d274014`. This local APK is distinct
 from the CI artifact and is not the final release delivery.
 
-## Reproduction, limits and remaining integration
+## Reproduction, limits and delivery
 
 See [Android README](../../android/README.md) for SDK setup, isolated connected
 tests and the explicit-serial process driver. `connectedValidationAndroidTest`
@@ -242,6 +258,9 @@ Color-model/LUT limits and cube-wide QA flags remain documented in the
 Fixtures are generated, not personal photos. The shown blue gallery image is the
 known synthetic fixture exported by the actual app.
 
-The current candidate now has physical functional/trace evidence and identifiable
-debug APKs. Whole-branch review and dependency-order merges remain required before
-issues 12–15, the feedback issues, or the parent can be considered complete.
+The accepted candidate has physical functional/trace evidence and identifiable
+debug APKs. All prerequisite and feedback PRs are merged. Issues #9–15 and
+#23–25 are complete; #16 remains the separate, unstarted v2 Auto backlog.
+Android v1 ships Portra 400, Gold 200, and Ektar 100. Adding further stocks is
+outside this delivery. The final bookkeeping commit changes documentation only;
+the reviewed and tested Android implementation is unchanged.

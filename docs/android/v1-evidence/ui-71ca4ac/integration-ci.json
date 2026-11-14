@@ -1,0 +1,31 @@
+{
+  "run": "https://github.com/HaaaappyDay/spektrafilm/actions/runs/43607294643",
+  "sourceCommit": "118575b8b78c6abff9428ff3cb034a80b047fc17",
+  "testedMergeCommit": "ad637396662c42d8eec54f04ac74ab61910769cd",
+  "conclusion": "success",
+  "api29": {
+    "initialAttempt": {
+      "javaHeapLimitBytes": 16777216,
+      "memoryClassMiB": 512,
+      "tests": {
+        "tests": 88,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      },
+      "testXmlSha256": "6bd7bd8397c853ade21e419b42434a28da83219c3f33df85f82ec339a9d34988"
+    },
+    "retry": {
+      "javaHeapLimitBytes": 536870912,
+      "memoryClassMiB": 512,
+      "tests": {
+        "tests": 88,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "testXmlSha256": "dadb1fca77ae454a527d725e226b4858a05fe3c326618df10565a83c8e466d69"
+    },
+    "note": "The initial attempt failed two preset/reference tests with OutOfMemoryError under a 16 MiB runtime heap. Retrying the failed job without source changes passed all 88 tests under a 512 MiB heap. Both attempts are retained; the emulator heap discrepancy is observed, while its underlying startup cause is not established."
+  }
+}
