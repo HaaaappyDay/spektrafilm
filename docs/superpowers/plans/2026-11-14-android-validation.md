@@ -27,11 +27,11 @@
 
 Files: e2e/PhotoEditingFlowTest.kt, e2e/LifecycleAndRecoveryTest.kt, existing editor/render tests for targeted gaps, .github/workflows/android.yml, scripts/generate_android_fixtures.py as required.
 Interfaces: Consume MainActivity and its real EditorViewModel factory, existing fixture/import hooks and testOutputDirectory(). Produce per-API v1-flow.json and device-build.json with model/API/RAM/GPU/driver, actual dimensions, commit/build and pass/failure evidence.
-- [ ] Read prior reports, map each #15 assertion to existing tests or an explicit new case. Extend the flow with all presets, all three controls, original/reset, cancelled/failed/replaced import and airplane-mode gallery opening.
-- [ ] Add gated temperature-only and noncooperative superseded-import regressions; observe failures if a defect exists, then minimal fix and whole-suite pass. A new coverage test that passes existing correct behavior is recorded as coverage, not a fabricated RED.
-- [ ] Add lifecycle cases for durable restoration, missing source, actual renderer/context recreation and tiled cancellation. Use controlled failures to reproduce real edge cases; preserve source hashes.
-- [ ] Reuse the existing generated48MP fixture and ImageNormalizerTest sample-at1600 coverage; add full editor flow and4096 export-cap sampling coverage without full-resolution decode-before-sample; retain existing EXIF/P3/alpha/corrupt/tiny/12MP cases.
-- [ ] Add stable API37 runtime and CI device/build metadata; keep explicit2048MiB RAM/128MiB Javaheap in emulator configuration and report actual Runtime.maxMemory, never infer device limits from defaults. Run clean-checkout assemble/unit/lint/connected on required APIs and Python109/reference reproduction. Expected: all executed tests pass, recorded failures remain blocking.
+- [x] Read prior reports, map each #15 assertion to existing tests or an explicit new case. Extend the flow with all presets, all three controls, original/reset, cancelled/failed/replaced import and airplane-mode gallery opening.
+- [x] Add gated temperature-only and noncooperative superseded-import regressions; observe failures if a defect exists, then minimal fix and whole-suite pass. A new coverage test that passes existing correct behavior is recorded as coverage, not a fabricated RED.
+- [x] Add lifecycle cases for durable restoration, missing source, actual renderer/context recreation and tiled cancellation. Use controlled failures to reproduce real edge cases; preserve source hashes.
+- [x] Reuse the existing generated48MP fixture and ImageNormalizerTest sample-at1600 coverage; add full editor flow and4096 export-cap sampling coverage without full-resolution decode-before-sample; retain existing EXIF/P3/alpha/corrupt/tiny/12MP cases.
+- [x] Add stable API37 runtime and CI device/build metadata; keep explicit2048MiB RAM/128MiB Javaheap in emulator configuration and report actual Runtime.maxMemory, never infer device limits from defaults. Run clean-checkout assemble/unit/lint/connected on required APIs and Python109/reference reproduction. Expected: all executed tests pass, recorded failures remain blocking.
 
 ### Task 2: Reproducible physical measurement harness
 

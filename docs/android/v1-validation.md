@@ -2,86 +2,117 @@
 
 Tracking: [#15](https://github.com/HaaaappyDay/spektrafilm/issues/15),
 [parent #9](https://github.com/HaaaappyDay/spektrafilm/issues/9).
-This report is not a release acceptance. Physical color/performance evidence,
-final clean-checkout delivery and prerequisite merges remain incomplete.
+The integrated emulator flow passes. Physical color/performance acceptance,
+final delivery and prerequisite merges remain incomplete.
 
-## Build identity and evidence
+## Verified integrated candidate
 
-- Integrated candidate `f4691c5ce97bb06dd84ef9aec60043fbde2fc1be`:
-  [CI run](https://github.com/HaaaappyDay/spektrafilm/actions/runs/43557283930).
-  API 29 and 36 each completed 75 connected tests successfully. The subsequent
-  host driver failed while polling an absent ready file (empty ADB output). A
-  tested polling fix is prepared; process restoration is not yet a pass. API 37.2
-  completed 75 tests with 15 UI failures caused by transitive Espresso 3.5.0
-  reflecting the removed `InputManager.getInstance` API. The other 60 tests
-  passed. Stable Espresso 3.7.0 is now pinned; its runtime verification is pending.
-- Local Ubuntu: Temurin 17.0.21, Gradle 8.13, SDK compile/target 36,
-  Build Tools 35.0.0. Validation APK and instrumentation APK compile; 9 debug
-  unit tests pass, lint has no errors. Python regression: 119 passed, including
-  10 process-driver report-validation tests. These are not device acceptance.
-- Instrumentation uses `io.github.haaaappyday.filmeditor.validation` and its
-  corresponding test/provider package. The ordinary debug APK retains
-  `io.github.haaaappyday.filmeditor`. Version name/code remain `0.1.0`/`1`.
-- Each connected run emits `device-build.json`: actual API/release/fingerprint,
-  model, RAM, heap, GLES vendor/renderer/version, package, debuggability and
-  source/tested commits. Physical acceptance is never inferred from the model.
+Source and tested commit: `683d15eb8495205f0e6defd48cad2c6d6985a8ac`.
+[CI run 43557947368](https://github.com/HaaaappyDay/spektrafilm/actions/runs/43557947368)
+completed all five jobs successfully. Fresh CI checkouts built the APK, passed
+9 unit tests and lint with zero errors, passed 119 Python regression tests and
+reproduced the committed Python color-reference bytes. Versions are pinned in
+[the Android README](../../android/README.md).
+
+| Runtime | Connected tests | Live process-kill recovery | Actual RAM / Java heap limit |
+| --- | --- | --- | --- |
+| API 29 / Android 10 | 77 pass, 0 failed/error/skipped | Pass; PID 4354→4460 | 2089517056 / 536870912 bytes |
+| API 36 / Android 16 | 77 pass, 0 failed/error/skipped | Pass; PID 3437→3531 | 2593079296 / 201326592 bytes |
+| API 37.2 image / Android 17, API 37 | 77 pass, 0 failed/error/skipped | Pass; PID 8467→8598 | 4103217152 / 201326592 bytes |
+
+CI requests 2048M RAM/128M heap; the table reports values read from each running
+image, rather than assuming the image honors those settings identically.
+The API 37.2 image uses 16 KB pages. All three GPUs are emulator SwiftShader;
+none establishes physical GPU or memory/performance acceptance.
+
+[Compact summary](v1-evidence/summary.json) retains source identity, XML hashes,
+counts and APK hash. Per-API folders retain actual device/build/GLES metadata,
+full-flow and 48MP reports, process-restoration assertions, color errors and
+synthetic-gallery screenshots:
+[API 29](v1-evidence/api29/device-build.json),
+[API 36](v1-evidence/api36/device-build.json),
+[API 37](v1-evidence/api37/device-build.json).
+The complete XML/HTML, phase logs and images are CI artifacts.
+
+The debug APK is in the CI artifact
+`android-debug-683d15eb8495205f0e6defd48cad2c6d6985a8ac`, version `0.1.0`/`1`.
+SHA256: `ed855c35e9813fb3baee1e9da0b3744bca7cfc85ff4b3dc00335c7a650d1a154`.
+This identifies the tested development candidate; the final delivery build will
+be recorded after performance work and review.
 
 ## Requirement coverage
 
-| Requirement | Test/evidence | Acceptance state |
+“Pass” in this table means the three emulator runtimes above, at the stated
+commit. Physical checks remain separately incomplete.
+
+| Requirement | Evidence | Status |
 | --- | --- | --- |
-| API 29, current stable API, physical GLES 3 | CI API 29/36/37.2; `DeviceEnvironmentTest` | API 29/36:75 tests pass; API 37.2 UI dependency failure; fix pending verification; vivo not run |
-| Generated orientation/color/size/error fixtures | `AndroidImageRepositoryTest`, normalization/sizing tests; [import report](import-validation.md) | Prior emulator evidence available; current candidate pending |
-| Each film, all controls, original/reset, airplane-mode gallery | `PhotoEditingFlowTest`; `v1-flow.json`, gallery screenshot | API 29/36 connected tests pass; API 37.2 UI dependency failure; fix pending verification |
-| Failed/cancelled import preserves edits; 48MP replacement resets/samples | `LifecycleAndRecoveryTest`; `v1-48mp.json` | API 29/36 connected tests pass; API 37.2 UI dependency failure; fix pending verification |
-| No-photo controls, latest result, temperature-only race, stale import | `EditorScreenTest`, `EditorViewModelTest`; [editor report](editor-validation.md) | Prior coverage plus new deterministic races; candidate pending |
-| Background/rotation/export exclusivity | `EditorActivityTest`, `ExportActivityTest` | Prior emulator evidence; candidate pending |
-| Actual process kill/restoration and unpublished output recovery | Host driver + `ProcessRestorePhases`; `process-restoration.json` | Host polling failed; tested fix awaits runtime verification |
-| Missing private source recovers to import | `LifecycleAndRecoveryTest` | API 29/36 connected tests pass; API 37.2 UI dependency failure; fix pending verification |
-| GL context recreation and cancellation | `GlFilmRendererTest`; new partial-tile and injected-loss tests | Existing recreation passes; new cancellation and bounded-retry cases compile, runtime pending |
-| No space, I/O failure, cancellation, guarded rollback | `MediaStorePhotoExporterTest`; [export report](export-validation.md) | Prior emulator evidence; candidate pending |
-| Shared preview/export math; same-size pre-JPEG max error ≤2 codes | Real GLES/Python fixture comparisons and export tests | Prior emulator max 1 code; physical GPU not run |
-| EXIF, transparency, dimensions, original hash and GPS removal | Import/export fixtures and byte/hash/metadata checks | Prior emulator evidence; candidate pending |
-| Fresh Android-only build; three real presets/licenses; identifiable APK | Final clean checkout, APK inventory/hash/artifact | Final delivery not run |
-| Python compatibility and committed reference bytes | 119 local Python tests; CI reference reproduction | 119 local tests pass; candidate CI 118 tests/reference reproduction passed |
+| API 29 and current stable API compatibility | Device metadata and 77-test XML per runtime | Pass; physical GLES 3 device not run |
+| Generated EXIF/color/size/error fixtures | Import/normalization tests; [import report](import-validation.md) | Pass |
+| Three films, all manual controls, original/reset, airplane-mode gallery | `PhotoEditingFlowTest`; [flow JSON](v1-evidence/api37/v1-flow.json), [gallery screenshot](v1-evidence/api37/v1-full-flow-gallery.png) | Pass |
+| Failed/cancelled import preserves edits; new source resets | `LifecycleAndRecoveryTest` | Pass |
+| 48MP sampling without full-resolution decode | [48MP report](v1-evidence/api37/v1-48mp.json): 1600×1200 preview, 4096×3072 export decode | Pass; physical trace not run |
+| No-photo controls, latest-result races, temperature-only and stale-import races | `EditorScreenTest`, `EditorViewModelTest` | Pass |
+| Background/rotation and export exclusivity | `EditorActivityTest`, `ExportActivityTest` | Pass |
+| Actual process death restores source/edits and cleans pending output | Host driver + `ProcessRestorePhases`; [report](v1-evidence/api37/process-restoration.json) | Pass |
+| Missing private source returns to import | `LifecycleAndRecoveryTest` | Pass |
+| GL recreation, bounded context-loss retry and cancellation after a completed tile | `GlFilmRendererTest`, `GlContextLossTest`, `GlPartialTileTest` | Pass |
+| No space/I/O/cancellation/guarded rollback | Export tests; [export report](export-validation.md) | Pass |
+| Shared preview/export math, same-size pre-JPEG error ≤2 codes | Real GLES/Python comparisons: 512001 channels, max 1, mean 0.00127148, p95 0 codes on each runtime | Pass; physical GPU not run |
+| Orientation, alpha, output dimensions, original hash, no copied GPS | Import/export pixel, hash and metadata assertions | Pass |
+| Python compatibility and reproducible reference bytes | 119 tests and CI byte comparison | Pass |
+| Final Android-only checkout, APK/license inventory and release evidence | Final delivery procedure | Not run |
 
-Historical color/export numbers apply only to the commits documented in the
-linked reports. They are not evidence for an untested candidate or physical GPU.
+Process preparation keeps a real Activity/instrumentation process alive after
+its source/edits and pending export journal are durable. The host validates that
+PID, force-stops the isolated app and confirms it is gone. A different process
+then restores the same source hash/parameters/preview, removes unpublished output,
+preserves the already published JPEG byte-for-byte, and avoids duplicate saves
+or false success. Tracked fixture cleanup also passes. This tests death after
+pending-row journaling, not every instruction boundary during an export.
 
-## Performance and sustained resources
+The GL loss test injects the typed context-loss signal after real EGL creation;
+it checks fresh-context recovery, one-retry bounds, typed failure on repeated
+loss and successful subsequent rendering. It does not claim to reset a physical
+GPU driver. The partial-tile test cancels after real draw/readback of tile one,
+checks deletion of transient textures/framebuffer and preservation of the input,
+then verifies the next render's pixels.
 
-Reference phone: maintainer-provided vivo X200 Pro mini. No authorized device is
-currently visible to ADB. Its actual API/RAM/GPU/driver must be measured on connection. The API 37.2
-emulator reports Android 17/API 37, `sdk_gphone16k_x86_64`, and GLES 3 SwiftShader;
-these values describe the emulator only.
+Stable Espresso 3.7.0 is pinned for API 37: Compose's transitive 3.5.0 called a
+removed hidden InputManager API. The 15 previously failing UI tests now pass.
+No alpha dependency or app target-SDK change was needed.
+
+## Physical performance and sustained resources
+
+Reference phone: maintainer-provided vivo X200 Pro mini. No device is currently
+visible to ADB. Its actual API/RAM/GPU/driver must be measured on connection.
 
 | Measurement | Required evidence | Status |
 | --- | --- | --- |
-| 1600px preview | Profileable build, warmup then 30 user-action→presented-frame samples, p50/p95; p95 ≤200ms | Not run; trace harness incomplete |
-| 12MP export | Button→MediaStore publication ≤10s, dimensions, decode/render/encode/I/O phases, peak Java/native/graphics memory | Not run |
+| 1600px preview | Non-debuggable profileable build, warmup then 30 user-action→presented-frame samples; p50/p95, p95 ≤200ms | Not run; harness in progress |
+| 12MP export | Button→MediaStore publication ≤10s, dimensions, decode/render/encode/I/O times, peak Java/native/graphics memory | Not run |
 | Sustained resources | 20 import/edit cycles +10 exports, post-cache bitmap/GL/thread/resource trends | Not run |
-| 48MP behavior | Bounded sampling or clear rejection, no OOM/ANR, heavy work off Main | Emulator functional sampling test exists; physical trace not run |
+| 48MP behavior and main-thread health | Bounded sampling or clear rejection, no OOM/ANR, heavy work off Main | Physical trace not run |
 
-Emulator timings, shader-only timing and completed Compose draws do not satisfy
-the physical presentation target. Missing/unsupported trace data must remain
-unverified rather than be interpreted as zero latency or zero allocations.
+Draw completion and an app FrameTimeline slice end are not display presentation.
+The measurement must follow the matching content frame to SurfaceFlinger's actual
+display-frame end. Missing frame links, trace loss or fewer than 30 measured changes
+must not produce a performance pass. Emulator measurements never satisfy this gate.
 
-## Reproduction and artifacts
+## Reproduction, limits and remaining integration
 
-See [Android README](../../android/README.md) for SDK setup, build, isolated
-connected tests and the explicit-serial process driver. For #15's clean-checkout
-command, `connectedValidationAndroidTest` replaces `connectedDebugAndroidTest`
-so session-resetting tests cannot clear the everyday app's state. It executes
-the same real application services under a separate application ID.
+See [Android README](../../android/README.md) for SDK setup, isolated connected
+tests and the explicit-serial process driver. `connectedValidationAndroidTest`
+replaces #15's original `connectedDebugAndroidTest` command so tests can reset
+`io.github.haaaappyday.filmeditor.validation` without touching the everyday app's
+session. Both use the same application services; each variant has its own test
+fixture-provider authority. The ordinary debug app keeps its original package.
 
-CI retains the debug APK/build reports, connected XML/HTML and additional JSON/
-PNG output, process prepare/verify/cleanup logs, stable SDK inventory and Python
-JUnit report. The host kills a verified live prepared process after its private
-source/edit and pending export journal are durable, then verifies a different
-PID, preserved published bytes and no duplicate export. This models that crash
-boundary; it does not prove all possible instruction boundaries in an export.
+Color-model/LUT limits and cube-wide QA flags remain documented in the
+[color report](color-validation.md); no physics or regression snapshot was changed.
+Fixtures are generated, not personal photos. The shown blue gallery image is the
+known synthetic fixture exported by the actual app.
 
-Final APK SHA256/link, physical traces, measured performance, screenshots and
-the final requirement-by-requirement reconciliation will be recorded here before
-acceptance. Dependent PRs 19/20/21 and this validation PR must merge in order;
-their current draft state is not completion of issues 12–15.
+Physical traces, measured performance, final APK inventory and whole-branch review
+remain required. PRs 19/20/21 and the eventual validation PR must merge in dependency
+order before issues 12–15 or the parent can be considered complete.

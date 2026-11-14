@@ -1,0 +1,32 @@
+{
+  "presets": [
+    {
+      "preset": "kodak_portra_400",
+      "manualValuesPreservedOnPresetChange": true,
+      "originalToggle": true,
+      "resetKeptPreset": true,
+      "width": 4000,
+      "height": 3000
+    },
+    {
+      "preset": "kodak_gold_200",
+      "manualValuesPreservedOnPresetChange": true,
+      "originalToggle": true,
+      "resetKeptPreset": true,
+      "width": 4000,
+      "height": 3000
+    },
+    {
+      "preset": "kodak_ektar_100",
+      "manualValuesPreservedOnPresetChange": true,
+      "originalToggle": true,
+      "resetKeptPreset": true,
+      "width": 4000,
+      "height": 3000
+    }
+  ],
+  "airplaneMode": true,
+  "outputs": 3,
+  "sourceUnchanged": true,
+  "galleryPhotoDisplayed": true
+}
