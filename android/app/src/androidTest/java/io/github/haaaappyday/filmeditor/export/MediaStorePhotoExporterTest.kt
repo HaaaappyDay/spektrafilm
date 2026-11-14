@@ -226,13 +226,18 @@ class MediaStorePhotoExporterTest {
         val h = Harness()
         try {
             val request = ExportRequest(h.source("orientation-1.jpg"), EditParams("kodak_portra_400"))
+            var uriWriteRejected = false
             val journal = PendingExportStore(context, File(h.root, "broken-journal"), commit = { pending, committed ->
-                if (pending.readText().contains("content://")) throw IOException("URI journal write failed")
+                if (!JSONObject(pending.readText()).isNull("uri")) {
+                    uriWriteRejected = true
+                    throw IOException("URI journal write failed")
+                }
                 Os.rename(pending.absolutePath, committed.absolutePath)
             })
             val exporter = MediaStorePhotoExporter(context, h.images, h.renderer, journal, h.gateway, File(h.root, "staging"))
             try { exporter.export(request); fail("URI journal failure returned success") }
             catch (error: EditorException) { assertEquals(EditorErrorCode.EXPORT_FAILED, error.code) }
+            assertTrue("URI journal failure was not injected", uriWriteRejected)
             assertTrue(journal.read().isEmpty()); h.assertNoUnpublishedOutput()
             h.gateway.fault = Fault.WRITE; h.gateway.refuseDelete = true
             try { h.exporter.export(request); fail("Write failure returned success") }
