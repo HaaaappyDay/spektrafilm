@@ -83,6 +83,26 @@ Instrumented tests install a separate `io.github.haaaappyday.filmeditor.validati
 app and its own fixture provider. They may reset that validation app’s session;
 the regular debug app and its session remain separate.
 
+The process-death check is a separate host-driven test. It keeps the prepared
+instrumentation process alive, verifies its PID, force-stops that exact validation
+package, and then checks restoration in a new process. The generated source and
+edits must survive; an unpublished export must be removed, and an already
+published JPEG must remain byte-identical with no duplicate save. Run after the
+connected suite (replace `SERIAL` with the selected device's serial):
+
+```sh
+adb -s SERIAL install -r app/build/outputs/apk/validation/app-validation.apk
+adb -s SERIAL install -r app/build/outputs/apk/androidTest/validation/app-validation-androidTest.apk
+python3 ../scripts/verify_android_process_restore.py --serial SERIAL --out app/build/reports/process-restoration
+```
+
+The driver uses Python's standard library, requires no Python project install,
+and cleans up only its tracked generated images in the validation app. Its
+`process-restoration.json` and phase logs are retained in CI. This check models
+death after pending-row journaling; it does not claim to reproduce every possible
+instruction boundary during export. Normal connected tests exclude the host-only
+phases, which must not be run alone without their driver.
+
 CI builds, unit-tests and lints on Linux, uploads APK/reports, and runs device
 checks on API 29, 36 and 37.2 emulators (37.2 uses the Google APIs 16 KB image). Reports live under `app/build/reports/` and
 `app/build/outputs/androidTest-results/`. See [testing strategy](../docs/android/testing.md).

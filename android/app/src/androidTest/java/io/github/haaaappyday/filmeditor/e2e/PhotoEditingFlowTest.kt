@@ -1,5 +1,7 @@
 package io.github.haaaappyday.filmeditor.e2e
 
+import android.net.Uri
+
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.ParcelFileDescriptor

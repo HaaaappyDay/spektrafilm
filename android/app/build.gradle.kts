@@ -15,6 +15,7 @@ android {
         versionCode = 1
         versionName = "0.1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunnerArguments["notClass"] = "io.github.haaaappyday.filmeditor.e2e.ProcessRestorePhases"
         manifestPlaceholders["fixtureAuthority"] = "$applicationId.test.fixtures"
     }
     // Instrumented tests own their generated sources and recovery state. Never

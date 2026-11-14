@@ -83,7 +83,11 @@ jobs:
           heap-size: 128M
           disable-animations: true
           working-directory: android
-          script: ./gradlew :app:connectedValidationAndroidTest -Pandroid.testInstrumentationRunnerArguments.sourceCommit=${{ github.event.pull_request.head.sha || github.sha }} -Pandroid.testInstrumentationRunnerArguments.testedCommit=${{ github.sha }}
+          script: |
+            ./gradlew :app:connectedValidationAndroidTest -Pandroid.testInstrumentationRunnerArguments.sourceCommit=${{ github.event.pull_request.head.sha || github.sha }} -Pandroid.testInstrumentationRunnerArguments.testedCommit=${{ github.sha }}
+            adb -s emulator-5554 install -r app/build/outputs/apk/validation/app-validation.apk
+            adb -s emulator-5554 install -r app/build/outputs/apk/androidTest/validation/app-validation-androidTest.apk
+            python3 ../scripts/verify_android_process_restore.py --serial emulator-5554 --out app/build/reports/process-restoration
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -92,6 +96,7 @@ jobs:
             android/app/build/outputs/connected_android_test_additional_output/
             android/app/build/reports/androidTests/
             android/app/build/outputs/androidTest-results/
+            android/app/build/reports/process-restoration/
       - uses: actions/upload-artifact@v4
         if: always() && matrix.api == '37.2'
         with:
