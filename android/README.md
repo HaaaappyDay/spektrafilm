@@ -5,10 +5,15 @@ is tracked in [issue #9](https://github.com/HaaaappyDay/spektrafilm/issues/9).
 
 ## Current milestone
 
-Foundation (#10): shared import/render/export interfaces, an installable Compose
-empty state, and CI. The import button is intentionally disabled until #11.
-Film presets, adjustments and export arrive in #12–#14. This milestone is not
-an operational photo editor. No production fake simulates successful editing.
+Photo import (#11): select a static SDR JPEG/PNG and view its normalized preview.
+The source is copied privately without modifying the original. Failed/cancelled
+imports keep the old photo; retry is available. There are no simulated film or
+save operations. Presets, manual adjustments and gallery export arrive in #12–#14.
+
+See [import validation](../docs/android/import-validation.md) for size limits,
+color/orientation behavior, synthetic fixture provenance and verification status.
+Full edit-session process restoration is introduced with #13; this milestone
+retains the current preview across Activity recreation only.
 
 ## Reproducible build
 
@@ -39,6 +44,7 @@ Qt, preset baking or developer-specific paths are required to build Android.
 | Kotlin + Compose compiler plugin | 2.2.21 |
 | Compose BOM | 2025.10.01 |
 | Activity / Core | 1.11.0 / 1.17.0 |
+| Lifecycle | 2.9.4 |
 | Coroutines | 1.10.2 |
 
 These are intentionally pinned stable versions, not an assertion that each is
@@ -64,7 +70,7 @@ adb shell am start -W -n io.github.haaaappyday.filmeditor/.MainActivity
 ```
 
 CI builds, unit-tests and lints on Linux, uploads APK/reports, and runs device
-checks on an API 29 emulator. Reports live under `app/build/reports/` and
+checks on API 29 and 36 emulators. Reports live under `app/build/reports/` and
 `app/build/outputs/androidTest-results/`. See [testing strategy](../docs/android/testing.md).
 The maintainer's reference device is vivo X200 Pro mini. Its API, RAM, GPU and
 performance must be measured from the connected device; emulator results do
@@ -88,7 +94,7 @@ errors instead of substituting defaults. No Bitmap/GL objects enter saved state.
 Final v1 imports static SDR JPEG/PNG only, previews at long edge ≤1600 and exports
 JPEG quality 95 to `Pictures/FilmEditor` at long edge ≤4096 without upscaling.
 Output dimensions are shown before saving; original GPS/ICC/orientation metadata
-is not copied. These features are pending subsequent issues, not foundation behavior.
+is not copied. Gallery export is pending #14; the import repository already supports the 4096 decode cap.
 
 ## Attribution
 

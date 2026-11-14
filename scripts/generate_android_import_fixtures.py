@@ -99,6 +99,12 @@ def generate(out):
     image.save(out / 'animated.png', save_all=True, append_images=[patches.resize(image.size)], duration=100, loop=0)
     (out / 'corrupt.jpg').write_bytes(b'not an image')
     (out / 'truncated.jpg').write_bytes((out / 'orientation-1.jpg').read_bytes()[:150])
+    jpeg = (out / 'orientation-1.jpg').read_bytes()
+    (out / 'truncated-pixels.jpg').write_bytes(jpeg[:len(jpeg)*4//5])
+    png = (out / 'untagged.png').read_bytes()
+    idat = png.index(b'IDAT')
+    idat_length = struct.unpack('>I', png[idat-4:idat])[0]
+    (out / 'truncated-pixels.png').write_bytes(png[:idat+4+idat_length//2])
     metadata = dict(orientations=orientations, p3Expected=[reference.getpixel((20+40*i, 20)) for i in range(3)],
                     srgbExpected=colors)
     (out / 'expected.json').write_text(json.dumps(metadata, indent=2)+'\n')

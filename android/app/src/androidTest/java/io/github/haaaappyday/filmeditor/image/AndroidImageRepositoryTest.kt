@@ -44,7 +44,7 @@ class AndroidImageRepositoryTest {
         val good = AndroidImageRepository(context, directory = { directory }, openInput = { ByteArrayInputStream(bytes()) })
         val source = good.importImage(uri)
         try {
-            for (data in listOf(bytes("unsupported.webp"), bytes("corrupt.jpg"), bytes("truncated.jpg"), bytes("animated.png"))) {
+            for (data in listOf(bytes("unsupported.webp"), bytes("corrupt.jpg"), bytes("truncated.jpg"), bytes("truncated-pixels.jpg"), bytes("truncated-pixels.png"), bytes("animated.png"))) {
                 val bad = AndroidImageRepository(context, directory = { directory }, openInput = { ByteArrayInputStream(data) })
                 try { bad.importImage(uri); fail("Expected rejection") } catch (_: EditorException) { }
             }

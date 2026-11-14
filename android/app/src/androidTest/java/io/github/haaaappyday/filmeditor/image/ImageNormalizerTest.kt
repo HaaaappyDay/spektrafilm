@@ -89,7 +89,7 @@ class ImageNormalizerTest {
     }
 
     @Test fun unsupportedAnimatedAndCorruptInputsNeverProducePartialSuccess() {
-        for (name in listOf("unsupported.webp", "animated.png", "corrupt.jpg", "truncated.jpg")) {
+        for (name in listOf("unsupported.webp", "animated.png", "corrupt.jpg", "truncated.jpg", "truncated-pixels.jpg", "truncated-pixels.png")) {
             val error = assertThrows(EditorException::class.java) { normalizer.inspect(fixture(name)) }
             assertTrue(error.code in setOf(EditorErrorCode.UNSUPPORTED_IMAGE, EditorErrorCode.READ_FAILED))
         }

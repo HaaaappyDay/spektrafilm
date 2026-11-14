@@ -13,6 +13,7 @@ class AndroidImageRepository(
     context: Context,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
     private val directory: () -> File = { File(context.applicationContext.noBackupFilesDir, "sources") },
+    private val decodeBitmap: (File, Int) -> Bitmap = ImageNormalizer()::decode,
     private val openInput: (Uri) -> InputStream? = context.applicationContext.contentResolver::openInputStream,
 ) : ImageRepository {
     private val normalizer = ImageNormalizer()
@@ -76,7 +77,7 @@ class AndroidImageRepository(
             return withContext(ioDispatcher) {
                 translateReadFailure {
                     currentCoroutineContext().ensureActive()
-                    normalizer.decode(managedPath(source), maxLongEdge).also { produced = it }
+                    decodeBitmap(managedPath(source), maxLongEdge).also { produced = it }
                 }
             }
         } catch (error: Throwable) {

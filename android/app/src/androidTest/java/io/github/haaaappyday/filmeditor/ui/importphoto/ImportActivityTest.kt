@@ -14,6 +14,7 @@ import org.junit.Assert.*
 import org.junit.Rule
 import org.junit.Test
 import java.io.File
+import io.github.haaaappyday.filmeditor.testsupport.testOutputDirectory
 
 class ImportActivityTest {
     @get:Rule val compose = createAndroidComposeRule<MainActivity>()
@@ -44,7 +45,7 @@ class ImportActivityTest {
         compose.waitForIdle()
         val bitmap = InstrumentationRegistry.getInstrumentation().uiAutomation.takeScreenshot()
         try {
-            val directory = File(compose.activity.getExternalFilesDir(null), "screenshots").apply { mkdirs() }
+            val directory = testOutputDirectory()
             File(directory, "$name.png").outputStream().use { assertTrue(bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)) }
         } finally { bitmap.recycle() }
     }
