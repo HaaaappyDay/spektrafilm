@@ -158,8 +158,13 @@ graphics PSS describe different memory categories. Unknown counters stay unknown
 Resource checkpoints use a consistent post-GC policy outside timed operations;
 all 31 checkpoints and trends are retained. They require trace/retention review
 and never automatically certify the absence of a leak. Emulator reports remain
-`emulator-only`, regardless of timings. The first full harness dry run is still
-pending; physical v1 acceptance also requires the reference phone checks.
+`emulator-only`, regardless of timings. The complete local harness dry run and
+API 36 CI workload have passed artifact validation at commit `d274014`; see
+[v1 validation](../docs/android/v1-validation.md) for the retained samples and
+limitations. The local preview p95 was 263.906ms, above the 200ms target; no
+samples were discarded. Physical v1 acceptance still requires the reference phone.
+The helper tag identifies the downloaded scripts; `recording.json` records the
+actual trace-processor version, which may differ from the helper tag.
 
 ## Boundaries and ownership
 
