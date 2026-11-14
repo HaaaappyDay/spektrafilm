@@ -15,7 +15,19 @@ android {
         versionCode = 1
         versionName = "0.1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders["fixtureAuthority"] = "$applicationId.test.fixtures"
     }
+    // Instrumented tests own their generated sources and recovery state. Never
+    // run session-clearing tests against the app installed for everyday use.
+    buildTypes {
+        create("validation") {
+            initWith(getByName("debug"))
+            applicationIdSuffix = ".validation"
+            matchingFallbacks += "debug"
+            manifestPlaceholders["fixtureAuthority"] = "io.github.haaaappyday.filmeditor.validation.test.fixtures"
+        }
+    }
+    testBuildType = "validation"
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -38,6 +50,7 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
     debugImplementation(libs.compose.ui.tooling)
     debugImplementation(libs.compose.ui.test.manifest)
+    "validationImplementation"(libs.compose.ui.test.manifest)
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.compose.ui.test.junit4)

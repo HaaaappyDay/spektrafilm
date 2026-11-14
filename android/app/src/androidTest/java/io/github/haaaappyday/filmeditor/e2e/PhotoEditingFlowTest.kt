@@ -2,7 +2,6 @@ package io.github.haaaappyday.filmeditor.e2e
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.net.Uri
 import android.os.ParcelFileDescriptor
 import android.provider.Settings
 import androidx.compose.ui.semantics.SemanticsActions
@@ -50,7 +49,7 @@ class PhotoEditingFlowTest {
             compose.onNodeWithTag("export").performScrollTo().assertIsNotEnabled()
             compose.onNodeWithTag("strength").performScrollTo().assertIsNotEnabled()
             compose.onAllNodesWithText("Auto", substring = true).assertCountEquals(0)
-            compose.runOnUiThread { editor.importPhoto(Uri.parse("content://io.github.haaaappyday.filmeditor.test.fixtures/12mp.jpg")) }
+            compose.runOnUiThread { editor.importPhoto(fixtureUri("12mp.jpg")) }
             compose.waitUntil(30_000) { editor.state.value.previewValid }
             val source = checkNotNull(editor.state.value.source)
             val original = hash(File(source.localPath))

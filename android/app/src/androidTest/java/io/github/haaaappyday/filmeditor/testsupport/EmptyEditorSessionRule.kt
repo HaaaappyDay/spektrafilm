@@ -10,6 +10,10 @@ class EmptyEditorSessionRule : ExternalResource() {
     override fun before() = clear()
     override fun after() = clear()
     private fun clear() = runBlocking {
-        EditorSessionStore(InstrumentationRegistry.getInstrumentation().targetContext).save(null)
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        check(context.packageName == "io.github.haaaappyday.filmeditor.validation") {
+            "Session cleanup is allowed only in the isolated validation app"
+        }
+        EditorSessionStore(context).save(null)
     }
 }

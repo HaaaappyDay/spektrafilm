@@ -1,6 +1,5 @@
 package io.github.haaaappyday.filmeditor.e2e
 
-import android.net.Uri
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.lifecycle.ViewModelProvider
 import androidx.test.platform.app.InstrumentationRegistry
@@ -28,7 +27,7 @@ class LifecycleAndRecoveryTest {
         return editor
     }
     private fun import(editor: EditorViewModel, fixture: String) {
-        compose.runOnUiThread { editor.importPhoto(Uri.parse("content://io.github.haaaappyday.filmeditor.test.fixtures/$fixture")) }
+        compose.runOnUiThread { editor.importPhoto(fixtureUri("$fixture")) }
         compose.waitUntil(30_000) { editor.state.value.previewValid && !editor.state.value.importing }
         assertNull(editor.state.value.error)
     }
@@ -40,7 +39,7 @@ class LifecycleAndRecoveryTest {
         val previous = editor.state.value
         compose.runOnUiThread { editor.importPhoto(null) }
         assertEquals(previous.source, editor.state.value.source); assertEquals(previous.params, editor.state.value.params)
-        compose.runOnUiThread { editor.importPhoto(Uri.parse("content://io.github.haaaappyday.filmeditor.test.fixtures/missing.jpg")) }
+        compose.runOnUiThread { editor.importPhoto(fixtureUri("missing.jpg")) }
         compose.waitUntil(20_000) { !editor.state.value.importing && editor.state.value.error != null }
         assertEquals(previous.source, editor.state.value.source); assertEquals(previous.params, editor.state.value.params)
         assertSame(previous.input, editor.state.value.input)

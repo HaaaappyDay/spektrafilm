@@ -44,7 +44,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        api: [29, 36, 37]
+        include:
+          - api: '29'
+            target: default
+          - api: '36'
+            target: default
+          - api: '37.2'
+            target: google_apis_ps16k
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -65,18 +71,19 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
       - name: Record available stable SDK packages
-        if: matrix.api == 37
+        if: matrix.api == '37.2'
         run: sdkmanager --list --channel=0 > "$RUNNER_TEMP/android-sdk-stable.txt"
       - name: Instrumented tests on API ${{ matrix.api }}
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api }}
+          target: ${{ matrix.target }}
           arch: x86_64
           ram-size: 2048M
           heap-size: 128M
           disable-animations: true
           working-directory: android
-          script: ./gradlew :app:connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.sourceCommit=${{ github.event.pull_request.head.sha || github.sha }} -Pandroid.testInstrumentationRunnerArguments.testedCommit=${{ github.sha }}
+          script: ./gradlew :app:connectedValidationAndroidTest -Pandroid.testInstrumentationRunnerArguments.sourceCommit=${{ github.event.pull_request.head.sha || github.sha }} -Pandroid.testInstrumentationRunnerArguments.testedCommit=${{ github.sha }}
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -86,7 +93,7 @@ jobs:
             android/app/build/reports/androidTests/
             android/app/build/outputs/androidTest-results/
       - uses: actions/upload-artifact@v4
-        if: always() && matrix.api == 37
+        if: always() && matrix.api == '37.2'
         with:
           name: android-sdk-inventory-${{ github.sha }}
           path: ${{ runner.temp }}/android-sdk-stable.txt

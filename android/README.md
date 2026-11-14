@@ -76,11 +76,15 @@ For multiple devices set `ANDROID_SERIAL` to the chosen device.
 ```sh
 adb install -r app/build/outputs/apk/debug/app-debug.apk
 adb shell am start -W -n io.github.haaaappyday.filmeditor/.MainActivity
-./gradlew :app:connectedDebugAndroidTest
+./gradlew :app:connectedValidationAndroidTest
 ```
 
+Instrumented tests install a separate `io.github.haaaappyday.filmeditor.validation`
+app and its own fixture provider. They may reset that validation app’s session;
+the regular debug app and its session remain separate.
+
 CI builds, unit-tests and lints on Linux, uploads APK/reports, and runs device
-checks on API 29 and 36 emulators. Reports live under `app/build/reports/` and
+checks on API 29, 36 and 37.2 emulators (37.2 uses the Google APIs 16 KB image). Reports live under `app/build/reports/` and
 `app/build/outputs/androidTest-results/`. See [testing strategy](../docs/android/testing.md).
 The maintainer's reference device is vivo X200 Pro mini. Its API, RAM, GPU and
 performance must be measured from the connected device; emulator results do
