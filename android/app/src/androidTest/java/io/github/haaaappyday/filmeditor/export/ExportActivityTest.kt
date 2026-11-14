@@ -45,6 +45,7 @@ class ExportActivityTest {
             compose.runOnUiThread { editor.setExposure(.7f); editor.setTemperature(30f) }
             compose.waitUntil(30_000) { editor.state.value.previewValid }
             val expected = editor.state.value.params
+            compose.onNodeWithTag("tab-export").performClick()
             compose.onNodeWithTag("export").performScrollTo().assertIsEnabled()
             // Both actions execute in the same Main turn, before IO can publish a result.
             compose.runOnUiThread {
@@ -77,7 +78,7 @@ class ExportActivityTest {
             }
             // Resumed Activity can precede its first displayed frame. The generated
             // 12MP fixture is uniform: a fitted gallery image covers >30% of either
-            // orientation, whereas the previous editor's preview covers <30%.
+            // orientation; the resumed external gallery check above rules out the editor.
             var frame: Bitmap? = null
             try {
                 compose.waitUntil(15_000) {
@@ -118,6 +119,7 @@ class ExportActivityTest {
             compose.waitUntil(20_000) { !editor.state.value.initializing }
             compose.runOnUiThread { editor.importPhoto(fixtureUri("orientation-1.jpg")) }
             compose.waitUntil(20_000) { editor.state.value.previewValid }
+            compose.onNodeWithTag("tab-export").performClick()
             compose.onNodeWithTag("export").performScrollTo().assertIsEnabled().performClick()
             compose.waitUntil(20_000) { editor.state.value.exportResult != null }
             published = editor.state.value.exportResult!!.uri

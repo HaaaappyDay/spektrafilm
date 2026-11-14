@@ -2,11 +2,16 @@ package io.github.haaaappyday.filmeditor.ui.editor
 
 import android.graphics.Bitmap
 import androidx.compose.runtime.*
+import androidx.compose.ui.graphics.asAndroidBitmap
+import io.github.haaaappyday.filmeditor.testsupport.testOutputDirectory
+import java.io.File
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.junit4.StateRestorationTester
 import androidx.compose.ui.unit.Density
+import androidx.test.espresso.Espresso
 import androidx.test.platform.app.InstrumentationRegistry
 import io.github.haaaappyday.filmeditor.R
 import io.github.haaaappyday.filmeditor.core.*
@@ -25,16 +30,23 @@ class EditorScreenTest {
             input = bitmap, preview = bitmap, initializing = false, servicesReady = true, previewValid = true, exportAvailable = true,
             presets = listOf(FilmPreset("kodak_portra_400", "Portra 400", "p", "0".repeat(64)), FilmPreset("kodak_gold_200", "Gold 200", "g", "1".repeat(64))))
     }
-    @Test fun noPhotoDisablesEditingAndSaving() {
+    private fun tab(name: String) = compose.onNodeWithTag("tab-$name").performClick()
+    private fun adjust(name: String, value: Float) {
+        compose.onNodeWithTag("adjust-$name").performScrollTo().performClick()
+        compose.onNodeWithTag(name).performScrollTo().performSemanticsAction(SemanticsActions.SetProgress) { it(value) }
+    }
+    @Test fun emptyEditorHasAClearImportWithoutInactiveParameterClutter() {
+        var imports = 0
         compose.setContent { FilmEditorTheme {
-            EditorScreen(EditorUiState(initializing = false, servicesReady = true), {}, {}, {}, {}, {}, {}, {}, {}, {}, {})
+            EditorScreen(EditorUiState(initializing = false, servicesReady = true), { imports++ }, {}, {}, {}, {}, {}, {}, {}, {}, {})
         } }
-        compose.onNodeWithTag("import").assertIsEnabled()
-        for (tag in listOf("preset-selector", "strength", "exposure", "temperature", "reset", "original", "export")) {
-            compose.onNodeWithTag(tag).performScrollTo().assertIsNotEnabled()
+        compose.onNodeWithTag("import").assertIsEnabled().assertIsDisplayed().performClick()
+        compose.runOnIdle { assertEquals(1, imports) }
+        for (tag in listOf("strength", "exposure", "temperature", "reset", "original", "export", "tab-films")) {
+            compose.onNodeWithTag(tag).assertDoesNotExist()
         }
     }
-    @Test fun accessibleSlidersPresetResetComparisonAndSaveLockout() {
+    @Test fun accessibleSlidersFilmCardsComparisonResetAndSaveLockout() {
         var state by mutableStateOf(ready())
         var exports = 0
         compose.setContent { FilmEditorTheme {
@@ -46,22 +58,21 @@ class EditorScreenTest {
                 { state = state.copy(showOriginal = !state.showOriginal) }, {},
                 { exports++; state = state.copy(exporting = true) }, {})
         } }
-        compose.onNodeWithTag("strength").performScrollTo().performSemanticsAction(SemanticsActions.SetProgress) { it(.37f) }
-        compose.onNodeWithTag("exposure").performScrollTo().performSemanticsAction(SemanticsActions.SetProgress) { it(.34f) }
-        compose.onNodeWithTag("temperature").performScrollTo().performSemanticsAction(SemanticsActions.SetProgress) { it(24f) }
-        compose.onNodeWithTag("preset-selector").performScrollTo().performClick()
-        compose.onNodeWithText("Gold 200").performClick()
+        tab("adjust")
+        adjust("strength", .37f); adjust("exposure", .34f); adjust("temperature", 24f)
+        tab("films")
+        compose.onNodeWithTag("preset-kodak_gold_200").performScrollTo().performClick().assertIsSelected()
         compose.runOnIdle { assertEquals(EditParams("kodak_gold_200", .37f, .3f, 24f), state.params) }
-        compose.onNodeWithTag("original").performScrollTo().performClick()
+        compose.onNodeWithTag("original").performClick().assertIsSelected()
         compose.runOnIdle { assertTrue(state.showOriginal) }
+        tab("adjust")
         compose.onNodeWithTag("reset").performScrollTo().performClick()
         compose.runOnIdle { assertEquals(EditParams("kodak_gold_200"), state.params) }
+        tab("export")
         compose.onNodeWithTag("export").performScrollTo().performClick()
         compose.runOnIdle { assertEquals(1, exports) }
-        for (tag in listOf("import", "preset-selector", "strength", "exposure", "temperature", "reset", "original", "export")) {
-            val node = compose.onNodeWithTag(tag)
-            if (tag != "import") node.performScrollTo()
-            node.assertIsNotEnabled()
+        for (tag in listOf("import", "original", "tab-films", "tab-adjust", "tab-export", "export")) {
+            compose.onNodeWithTag(tag).assertIsNotEnabled()
         }
     }
     @Test fun failureAndLargeTextExposeRetryAndActualOutputDimensions() {
@@ -73,10 +84,49 @@ class EditorScreenTest {
                     errorStage = EditorErrorStage.PREVIEW), {}, {}, {}, {}, {}, {}, {}, { retries++ }, {}, {}) }
             }
         }
+        compose.onNodeWithTag("retry").assertIsDisplayed().performClick()
+        compose.runOnIdle { assertEquals(1, retries) }
+        tab("export")
         compose.onNodeWithTag("export").performScrollTo().assertIsNotEnabled()
         compose.onNodeWithText(context.getString(R.string.export_dimensions, 4096, 2731)).performScrollTo().assertIsDisplayed()
-        compose.onNodeWithTag("retry").performScrollTo().assertIsDisplayed().performClick()
-        compose.runOnIdle { assertEquals(1, retries) }
         compose.onNodeWithContentDescription(context.getString(R.string.photo_preview)).assertIsDisplayed()
+        screenshot("editor-large-text-export")
+    }
+    @Test fun toolNavigationAndRestorationPreserveEditsWithoutSaving() {
+        var state by mutableStateOf(ready())
+        var exports = 0
+        val restoration = StateRestorationTester(compose)
+        restoration.setContent { FilmEditorTheme {
+            EditorScreen(state, {}, {}, {}, { state = state.copy(params = state.params.copy(exposureEv = it)) },
+                {}, {}, {}, {}, { exports++ }, {})
+        } }
+        tab("export")
+        compose.runOnIdle { assertEquals(0, exports); assertEquals(EditParams("kodak_portra_400"), state.params) }
+        tab("adjust")
+        compose.onNodeWithTag("strength").assertExists()
+        compose.onNodeWithTag("exposure").assertDoesNotExist()
+        adjust("exposure", .4f)
+        compose.onNodeWithTag("strength").assertDoesNotExist()
+        restoration.emulateSavedInstanceStateRestore()
+        compose.onNodeWithTag("tab-adjust").assertIsSelected()
+        compose.onNodeWithTag("exposure").assertExists()
+        compose.runOnIdle { assertEquals(.4f, state.params.exposureEv); assertEquals(0, exports) }
+        Espresso.pressBack()
+        compose.onNodeWithTag("tab-films").assertIsSelected()
+        compose.runOnIdle { assertEquals(.4f, state.params.exposureEv); assertEquals(0, exports) }
+    }
+    @Test fun normalPhoneLayoutGivesMostOfTheWorkspaceToThePhoto() {
+        compose.setContent { FilmEditorTheme { EditorScreen(ready(), {}, {}, {}, {}, {}, {}, {}, {}, {}, {}) } }
+        val root = compose.onRoot().fetchSemanticsNode().boundsInRoot
+        val preview = compose.onNodeWithTag("photo-workspace").fetchSemanticsNode().boundsInRoot
+        assertTrue("Photo workspace $preview in $root", preview.height >= root.height * .55f)
+        compose.onNodeWithTag("tab-films").assertIsDisplayed()
+        compose.onNodeWithTag("preset-kodak_portra_400").assertIsDisplayed().assertIsSelected()
+        screenshot("editor-workspace")
+    }
+    private fun screenshot(name: String) {
+        val bitmap = compose.onRoot().captureToImage().asAndroidBitmap()
+        try { File(testOutputDirectory(), "$name.png").outputStream().use { assertTrue(bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)) } }
+        finally { bitmap.recycle() }
     }
 }

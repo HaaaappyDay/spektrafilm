@@ -39,4 +39,10 @@
     <string name="preset_unavailable">这款胶片暂时不可用，请重试或选择其他胶片。</string>
     <string name="preview_failed">无法更新预览，请重试。</string>
     <string name="export_failed">无法保存照片，请重试。</string>
+    <string name="tab_films">胶片</string>
+    <string name="tab_adjust">调整</string>
+    <string name="tab_export">导出</string>
+    <string name="open_image">打开</string>
+    <string name="compare_short">对比</string>
+    <string name="film_preview_hint">缩略图展示各胶片的默认效果。</string>
 </resources>
