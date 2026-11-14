@@ -102,8 +102,17 @@ class MediaStorePhotoExporterTest {
         }
     }
     private fun hash(file: File) = MessageDigest.getInstance("SHA-256").digest(file.readBytes()).joinToString("") { "%02x".format(it) }
-    private fun shell(command: String): String = ParcelFileDescriptor.AutoCloseInputStream(
-        instrumentation.uiAutomation.executeShellCommand(command)).bufferedReader().use { it.readText() }
+    private fun shell(command: String): String {
+        // UiAutomation uses Runtime.exec, which does not interpret pipes or quoting.
+        // Only generated fixture names/URIs/base64 are passed to this test-only script.
+        val script = File(checkNotNull(context.getExternalFilesDir(null)), "export-fixture-${UUID.randomUUID()}.sh")
+        return try {
+            script.writeText("exec 2>&1\n$command\n")
+            ParcelFileDescriptor.AutoCloseInputStream(
+                instrumentation.uiAutomation.executeShellCommand("sh ${script.absolutePath}")
+            ).bufferedReader().use { it.readText() }
+        } finally { script.delete() }
+    }
     private fun metadata(result: ExportResult) {
         resolver.openInputStream(result.uri)!!.use { input ->
             val exif = ExifInterface(input)
@@ -295,32 +304,46 @@ class MediaStorePhotoExporterTest {
             File(testOutputDirectory(), "export-repeat-resources.json").writeText(JSONObject().put("exports", 10).put("uniqueUris", results.size).put("openFdCounts", JSONArray(counts)).put("encodedBitmapsRecycled", true).toString(2))
         } finally { h.close() }
     }
+    @Suppress("DEPRECATION")
     @Test fun shellOwnedPendingAndPublishedPhotosSurviveEvenWithForgedJournalUri() = runBlocking {
         val h = Harness(); val record = PendingExport.create()
+        val collection = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
+        val includingPending = MediaStore.setIncludePending(collection)
+        val selection = "_display_name='${record.displayName}'"
         var foreign: Uri? = null
         try {
-            val inserted = shell("content insert --uri content://media/external_primary/images/media --bind _display_name:s:${record.displayName} --bind mime_type:s:image/jpeg --bind relative_path:s:${PendingExport.RELATIVE_PATH} --bind is_pending:i:1")
-            foreign = Uri.parse(checkNotNull(Regex("content://media/[^\\s]+").find(inserted)) { inserted }.value)
+            val inserted = shell("content insert --uri $collection --bind _display_name:s:${record.displayName} --bind mime_type:s:image/jpeg --bind relative_path:s:${PendingExport.RELATIVE_PATH} --bind is_pending:i:1")
+            // Insert intentionally prints nothing. Discover the row by its unique fixture name.
+            val found = shell("content query --uri '$includingPending' --projection _id --where \"$selection\"")
+            val ids = Regex("_id=(\\d+)").findAll(found).toList()
+            assertEquals("insert=$inserted; query=$found", 1, ids.size)
+            foreign = Uri.withAppendedPath(collection, ids.single().groupValues[1])
             val jpeg = instrumentation.context.assets.open("import-fixtures/orientation-1.jpg").use { it.readBytes() }
             val encoded = Base64.encodeToString(jpeg, Base64.NO_WRAP)
             shell("printf %s $encoded | base64 -d | content write --uri $foreign")
-            val query = "content query --uri $foreign --projection _id:owner_package_name:is_pending:_display_name"
+            val query = "content query --uri '${MediaStore.setIncludePending(foreign)}' --projection _id:owner_package_name:is_pending:_display_name"
             val before = shell(query)
             assertTrue(before, before.contains(record.displayName) && before.contains("is_pending=1"))
-            assertTrue(before, before.contains("owner_package_name=") && !before.contains("owner_package_name=${context.packageName}"))
+            assertTrue(before, before.contains("owner_package_name=com.android.shell"))
+            fun assertFixtureBytes() = assertArrayEquals(jpeg, Base64.decode(
+                shell("content read --uri $foreign | base64"), Base64.DEFAULT))
+            assertFixtureBytes()
             h.journal.write(record.copy(uri = foreign))
             h.exporter.recover()
             assertEquals(before, shell(query))
+            assertFixtureBytes()
             shell("content update --uri $foreign --bind is_pending:i:0")
             h.journal.write(record.copy(uri = foreign))
             h.exporter.recover()
             val published = shell(query)
             assertTrue(published, published.contains(record.displayName) && published.contains("is_pending=0"))
+            assertFixtureBytes()
             File(testOutputDirectory(), "export-external-owner-preservation.json").writeText(JSONObject()
                 .put("pendingPreserved", true).put("publishedPreserved", true)
                 .put("ownerMetadata", published.substringAfter("owner_package_name=").substringBefore(",")).toString(2))
         } finally {
-            foreign?.let { shell("content delete --uri $it") }
+            if (foreign != null) shell("content delete --uri '${MediaStore.setIncludePending(foreign)}'")
+            else shell("content delete --uri '$includingPending' --where \"$selection\"")
             h.close()
         }
     }
