@@ -4,7 +4,7 @@ from pathlib import Path
 import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts"))
-from verify_android_process_restore import validate_ready, validate_result, require_one_test
+from verify_android_process_restore import validate_ready, validate_result, require_one_test, decode_device_json
 
 
 def ready():
@@ -49,3 +49,12 @@ def test_instrumentation_exit_zero_is_insufficient(output):
 
 def test_accepts_one_completed_phase():
     require_one_test("Time: 1.27\n\nOK (1 test)\n\nINSTRUMENTATION_CODE: -1\n")
+
+
+def test_ready_poll_handles_absent_file_and_empty_adb_output():
+    assert decode_device_json(1, "") is None
+    assert decode_device_json(0, "") is None
+    assert decode_device_json(0, " \n") is None
+    assert decode_device_json(0, '{"readyForKill": true}') == {"readyForKill": True}
+    with pytest.raises(ValueError):
+        decode_device_json(0, "malformed nonempty result")

@@ -18,6 +18,12 @@ INVARIANTS = ("sourcePreserved", "paramsRestored", "pendingRemoved", "publishedP
               "noDuplicateExport", "previewRestored", "noTransientSuccess")
 
 
+def decode_device_json(returncode, stdout):
+    # The first poll can precede file creation. Empty transport output is not
+    # a ready marker; malformed nonempty JSON still fails validation.
+    return json.loads(stdout) if returncode == 0 and stdout.strip() else None
+
+
 def _identity(data, run_id):
     if data.get("schemaVersion") != 1 or data.get("package") != PACKAGE or data.get("runId") != run_id:
         raise ValueError("Unexpected validation package, schema or stale run identity")
@@ -50,6 +56,8 @@ def require_one_test(output):
 
 def run(serial, out):
     out.mkdir(parents=True, exist_ok=True)
+    report = out / "process-restoration.json"
+    report.unlink(missing_ok=True)  # A failed rerun must not leave an old pass.
     run_id = uuid.uuid4().hex
     adb = ["adb", "-s", serial]
 
@@ -62,8 +70,9 @@ def run(serial, out):
                 f"{PACKAGE}.test/androidx.test.runner.AndroidJUnitRunner"]
 
     def read_json(name):
-        result = command("exec-out", "run-as", PACKAGE, "cat", f"files/{name}", check=False)
-        return json.loads(result.stdout) if result.returncode == 0 else None
+        # shell v2 propagates remote exit status, unlike exec-out's raw stream.
+        result = command("shell", "-T", "run-as", PACKAGE, "cat", f"files/{name}", check=False)
+        return decode_device_json(result.returncode, result.stdout)
 
     if command("get-state").stdout.strip() != "device":
         raise ValueError("Explicit serial is not a connected, authorized device")
@@ -96,7 +105,6 @@ def run(serial, out):
             raise ValueError("Verification did not produce a report")
         validate_result(result, run_id, int(pid))
         result["hostForceStopVerified"] = True
-        (out / "process-restoration.json").write_text(json.dumps(result, indent=2) + "\n")
     except BaseException:
         failed = True
         raise
@@ -112,6 +120,8 @@ def run(serial, out):
         if not failed:
             cleanup.check_returncode()
             require_one_test(cleanup.stdout)
+    result["cleanupVerified"] = True
+    report.write_text(json.dumps(result, indent=2) + "\n")
 
 
 def main():
