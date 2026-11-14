@@ -8,9 +8,19 @@ import io.github.haaaappyday.filmeditor.core.*
 import org.json.JSONObject
 import org.junit.Assert.*
 import org.junit.Test
+import org.junit.After
+import org.junit.Rule
+import org.junit.rules.TestName
+import io.github.haaaappyday.filmeditor.testsupport.testOutputDirectory
 import java.io.File
 
 class ImageNormalizerTest {
+    @get:Rule val testName = TestName()
+    private var maxError = 0
+    @After fun recordSampledColorError() {
+        File(testOutputDirectory(), "normalization-${testName.methodName}.json")
+            .writeText(JSONObject().put("maxSampledRgbCodeError", maxError).toString())
+    }
     private val instrumentation = InstrumentationRegistry.getInstrumentation()
     private val normalizer = ImageNormalizer()
     private fun fixture(name: String): File = File(instrumentation.targetContext.cacheDir, "fixture-$name").also { file ->
@@ -24,6 +34,7 @@ class ImageNormalizerTest {
     }
     private fun assertColor(expected: IntArray, actual: Int, tolerance: Int = 2) {
         val channels = intArrayOf(Color.red(actual), Color.green(actual), Color.blue(actual))
+        for (i in 0..2) maxError = maxOf(maxError, kotlin.math.abs(expected[i] - channels[i]))
         for (i in 0..2) assertTrue("RGB expected=${expected.toList()}, actual=${channels.toList()}", kotlin.math.abs(expected[i] - channels[i]) <= tolerance)
         assertEquals(255, Color.alpha(actual))
     }

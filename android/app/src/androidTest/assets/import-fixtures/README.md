@@ -14,3 +14,11 @@ Python/Pillow/LCMS are regeneration tools only, not Android build dependencies.
 SHA256SUMS.json records committed fixture bytes; timestamps inside generated ICC
 profiles are normalized. 12/24/48 MP fixtures are highly compressible solid colors
 but their encoded dimensions exercise real decoder sampling/allocation behavior.
+
+`synthetic-gainmap.jpg` is generated separately by GainmapFixtureTest on an API 36
+emulator using Android's native Gainmap + JPEG encoder. The base is a 32×24 solid
+RGB(100,140,170) image, with a neutral gain map and HDR ratio 2. Source run:
+https://github.com/HaaaappyDay/spektrafilm/actions/runs/43540056192 . The same bytes
+are committed so API29 tests exercise a real modern gain-map container. Regenerate
+by running GainmapFixtureTest on API34+ and copying its additional test output;
+this file is not synthesized by the Python generator.

@@ -11,8 +11,36 @@ import java.io.File
 import io.github.haaaappyday.filmeditor.testsupport.testOutputDirectory
 
 class GainmapFixtureTest {
-    @Test fun newerAndroidRejectsARealSyntheticGainmapJpeg() {
+    @Test fun nativeGainmapJpegUsesItsKnownSdrBase() {
         if (Build.VERSION.SDK_INT >= 34) generateAndCheck()
+    }
+
+    @Test fun archivedGainmapHasTheSameSdrPixelsOnOldAndNewAndroid() {
+        val instrumentation = InstrumentationRegistry.getInstrumentation()
+        val file = File(instrumentation.targetContext.cacheDir, "archived-gainmap.jpg")
+        instrumentation.context.assets.open("import-fixtures/synthetic-gainmap.jpg").use { input ->
+            file.outputStream().use { input.copyTo(it) }
+        }
+        checkSdrBase(file)
+    }
+
+    private fun checkSdrBase(file: File) {
+        val normalizer = ImageNormalizer()
+        val metadata = normalizer.inspect(file)
+        assertEquals(32, metadata.width); assertEquals(24, metadata.height)
+        val bitmap = normalizer.decode(file, 1600)
+        try {
+            assertEquals(Bitmap.Config.ARGB_8888, bitmap.config)
+            assertEquals(ColorSpace.get(ColorSpace.Named.SRGB), bitmap.colorSpace)
+            if (Build.VERSION.SDK_INT >= 34) assertFalse(bitmap.hasGainmap())
+            for (y in 0 until bitmap.height) for (x in 0 until bitmap.width) {
+                val pixel = bitmap.getPixel(x, y)
+                assertTrue(kotlin.math.abs(Color.red(pixel) - 100) <= 2)
+                assertTrue(kotlin.math.abs(Color.green(pixel) - 140) <= 2)
+                assertTrue(kotlin.math.abs(Color.blue(pixel) - 170) <= 2)
+                assertEquals(255, Color.alpha(pixel))
+            }
+        } finally { bitmap.recycle() }
     }
 
     @RequiresApi(34)
@@ -27,13 +55,7 @@ class GainmapFixtureTest {
             file.outputStream().use { assertTrue(base.compress(Bitmap.CompressFormat.JPEG, 100, it)) }
             val raw = ImageDecoder.decodeBitmap(ImageDecoder.createSource(file))
             try { assertTrue("Fixture must contain a real gain map", raw.hasGainmap()) } finally { raw.recycle() }
-            val normalizer = ImageNormalizer()
-            for (inspect in listOf(true, false)) {
-                val error = assertThrows(EditorException::class.java) {
-                    if (inspect) normalizer.inspect(file) else normalizer.decode(file, 1600)
-                }
-                assertEquals(EditorErrorCode.UNSUPPORTED_IMAGE, error.code)
-            }
+            checkSdrBase(file)
         } finally { base.recycle(); gain.recycle() }
     }
 }

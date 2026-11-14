@@ -3,6 +3,7 @@ package io.github.haaaappyday.filmeditor.ui.importphoto
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.graphics.Bitmap
+import androidx.compose.ui.graphics.asAndroidBitmap
 import android.net.Uri
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -43,7 +44,9 @@ class ImportActivityTest {
 
     private fun screenshot(name: String) {
         compose.waitForIdle()
-        val bitmap = InstrumentationRegistry.getInstrumentation().uiAutomation.takeScreenshot()
+        compose.mainClock.advanceTimeByFrame()
+        compose.waitForIdle()
+        val bitmap = compose.onRoot().captureToImage().asAndroidBitmap()
         try {
             val directory = testOutputDirectory()
             File(directory, "$name.png").outputStream().use { assertTrue(bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)) }
