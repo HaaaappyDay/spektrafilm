@@ -62,7 +62,11 @@ class PerformanceScenario {
         check(frames.await(10, TimeUnit.SECONDS)) { "No foreground frames" }
     }
     private fun find(predicate: (AccessibilityNodeInfo) -> Boolean): AccessibilityNodeInfo? {
+        // Compose can update geometry before a coalesced accessibility event
+        // invalidates UiAutomation's cache. Never search the previous viewport.
+        if (Build.VERSION.SDK_INT >= 34) automation.clearCache()
         fun visit(node: AccessibilityNodeInfo): AccessibilityNodeInfo? {
+            if (Build.VERSION.SDK_INT < 34 && !node.refresh()) return null
             if (predicate(node)) return node
             for (i in 0 until node.childCount) node.getChild(i)?.let { child ->
                 val found = visit(child)
@@ -123,7 +127,12 @@ class PerformanceScenario {
         .put("range", node.rangeInfo?.let { JSONObject().put("min", it.min).put("max", it.max).put("current", it.current) } ?: JSONObject.NULL)
     private fun change(index: Int): JSONObject {
         val label = context.getString(R.string.film_strength)
-        val slider = visible { it.contentDescription?.toString() == label && it.rangeInfo != null }
+        var slider = visible { it.contentDescription?.toString() == label }
+        // Material3 exposes the label as a child of the actionable SeekBar.
+        while (slider.rangeInfo == null || slider.actionList.none {
+            it.id == AccessibilityNodeInfo.AccessibilityAction.ACTION_SET_PROGRESS.id
+        }) slider = checkNotNull(slider.parent) { "Label has no actionable slider owner" }
+        check(slider.rangeInfo.min == 0f && slider.rangeInfo.max == 1f)
         val value = if (index % 2 == 0) .35f else .75f
         val previous = editor.state.value.previewTraceId
         val span = PerformanceTrace.app.begin("FilmInputPreview")
