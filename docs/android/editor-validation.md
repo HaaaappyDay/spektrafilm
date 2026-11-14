@@ -59,7 +59,27 @@ AtomicFile's silent failure and API 29 rollback behavior were verified against
 and [Android 10 AOSP](https://github.com/aosp-mirror/platform_frameworks_base/blob/android-10.0.0_r1/core/java/android/util/AtomicFile.java).
 Read/decode failures preserve the descriptor for Retry; the no-photo recovery
 UI still offers import, which can replace a missing or corrupt session.
-Final regression results will be recorded after CI completes.
+The corrected implementation at `3ab58a2` passed
+[CI 43547899758](https://github.com/HaaaappyDay/spektrafilm/actions/runs/43547899758):
+9 JVM unit tests, 48 device tests on each of API 29 and API 36, and 109
+Python/mobile-reference tests, all with zero failures/errors. Lint completed
+with zero errors and 15 warnings. Both important regressions now pass, including
+retaining the old durable source after failed persistence and restoring the
+same source/parameters after a one-time memory-pressure decode failure.
+
+Executed CI commands (Android runs from `android/`):
+
+```sh
+./gradlew :app:assembleDebug :app:testDebugUnitTest :app:lintDebug
+./gradlew :app:connectedDebugAndroidTest
+python -m pytest tests/android tests/lut_creator/test_cube_format.py tests/lut_creator/test_builders.py tests/test_lut_mode.py --junitxml=reports/python-mobile.xml -q
+python scripts/verify_android_color.py --presets android/app/src/main/assets/presets --out "$RUNNER_TEMP/mobile-reference"
+diff -rq android/app/src/androidTest/assets/render-fixtures "$RUNNER_TEMP/mobile-reference"
+```
+
+Build type: debug. Devices: x86_64 emulators, Android 10/API29 and Android16/API36,
+using SwiftShader rather than physical GPUs. XML, APK, screenshots, videos and
+numeric renderer/import evidence are in the linked run's artifacts.
 
 ## UI and test scope
 

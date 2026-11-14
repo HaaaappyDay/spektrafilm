@@ -30,26 +30,29 @@
 **Files:** ui/editor/{EditorUiState,EditorViewModel,EditorSessionStore}.kt; androidTest/ui/editor/{EditorViewModelTest,EditorSessionStoreTest}.kt.
 **Interfaces:** StoredEdit(source:ImageSource,params:EditParams); SessionPersistence.load():StoredEdit?, save(edit:StoredEdit?). EditorSessionStore(context). EditorViewModel(images,presets,renderer,sessions,exporter:PhotoExporter?=null) exposes state:StateFlow<EditorUiState>; importPhoto(Uri?), setPreset(String), setStrength(Float), setExposure(Float), setTemperature(Float), reset(), toggleOriginal(), retry(), export(). State contains source/input/preview/params/presets/initializing/importing/rendering/exporting/showOriginal/error/errorStage/exportResult/previewValid.
 
-- [ ] Write instrumented tests first (real Bitmap/Android dispatcher, no Robolectric dependency): B finishes before cancelled noncooperative A, late previous-photo output discarded,100changes bounded≤2active+1pending, only one decode per source, final output matches final params.
-- [ ] Verify defaults/preset/reset/quantization/original distinction; cancelled/corrupt imports retain photo/edits. Export fake records one immutable request while changes/import/repeated save are blocked; failure retries once.
-- [ ] Session tests: exact JSON roundtrip, invalid/nonfinite/corrupt state, atomic rollback, source safety; startup removes only managed orphan .source files before the first editor loads in this process and preserves the durable source/other files. Recreated VM restores source/params via re-decode/re-render; missing source shows recovery and no false saved result.
-- [ ] Observe missing implementation RED in CI. Implement state machine, bounded scheduler and one conflated persistence writer. Persisted-source deletion only follows confirmed successful write of current source. Unaccepted candidates are never persisted and cleaned immediately.
-- [ ] On clearing, cancel jobs and release the owned renderer after they finish, outside main; never manually recycle displayed input/preview. Run state/storage tests; expected pass.
+- [x] Write instrumented tests first (real Bitmap/Android dispatcher, no Robolectric dependency): B finishes before cancelled noncooperative A, late previous-photo output discarded,100changes bounded≤2active+1pending, only one decode per source, final output matches final params.
+- [x] Verify defaults/preset/reset/quantization/original distinction; cancelled/corrupt imports retain photo/edits. Export fake records one immutable request while changes/import/repeated save are blocked; failure retries once.
+- [x] Session tests: exact JSON roundtrip, invalid/nonfinite/corrupt state, atomic rollback, source safety; startup removes only managed orphan .source files before the first editor loads in this process and preserves the durable source/other files. Recreated VM restores source/params via re-decode/re-render; missing source shows recovery and no false saved result.
+- [x] Observe missing implementation RED in CI. Implement state machine, bounded scheduler and one conflated persistence writer. Persisted-source deletion only follows confirmed successful write of current source. Unaccepted candidates are never persisted and cleaned immediately.
+- [x] On clearing, cancel jobs and release the owned renderer after they finish, outside main; never manually recycle displayed input/preview. Run state/storage tests; expected pass.
 
 ### Task 2: Adaptive editor UI and real integration
 
 **Files:** ui/editor/{EditorScreen,PresetSelector,AdjustmentControls,BeforeAfterPreview}.kt, MainActivity.kt, values*/strings.xml; androidTest/ui/editor/EditorScreenTest.kt; adapt existing Activity/foundation integration tests.
 **Interfaces:** EditorScreen(state,onImport,onPreset,onStrength,onExposure,onTemperature,onReset,onToggleOriginal,onRetry,onExport,onOpenExport). Controls expose stable semantics/test tags and localized labels/values.
 
-- [ ] Compose tests first: no-photo disables editing/export; sliders support accessible set-progress with exact ranges/steps; preset changes,reset,original toggle; saving lockout; error/retry; stale preview disables export.
-- [ ] Portrait: canvas above a bounded scrolling controls panel; landscape/wide: canvas alongside scrolling controls. Image uses Fit, always remains visible; controls use48dp targets and system insets. Large fonts and short windows scroll controls without placing them over the image.
-- [ ] Preset selector uses readable names; label slider values (%/EV/cool–warm relative units). Original accessible toggle; reset retains preset. Rendering/error status accurately distinguishes stale preview/original.
-- [ ] Wire real repositories/renderer/store in MainActivity ViewModel factory; leave PhotoExporter unavailable until #14. Update former import-only Activity test to real editor and keep low-level import tests. Expose actual4096-cap output dimensions before save.
-- [ ] Capture real generated-photo editor portrait/landscape/error screenshots and an interaction recording on emulator. Verify rotate/background/foreground preserves state. Run full Android suite; expected pass.
+- [x] Compose tests first: no-photo disables editing/export; sliders support accessible set-progress with exact ranges/steps; preset changes,reset,original toggle; saving lockout; error/retry; stale preview disables export.
+- [x] Portrait: canvas above a bounded scrolling controls panel; landscape/wide: canvas alongside scrolling controls. Image uses Fit, always remains visible; controls use48dp targets and system insets. Large fonts and short windows scroll controls without placing them over the image.
+- [x] Preset selector uses readable names; label slider values (%/EV/cool–warm relative units). Original accessible toggle; reset retains preset. Rendering/error status accurately distinguishes stale preview/original.
+- [x] Wire real repositories/renderer/store in MainActivity ViewModel factory; leave PhotoExporter unavailable until #14. Update former import-only Activity test to real editor and keep low-level import tests. Expose actual4096-cap output dimensions before save.
+- [x] Capture real generated-photo editor portrait/landscape/error screenshots and an interaction recording on emulator. Verify rotate/background/foreground preserves state. Run full Android suite; expected pass.
 
 ### Task 3: Handoff and review
 
 **Files:** docs/android/editor-validation.md, android/README.md.
 
-- [ ] Record exact CI/device results, state-race cases, screenshots/recording, persistence/bitmap ownership and PhotoExporter injection contract for #14. Physical checks remain #15.
-- [ ] Independent whole-branch review; fix important issues with tests. Final checks green. Create dependent PR Closes #13, link #9/#19; merge only after renderer prerequisite is satisfied.
+- [x] Record exact CI/device results, state-race cases, screenshots/recording, persistence/bitmap ownership and PhotoExporter injection contract for #14. Physical checks remain #15.
+- [x] Independent whole-branch review; important fixes verified RED→GREEN in CI43547899758. Dependent PR20 closes#13 and links#9/#19.
+- [ ] Merge after renderer prerequisite and physical gate are satisfied.
+
+Validation: 3ab58a2, CI43547899758: 9unit +48device/API29 +48device/API36 +109Python tests, zero failures/errors; lint0errors15warnings. Two minor coverage refinements (final temperature pixels and noncooperative import completion) remain explicitly deferred to#15 in editor-validation.md. Manual TalkBack/physical checks are unverified.
