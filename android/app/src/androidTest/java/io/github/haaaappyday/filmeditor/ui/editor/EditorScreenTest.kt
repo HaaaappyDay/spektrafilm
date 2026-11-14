@@ -124,6 +124,28 @@ class EditorScreenTest {
         compose.onNodeWithTag("preset-kodak_portra_400").assertIsDisplayed().assertIsSelected()
         screenshot("editor-workspace")
     }
+    @Test fun loadingFeedbackKeepsExactPhotoBoundsAtNormalAndLargeText() {
+        val base = ready()
+        var state by mutableStateOf(base)
+        var scale by mutableFloatStateOf(1f)
+        compose.setContent {
+            val density = LocalDensity.current
+            CompositionLocalProvider(LocalDensity provides Density(density.density, scale)) {
+                FilmEditorTheme { EditorScreen(state, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}) }
+            }
+        }
+        for (fontScale in listOf(1f, 2f)) {
+            compose.runOnIdle { scale = fontScale; state = base }
+            val photo = compose.onNodeWithContentDescription(context.getString(R.string.photo_preview))
+            val bounds = photo.fetchSemanticsNode().boundsInRoot
+            for (busy in listOf(base.copy(rendering = true), base.copy(importing = true),
+                base.copy(exporting = true), base.copy(initializing = true), base.copy(showOriginal = true), base)) {
+                compose.runOnIdle { state = busy }
+                assertEquals("Photo moved with font scale $fontScale and busy state $busy", bounds,
+                    photo.fetchSemanticsNode().boundsInRoot)
+            }
+        }
+    }
     private fun screenshot(name: String) {
         val bitmap = compose.onRoot().captureToImage().asAndroidBitmap()
         try { File(testOutputDirectory(), "$name.png").outputStream().use { assertTrue(bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)) } }

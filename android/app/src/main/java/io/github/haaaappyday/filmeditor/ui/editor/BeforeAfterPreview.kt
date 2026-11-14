@@ -12,6 +12,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.*
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.github.haaaappyday.filmeditor.R
 import io.github.haaaappyday.filmeditor.diagnostics.PerformanceTrace
@@ -41,8 +42,14 @@ fun BeforeAfterPreview(state: EditorUiState, modifier: Modifier = Modifier) {
             else -> R.string.edited_photo
         }
         if (bitmap != null || state.initializing || state.importing) {
-            Text(stringResource(status), Modifier.padding(top = 8.dp).semantics { liveRegion = LiveRegionMode.Polite }, style = MaterialTheme.typography.labelMedium)
+            Text(stringResource(status), Modifier.padding(top = 8.dp).semantics { liveRegion = LiveRegionMode.Polite },
+                style = MaterialTheme.typography.labelMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
-        if (state.rendering || state.importing || state.initializing || state.exporting) LinearProgressIndicator(Modifier.fillMaxWidth().padding(top = 6.dp))
+        // Keep the image's measurement space identical when progress appears or disappears.
+        Box(Modifier.fillMaxWidth().height(10.dp), contentAlignment = Alignment.BottomCenter) {
+            if (state.rendering || state.importing || state.initializing || state.exporting) {
+                LinearProgressIndicator(Modifier.fillMaxWidth())
+            }
+        }
     }
 }
