@@ -376,15 +376,32 @@ class MediaStorePhotoExporterTest {
             foreign = Uri.withAppendedPath(collection, ids.single().groupValues[1])
             val jpeg = instrumentation.context.assets.open("import-fixtures/orientation-1.jpg").use { it.readBytes() }
             val encoded = Base64.encodeToString(jpeg, Base64.NO_WRAP)
-            shell("printf %s $encoded | base64 -d | content write --uri $foreign")
+            fun fixturePath(): String {
+                val data = shell("content query --uri '${MediaStore.setIncludePending(foreign)}' --projection _data")
+                    .substringAfter("_data=", "").trim()
+                val file = File(data)
+                assertEquals(File(android.os.Environment.getExternalStorageDirectory(), PendingExport.RELATIVE_PATH), file.parentFile)
+                assertTrue(data, file.name.endsWith(record.displayName))
+                return data
+            }
+            // API29's content read/write passes a null calling package and the
+            // provider rejects it (UID2000/package mismatch). Shell can write its
+            // own fixture file directly; row creation/metadata remain real MediaStore.
+            val write = if (android.os.Build.VERSION.SDK_INT == 29) "cat > '${fixturePath()}'"
+                else "content write --uri $foreign"
+            assertEquals("Writing external fixture", "", shell("printf %s $encoded | base64 -d | $write").trim())
             val query = "content query --uri '${MediaStore.setIncludePending(foreign)}' --projection _id:owner_package_name:is_pending:_display_name"
             val before = shell(query)
             assertTrue(before, before.contains(record.displayName) && before.contains("is_pending=1"))
             // MediaStore assigns no app owner to shell-created media on these platforms.
             // This is an actual external row; never rewrite ownership to make a fake.
             assertTrue(before, before.contains("owner_package_name=NULL"))
-            fun assertFixtureBytes() = assertArrayEquals(jpeg, Base64.decode(
-                shell("content read --uri $foreign | base64"), Base64.DEFAULT))
+            fun assertFixtureBytes() {
+                val read = if (android.os.Build.VERSION.SDK_INT == 29) "cat '${fixturePath()}'"
+                    else "content read --uri $foreign"
+                assertEquals("External fixture bytes changed or shell read failed", encoded,
+                    shell("$read | base64").filterNot { it.isWhitespace() })
+            }
             assertFixtureBytes()
             h.journal.write(record.copy(uri = foreign))
             h.exporter.recover()

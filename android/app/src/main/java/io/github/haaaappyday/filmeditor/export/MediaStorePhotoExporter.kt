@@ -22,6 +22,9 @@ class MediaStorePhotoExporter(
 ) : PhotoExporter {
     private val resolver = context.applicationContext.contentResolver
     private val packageName = context.applicationContext.packageName
+    // Only this live instance knows an invocation failed after publication.
+    // Never reconstruct authority to remove published photos from startup journals.
+    private val rollbackDebts = mutableMapOf<String, PendingExport>()
 
     /** Invoke through ExportCoordinator, which excludes concurrent export/recovery across instances. */
     override suspend fun export(request: ExportRequest): ExportResult {
@@ -81,9 +84,10 @@ class MediaStorePhotoExporter(
             // Includes prompt cancellation returning from IO after publication. This
             // invocation owns its unique operation; startup never deletes published rows.
             withContext(NonCancellable + Dispatchers.IO) {
+                rollbackDebts[intent.id] = intent
                 try {
-                    gateway.rows().filter { eligible(it) && it.name == intent.displayName }.forEach { gateway.delete(it, false) }
-                    journal.remove(intent.id)
+                    rollback(intent)
+                    rollbackDebts.remove(intent.id)
                 } catch (cleanup: Exception) {
                     error.addSuppressed(cleanup)
                     try { journal.write(intent.copy(uri = uri)) } catch (recordFailure: Exception) { error.addSuppressed(recordFailure) }
@@ -97,6 +101,13 @@ class MediaStorePhotoExporter(
     /** Never trust journal URIs alone: only provider-verified own, unpublished media is removed. */
     suspend fun recover() = withContext(Dispatchers.IO) {
         try {
+            // A retry must finish this instance's failed operation before creating
+            // another output. A newly created exporter has no such live authority.
+            for (intent in rollbackDebts.values.toList()) {
+                currentCoroutineContext().ensureActive()
+                rollback(intent)
+                rollbackDebts.remove(intent.id)
+            }
             val records = journal.read()
             val rows = gateway.rows()
             val journaled = records.mapNotNull { record -> rows.firstOrNull { it.uri == record.uri && it.name == record.displayName } }
@@ -113,6 +124,10 @@ class MediaStorePhotoExporter(
             }
             journal.clear()
         } catch (error: Throwable) { throwExportFailure(error) }
+    }
+    private fun rollback(intent: PendingExport) {
+        gateway.rows().filter { eligible(it) && it.name == intent.displayName }.forEach { gateway.delete(it, false) }
+        journal.remove(intent.id)
     }
     private fun eligible(row: MediaRow) = row.owner == packageName && row.path == PendingExport.RELATIVE_PATH && PendingExport.isManagedName(row.name)
     private suspend fun digest(input: InputStream): ByteArray {

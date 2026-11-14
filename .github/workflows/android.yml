@@ -69,6 +69,8 @@ jobs:
         with:
           api-level: ${{ matrix.api }}
           arch: x86_64
+          ram-size: 2048M
+          heap-size: 128M
           disable-animations: true
           working-directory: android
           script: ./gradlew :app:connectedDebugAndroidTest
