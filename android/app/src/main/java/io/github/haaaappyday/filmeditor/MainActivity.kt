@@ -11,6 +11,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.github.haaaappyday.filmeditor.image.AndroidImageRepository
+import io.github.haaaappyday.filmeditor.export.ExportCoordinator
+import io.github.haaaappyday.filmeditor.export.MediaStorePhotoExporter
 import io.github.haaaappyday.filmeditor.image.rememberPhotoPicker
 import io.github.haaaappyday.filmeditor.render.AssetPresetRepository
 import io.github.haaaappyday.filmeditor.render.GlFilmRenderer
@@ -26,8 +28,12 @@ class MainActivity : ComponentActivity() {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 require(modelClass == EditorViewModel::class.java)
                 val presets = AssetPresetRepository(applicationContext)
-                return EditorViewModel(AndroidImageRepository(applicationContext), presets,
-                    GlFilmRenderer(applicationContext, presets), EditorSessionStore(applicationContext)) as T
+                val images = AndroidImageRepository(applicationContext)
+                val renderer = GlFilmRenderer(applicationContext, presets)
+                val exporter = MediaStorePhotoExporter(applicationContext, images, renderer)
+                val coordinator = ExportCoordinator(exporter, exporter::recover)
+                return EditorViewModel(images, presets, renderer, EditorSessionStore(applicationContext),
+                    coordinator, coordinator::recover) as T
             }
         })[EditorViewModel::class.java]
         setContent {

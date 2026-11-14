@@ -1,0 +1,38 @@
+[
+  {
+    "fixture": "orientation-1.jpg",
+    "maxPreEncodingRgbCodeError": 0
+  },
+  {
+    "fixture": "orientation-2.jpg",
+    "maxPreEncodingRgbCodeError": 0
+  },
+  {
+    "fixture": "orientation-3.jpg",
+    "maxPreEncodingRgbCodeError": 0
+  },
+  {
+    "fixture": "orientation-4.jpg",
+    "maxPreEncodingRgbCodeError": 0
+  },
+  {
+    "fixture": "orientation-5.jpg",
+    "maxPreEncodingRgbCodeError": 0
+  },
+  {
+    "fixture": "orientation-6.jpg",
+    "maxPreEncodingRgbCodeError": 0
+  },
+  {
+    "fixture": "orientation-7.jpg",
+    "maxPreEncodingRgbCodeError": 0
+  },
+  {
+    "fixture": "orientation-8.jpg",
+    "maxPreEncodingRgbCodeError": 0
+  },
+  {
+    "fixture": "transparent.png",
+    "maxPreEncodingRgbCodeError": 0
+  }
+]
