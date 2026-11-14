@@ -46,8 +46,8 @@ Interfaces: `record_android_v1.py --serial SERIAL --out DIR` records generated-f
 ### Task 3: Physical acceptance, release evidence and PR integration
 
 Files: docs/android/v1-validation.md, android/README.md, compact generated evidence/links, CI artifacts.
-- [ ] Connect authorized vivo X200 Pro mini through available ADB. Record actual model/API/RAM/GPU/driver rather than infer from product name. Run color reference, full flow, lifecycle and generated-fixture tests on its GPU.
-- [ ] Run the profileable measurement and inspect traces. Report30preview p50/p95 and12MP export breakdown/peakmemory;20cycle+10export trends. If missed, trace root cause, document proposal and implement verified targeted optimization without lowering thresholds.
-- [ ] Fresh Android-only checkout builds committed assets without Python; publish identifiable debugAPK with SHA256 and artifact link, packaged preset/manifest/license inventory.
+- [x] Connect authorized vivo X200 Pro mini through available ADB. Record actual model/API/RAM/GPU/driver rather than infer from product name. Run color reference, full flow, lifecycle and generated-fixture tests on its GPU.
+- [x] Run the profileable measurement and inspect traces. Report30preview p50/p95 and12MP export breakdown/peakmemory;20cycle+10export trends. If missed, trace root cause, document proposal and implement verified targeted optimization without lowering thresholds.
+- [x] Fresh Android-only checkout builds committed assets without Python; publish identifiable debugAPK with SHA256 and artifact link, packaged preset/manifest/license inventory.
 - [ ] Reconcile every #9/#15 checklist row as pass/fail/not-run against evidence. One whole-branch review; one tested Important/Critical fix pass; minor follow-ups linked.
 - [ ] Create dependent #15 PR with Closes#15 and parent link. Merge PR19→PR20→export→validation only after each prerequisite's acceptance and exact-head checks pass. Close/reconcile issues only after merge. Goal completion requires full physical gate; unavailable hardware is not an emulator waiver.

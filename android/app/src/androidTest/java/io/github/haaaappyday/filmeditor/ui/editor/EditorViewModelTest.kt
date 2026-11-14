@@ -62,98 +62,14 @@ class EditorViewModelTest {
     private suspend fun await(predicate: () -> Boolean) = withTimeout(10_000) { while (!predicate()) delay(10) }
     private suspend fun main(action: () -> Unit) = withContext(Dispatchers.Main) { action() }
     private suspend fun create(images: ImageRepository, renderer: FilmRenderer, sessions: Sessions, exporter: PhotoExporter? = null,
-        traces: PerformanceTrace = PerformanceTrace.app,
-        thumbnails: (suspend (Bitmap, List<FilmPreset>) -> Map<String, Bitmap>)? = null): Pair<EditorViewModel, ViewModelStore> = withContext(Dispatchers.Main) {
-        val vm = EditorViewModel(images, presets, renderer, sessions, exporter, traces = traces, thumbnailGenerator = thumbnails)
+        traces: PerformanceTrace = PerformanceTrace.app): Pair<EditorViewModel, ViewModelStore> = withContext(Dispatchers.Main) {
+        val vm = EditorViewModel(images, presets, renderer, sessions, exporter, traces = traces)
         vm to ViewModelStore().apply { put("editor", vm) }
     }
     private suspend fun ready(vm: EditorViewModel) {
         await { !vm.state.value.initializing }
         main { vm.importPhoto(Uri.parse("content://fixture/first")) }
         await { vm.state.value.previewValid }
-    }
-
-    @Test fun filmThumbnailsAreGeneratedOncePerSourceAndManualEditsKeepThem() = runBlocking {
-        var calls = 0
-        val (vm, store) = create(Images(), Renderer(), Sessions(), thumbnails = { input, films ->
-            calls++
-            films.associate { it.id to input.copy(Bitmap.Config.ARGB_8888, false) }
-        })
-        try {
-            ready(vm)
-            await { vm.state.value.presetThumbnails.size == 3 }
-            val original = vm.state.value.presetThumbnails
-            main { vm.setExposure(.5f); vm.setTemperature(12f); vm.setPreset("kodak_gold_200") }
-            await { vm.state.value.previewValid }
-            assertEquals(1, calls)
-            assertSame(original, vm.state.value.presetThumbnails)
-            main { vm.importPhoto(Uri.parse("content://fixture/second")) }
-            await { vm.state.value.previewValid && calls == 2 && vm.state.value.presetThumbnails.size == 3 }
-            assertNotSame(original, vm.state.value.presetThumbnails)
-            assertTrue(original.values.none { it.isRecycled }) // Previously displayed images stay Compose-safe.
-        } finally { main { store.clear() } }
-    }
-
-    @Test fun lateOldPhotoThumbnailsCannotReplaceNewPhotoCards() = runBlocking {
-        val oldStarted = CompletableDeferred<Unit>()
-        val releaseOld = CompletableDeferred<Unit>()
-        var calls = 0
-        var obsolete: Map<String, Bitmap>? = null
-        val (vm, store) = create(Images(), Renderer(), Sessions(), thumbnails = { input, films ->
-            val index = ++calls
-            withContext(NonCancellable) {
-                if (index == 1) { oldStarted.complete(Unit); releaseOld.await() }
-                films.associate { it.id to input.copy(Bitmap.Config.ARGB_8888, true).apply {
-                    eraseColor(if (index == 1) 0xff112233.toInt() else 0xff445566.toInt())
-                } }.also { if (index == 1) obsolete = it }
-            }
-        })
-        try {
-            ready(vm)
-            withTimeout(10_000) { oldStarted.await() }
-            main { vm.importPhoto(Uri.parse("content://fixture/second")) }
-            await { vm.state.value.previewValid && vm.state.value.presetThumbnails.size == 3 }
-            val visible = vm.state.value.presetThumbnails
-            assertEquals(0xff445566.toInt(), visible.values.first().getPixel(0, 0))
-            releaseOld.complete(Unit)
-            await { obsolete?.values?.all { it.isRecycled } == true }
-            assertSame(visible, vm.state.value.presetThumbnails)
-            assertTrue(visible.values.none { it.isRecycled })
-        } finally { releaseOld.complete(Unit); main { store.clear() } }
-    }
-
-    @Test fun thumbnailFailureDoesNotBlockTheRealPreviewOrExport() = runBlocking {
-        var attempted = false
-        val saver = object : PhotoExporter {
-            override suspend fun export(request: ExportRequest) = ExportResult(Uri.parse("content://fixture/saved"), 4, 3)
-        }
-        val (vm, store) = create(Images(), Renderer(), Sessions(), saver, thumbnails = { _, _ ->
-            attempted = true
-            throw EditorException(EditorErrorCode.RENDER_FAILED)
-        })
-        try {
-            ready(vm)
-            await { attempted }
-            assertTrue(vm.state.value.presetThumbnails.isEmpty())
-            assertNull(vm.state.value.error)
-            assertTrue(vm.state.value.canExport)
-            main { vm.export() }
-            await { vm.state.value.exportResult != null }
-        } finally { main { store.clear() } }
-    }
-
-    @Test fun restoredPhotoAlsoReceivesFreshThumbnails() = runBlocking {
-        val sessions = Sessions().apply {
-            saved = StoredEdit(ImageSource("restored", "/restored", 4, 3, "image/jpeg"), EditParams("kodak_gold_200", .5f))
-        }
-        val (vm, store) = create(Images(), Renderer(), sessions, thumbnails = { input, films ->
-            films.associate { it.id to input.copy(Bitmap.Config.ARGB_8888, false) }
-        })
-        try {
-            await { vm.state.value.previewValid && vm.state.value.presetThumbnails.size == 3 }
-            assertEquals("restored", vm.state.value.source!!.id)
-            assertEquals(EditParams("kodak_gold_200", .5f), vm.state.value.params)
-        } finally { main { store.clear() } }
     }
 
     private class Traces : TraceBackend {

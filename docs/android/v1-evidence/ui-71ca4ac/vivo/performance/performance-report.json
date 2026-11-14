@@ -1,0 +1,653 @@
+{
+  "preview": {
+    "status": "pass",
+    "physicalAccepted": true,
+    "reasons": [],
+    "p50Ms": 121.943192,
+    "p95Ms": 133.538461,
+    "maxMs": 134.022385,
+    "targetP95Ms": 200,
+    "withinTarget": true,
+    "p95Method": "nearest-rank",
+    "latenciesMs": [
+      114.158307,
+      121.996461,
+      123.787,
+      115.045923,
+      114.182462,
+      114.317769,
+      123.794693,
+      125.534462,
+      119.63323,
+      127.435154,
+      103.176846,
+      103.403384,
+      98.757154,
+      111.600846,
+      113.205232,
+      124.824231,
+      131.076076,
+      130.958615,
+      130.674616,
+      121.517231,
+      110.414155,
+      125.840001,
+      121.889923,
+      133.538461,
+      127.621461,
+      126.513076,
+      102.737769,
+      126.856,
+      134.022385,
+      120.663231
+    ],
+    "drawOnlyMs": [
+      79.715615,
+      94.394769,
+      93.587384,
+      84.397,
+      83.343077,
+      79.700615,
+      93.787,
+      95.732308,
+      88.598846,
+      96.767308,
+      85.482693,
+      85.241615,
+      80.906461,
+      78.198693,
+      83.365847,
+      95.35177,
+      101.987461,
+      101.585,
+      101.829308,
+      91.837538,
+      92.065539,
+      92.999692,
+      88.145538,
+      103.765538,
+      96.211,
+      95.075154,
+      69.282461,
+      96.783,
+      104.545,
+      88.233539
+    ],
+    "sampleCount": 30
+  },
+  "export": {
+    "status": "pass",
+    "physicalAccepted": true,
+    "reasons": [],
+    "maxMs": 499.228616,
+    "targetMaxMs": 10000,
+    "withinTarget": true,
+    "latenciesMs": [
+      499.228616,
+      418.192923,
+      447.775077,
+      468.627769,
+      433.54223,
+      453.024077,
+      430.577769,
+      447.345846,
+      444.197847,
+      449.222077
+    ],
+    "sampleCount": 10,
+    "samples": [
+      {
+        "exportId": 137,
+        "stagesMs": {
+          "decode": 44.777616,
+          "render": 301.734692,
+          "encode": 61.916308,
+          "io": 50.703385
+        },
+        "sampledPeakMemory": {
+          "sampleCount": 8,
+          "intervalMs": 100,
+          "javaBytes": 16101440,
+          "nativeBytes": 148016272,
+          "graphicsPssBytes": 120330240
+        }
+      },
+      {
+        "exportId": 139,
+        "stagesMs": {
+          "decode": 38.364615,
+          "render": 282.596923,
+          "encode": 40.695461,
+          "io": 43.089615
+        },
+        "sampledPeakMemory": {
+          "sampleCount": 7,
+          "intervalMs": 100,
+          "javaBytes": 16092104,
+          "nativeBytes": 148026480,
+          "graphicsPssBytes": 120330240
+        }
+      },
+      {
+        "exportId": 141,
+        "stagesMs": {
+          "decode": 39.282539,
+          "render": 293.799923,
+          "encode": 45.724,
+          "io": 43.859077
+        },
+        "sampledPeakMemory": {
+          "sampleCount": 7,
+          "intervalMs": 100,
+          "javaBytes": 16131392,
+          "nativeBytes": 148027680,
+          "graphicsPssBytes": 120330240
+        }
+      },
+      {
+        "exportId": 143,
+        "stagesMs": {
+          "decode": 45.765769,
+          "render": 307.136616,
+          "encode": 52.340615,
+          "io": 45.767
+        },
+        "sampledPeakMemory": {
+          "sampleCount": 7,
+          "intervalMs": 100,
+          "javaBytes": 16134680,
+          "nativeBytes": 184280592,
+          "graphicsPssBytes": 120330240
+        }
+      },
+      {
+        "exportId": 145,
+        "stagesMs": {
+          "decode": 40.059924,
+          "render": 292.024693,
+          "encode": 43.144308,
+          "io": 40.385846
+        },
+        "sampledPeakMemory": {
+          "sampleCount": 6,
+          "intervalMs": 100,
+          "javaBytes": 16150832,
+          "nativeBytes": 148030800,
+          "graphicsPssBytes": 120330240
+        }
+      },
+      {
+        "exportId": 147,
+        "stagesMs": {
+          "decode": 45.848308,
+          "render": 293.937539,
+          "encode": 43.886769,
+          "io": 39.800923
+        },
+        "sampledPeakMemory": {
+          "sampleCount": 6,
+          "intervalMs": 100,
+          "javaBytes": 16154344,
+          "nativeBytes": 184289216,
+          "graphicsPssBytes": 120330240
+        }
+      },
+      {
+        "exportId": 149,
+        "stagesMs": {
+          "decode": 39.631384,
+          "render": 284.269769,
+          "encode": 41.149538,
+          "io": 44.771077
+        },
+        "sampledPeakMemory": {
+          "sampleCount": 6,
+          "intervalMs": 100,
+          "javaBytes": 16144704,
+          "nativeBytes": 148032832,
+          "graphicsPssBytes": 120330240
+        }
+      },
+      {
+        "exportId": 151,
+        "stagesMs": {
+          "decode": 42.139154,
+          "render": 296.233923,
+          "encode": 40.159384,
+          "io": 43.743923
+        },
+        "sampledPeakMemory": {
+          "sampleCount": 7,
+          "intervalMs": 100,
+          "javaBytes": 16133696,
+          "nativeBytes": 148034720,
+          "graphicsPssBytes": 120330240
+        }
+      },
+      {
+        "exportId": 153,
+        "stagesMs": {
+          "decode": 42.431154,
+          "render": 284.766692,
+          "encode": 48.84,
+          "io": 43.639692
+        },
+        "sampledPeakMemory": {
+          "sampleCount": 7,
+          "intervalMs": 100,
+          "javaBytes": 16157984,
+          "nativeBytes": 148036032,
+          "graphicsPssBytes": 120330240
+        }
+      },
+      {
+        "exportId": 155,
+        "stagesMs": {
+          "decode": 50.906154,
+          "render": 301.994385,
+          "encode": 46.947307,
+          "io": 32.462154
+        },
+        "sampledPeakMemory": {
+          "sampleCount": 7,
+          "intervalMs": 100,
+          "javaBytes": 16170768,
+          "nativeBytes": 148043504,
+          "graphicsPssBytes": 120330240
+        }
+      }
+    ],
+    "memoryIsSampledLowerBound": true
+  },
+  "resources": {
+    "status": "review-required",
+    "physicalAccepted": false,
+    "reasons": [],
+    "samples": [
+      {
+        "elapsedNs": 245612007899528,
+        "javaBytes": 7193000,
+        "nativeBytes": 51955696,
+        "graphicsPssBytes": 138442752,
+        "index": 0,
+        "phase": "baseline",
+        "filmIconMode": "static-cartridge",
+        "threads": 45,
+        "fileDescriptors": 214
+      },
+      {
+        "elapsedNs": 245612905001297,
+        "javaBytes": 7222304,
+        "nativeBytes": 52036784,
+        "graphicsPssBytes": 138512384,
+        "index": 1,
+        "phase": "import",
+        "filmIconMode": "static-cartridge",
+        "threads": 45,
+        "fileDescriptors": 214
+      },
+      {
+        "elapsedNs": 245613880024759,
+        "javaBytes": 7221672,
+        "nativeBytes": 52034496,
+        "graphicsPssBytes": 138377216,
+        "index": 2,
+        "phase": "import",
+        "filmIconMode": "static-cartridge",
+        "threads": 45,
+        "fileDescriptors": 214
+      },
+      {
+        "elapsedNs": 245614783718528,
+        "javaBytes": 7222032,
+        "nativeBytes": 52032704,
+        "graphicsPssBytes": 138377216,
+        "index": 3,
+        "phase": "import",
+        "filmIconMode": "static-cartridge",
+        "threads": 45,
+        "fileDescriptors": 214
+      },
+      {
+        "elapsedNs": 245615756747221,
+        "javaBytes": 7226024,
+        "nativeBytes": 52034288,
+        "graphicsPssBytes": 138110976,
+        "index": 4,
+        "phase": "import",
+        "filmIconMode": "static-cartridge",
+        "threads": 45,
+        "fileDescriptors": 214
+      },
+      {
+        "elapsedNs": 245616693953990,
+        "javaBytes": 7226200,
+        "nativeBytes": 52036720,
+        "graphicsPssBytes": 138110976,
+        "index": 5,
+        "phase": "import",
+        "filmIconMode": "static-cartridge",
+        "threads": 45,
+        "fileDescriptors": 214
+      },
+      {
+        "elapsedNs": 245617632802913,
+        "javaBytes": 7226568,
+        "nativeBytes": 52038720,
+        "graphicsPssBytes": 138110976,
+        "index": 6,
+        "phase": "import",
+        "filmIconMode": "static-cartridge",
+        "threads": 45,
+        "fileDescriptors": 214
+      },
+      {
+        "elapsedNs": 245618717173375,
+        "javaBytes": 7227424,
+        "nativeBytes": 52044672,
+        "graphicsPssBytes": 138110976,
+        "index": 7,
+        "phase": "import",
+        "filmIconMode": "static-cartridge",
+        "threads": 45,
+        "fileDescriptors": 214
+      },
+      {
+        "elapsedNs": 245619764449375,
+        "javaBytes": 7228072,
+        "nativeBytes": 52055120,
+        "graphicsPssBytes": 129431552,
+        "index": 8,
+        "phase": "import",
+        "filmIconMode": "static-cartridge",
+        "threads": 45,
+        "fileDescriptors": 214
+      },
+      {
+        "elapsedNs": 245620729411529,
+        "javaBytes": 7228328,
+        "nativeBytes": 52044080,
+        "graphicsPssBytes": 129431552,
+        "index": 9,
+        "phase": "import",
+        "filmIconMode": "static-cartridge",
+        "threads": 45,
+        "fileDescriptors": 214
+      },
+      {
+        "elapsedNs": 245621747452682,
+        "javaBytes": 7229448,
+        "nativeBytes": 52045536,
+        "graphicsPssBytes": 129431552,
+        "index": 10,
+        "phase": "import",
+        "filmIconMode": "static-cartridge",
+        "threads": 45,
+        "fileDescriptors": 214
+      },
+      {
+        "elapsedNs": 245622736929067,
+        "javaBytes": 7227896,
+        "nativeBytes": 52036256,
+        "graphicsPssBytes": 112072704,
+        "index": 11,
+        "phase": "import",
+        "filmIconMode": "static-cartridge",
+        "threads": 45,
+        "fileDescriptors": 214
+      },
+      {
+        "elapsedNs": 245623735384452,
+        "javaBytes": 7230712,
+        "nativeBytes": 52050496,
+        "graphicsPssBytes": 112003072,
+        "index": 12,
+        "phase": "import",
+        "filmIconMode": "static-cartridge",
+        "threads": 45,
+        "fileDescriptors": 214
+      },
+      {
+        "elapsedNs": 245624704778298,
+        "javaBytes": 7231344,
+        "nativeBytes": 52051328,
+        "graphicsPssBytes": 112003072,
+        "index": 13,
+        "phase": "import",
+        "filmIconMode": "static-cartridge",
+        "threads": 45,
+        "fileDescriptors": 214
+      },
+      {
+        "elapsedNs": 245625762643837,
+        "javaBytes": 7232520,
+        "nativeBytes": 52041888,
+        "graphicsPssBytes": 112003072,
+        "index": 14,
+        "phase": "import",
+        "filmIconMode": "static-cartridge",
+        "threads": 45,
+        "fileDescriptors": 214
+      },
+      {
+        "elapsedNs": 245626713126606,
+        "javaBytes": 7257376,
+        "nativeBytes": 52043328,
+        "graphicsPssBytes": 112003072,
+        "index": 15,
+        "phase": "import",
+        "filmIconMode": "static-cartridge",
+        "threads": 45,
+        "fileDescriptors": 214
+      },
+      {
+        "elapsedNs": 245627809745067,
+        "javaBytes": 7235384,
+        "nativeBytes": 52044880,
+        "graphicsPssBytes": 112003072,
+        "index": 16,
+        "phase": "import",
+        "filmIconMode": "static-cartridge",
+        "threads": 45,
+        "fileDescriptors": 214
+      },
+      {
+        "elapsedNs": 245628805753991,
+        "javaBytes": 7233704,
+        "nativeBytes": 52046912,
+        "graphicsPssBytes": 112003072,
+        "index": 17,
+        "phase": "import",
+        "filmIconMode": "static-cartridge",
+        "threads": 45,
+        "fileDescriptors": 214
+      },
+      {
+        "elapsedNs": 245629773081683,
+        "javaBytes": 7235248,
+        "nativeBytes": 52052112,
+        "graphicsPssBytes": 112003072,
+        "index": 18,
+        "phase": "import",
+        "filmIconMode": "static-cartridge",
+        "threads": 45,
+        "fileDescriptors": 214
+      },
+      {
+        "elapsedNs": 245630631511837,
+        "javaBytes": 7251928,
+        "nativeBytes": 52150880,
+        "graphicsPssBytes": 112003072,
+        "index": 19,
+        "phase": "import",
+        "filmIconMode": "static-cartridge",
+        "threads": 45,
+        "fileDescriptors": 214
+      },
+      {
+        "elapsedNs": 245631654212068,
+        "javaBytes": 7236624,
+        "nativeBytes": 52060032,
+        "graphicsPssBytes": 112003072,
+        "index": 20,
+        "phase": "import",
+        "filmIconMode": "static-cartridge",
+        "threads": 45,
+        "fileDescriptors": 214
+      },
+      {
+        "elapsedNs": 245632768193914,
+        "javaBytes": 7167448,
+        "nativeBytes": 51982816,
+        "graphicsPssBytes": 107431936,
+        "index": 21,
+        "phase": "export",
+        "filmIconMode": "static-cartridge",
+        "threads": 45,
+        "fileDescriptors": 214
+      },
+      {
+        "elapsedNs": 245633722758299,
+        "javaBytes": 7187960,
+        "nativeBytes": 52007072,
+        "graphicsPssBytes": 111642624,
+        "index": 22,
+        "phase": "export",
+        "filmIconMode": "static-cartridge",
+        "threads": 45,
+        "fileDescriptors": 214
+      },
+      {
+        "elapsedNs": 245634615438606,
+        "javaBytes": 7180288,
+        "nativeBytes": 52008544,
+        "graphicsPssBytes": 111642624,
+        "index": 23,
+        "phase": "export",
+        "filmIconMode": "static-cartridge",
+        "threads": 45,
+        "fileDescriptors": 214
+      },
+      {
+        "elapsedNs": 245635582416683,
+        "javaBytes": 7195392,
+        "nativeBytes": 51996000,
+        "graphicsPssBytes": 107431936,
+        "index": 24,
+        "phase": "export",
+        "filmIconMode": "static-cartridge",
+        "threads": 45,
+        "fileDescriptors": 214
+      },
+      {
+        "elapsedNs": 245636476363530,
+        "javaBytes": 7198984,
+        "nativeBytes": 51997216,
+        "graphicsPssBytes": 107431936,
+        "index": 25,
+        "phase": "export",
+        "filmIconMode": "static-cartridge",
+        "threads": 45,
+        "fileDescriptors": 214
+      },
+      {
+        "elapsedNs": 245637388822222,
+        "javaBytes": 7202144,
+        "nativeBytes": 51997840,
+        "graphicsPssBytes": 107431936,
+        "index": 26,
+        "phase": "export",
+        "filmIconMode": "static-cartridge",
+        "threads": 45,
+        "fileDescriptors": 214
+      },
+      {
+        "elapsedNs": 245638284338530,
+        "javaBytes": 7194832,
+        "nativeBytes": 51998960,
+        "graphicsPssBytes": 107431936,
+        "index": 27,
+        "phase": "export",
+        "filmIconMode": "static-cartridge",
+        "threads": 45,
+        "fileDescriptors": 214
+      },
+      {
+        "elapsedNs": 245639221386837,
+        "javaBytes": 7209256,
+        "nativeBytes": 52000256,
+        "graphicsPssBytes": 107431936,
+        "index": 28,
+        "phase": "export",
+        "filmIconMode": "static-cartridge",
+        "threads": 45,
+        "fileDescriptors": 214
+      },
+      {
+        "elapsedNs": 245640126125684,
+        "javaBytes": 7208688,
+        "nativeBytes": 52015040,
+        "graphicsPssBytes": 111642624,
+        "index": 29,
+        "phase": "export",
+        "filmIconMode": "static-cartridge",
+        "threads": 45,
+        "fileDescriptors": 214
+      },
+      {
+        "elapsedNs": 245641032048068,
+        "javaBytes": 7225688,
+        "nativeBytes": 52015088,
+        "graphicsPssBytes": 111642624,
+        "index": 30,
+        "phase": "export",
+        "filmIconMode": "static-cartridge",
+        "threads": 45,
+        "fileDescriptors": 214
+      }
+    ],
+    "metrics": {
+      "javaBytes": {
+        "start": 7193000,
+        "end": 7225688,
+        "delta": 32688,
+        "minimum": 7167448,
+        "maximum": 7257376,
+        "slopePerCycle": -755.4387096774194
+      },
+      "nativeBytes": {
+        "start": 51955696,
+        "end": 52015088,
+        "delta": 59392,
+        "minimum": 51955696,
+        "maximum": 52150880,
+        "slopePerCycle": -768.9483870967742
+      },
+      "graphicsPssBytes": {
+        "start": 138442752,
+        "end": 111642624,
+        "delta": -26800128,
+        "minimum": 107431936,
+        "maximum": 138512384,
+        "slopePerCycle": -1220915.2
+      },
+      "threads": {
+        "start": 45,
+        "end": 45,
+        "delta": 0,
+        "minimum": 45,
+        "maximum": 45,
+        "slopePerCycle": 0.0
+      },
+      "fileDescriptors": {
+        "start": 214,
+        "end": 214,
+        "delta": 0,
+        "minimum": 214,
+        "maximum": 214,
+        "slopePerCycle": 0.0
+      }
+    },
+    "retentionReviewRequired": true
+  }
+}

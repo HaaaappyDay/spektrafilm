@@ -1,0 +1,27 @@
+{
+  "sourceCommit": "71ca4acab807d0ca025f53e2ab834f868802a435",
+  "deviceProperties": {
+    "ro.kernel.qemu": "",
+    "ro.boot.qemu": "",
+    "ro.hardware": "mt6991",
+    "ro.build.fingerprint": "vivo/PD2419/PD2419:17/CP2A.260605.016_V000L1/261109163123:user/release-keys",
+    "ro.build.version.sdk": "37"
+  },
+  "physical": true,
+  "appSha256": "c69987a298af5fe6bbb2a938a7d628e14fe7ec50beb5242abae977e4bc09f0e3",
+  "testApkSha256": "7e0b95eeb4adcf3b13e74d259fd7a7726e7e3a22ae2c6d1dadf69ac7b0a79c95",
+  "recorderSha256": "7524159eb1714c65ecb4299d82383be165d413b277eeca1af5bbc48cf4de7ca3",
+  "traceProcessorLauncherSha256": "f4acbe5388d8e5d9f3aac9c509026902a1cf6e50ad0b888bdba9acc12b83d886",
+  "traceProcessorVersion": "Perfetto v59.1-1e9c61e98 (1e9c61e9844affd7dccd3d42d9ea9f3a3d10cf6d)\nTrace Processor RPC API version: 14",
+  "hostScriptSha256": {
+    "record_android_v1.py": "53570979f05d300eee6cce432227872585c8b8597ba5d443ff2655fcea691744",
+    "extract_android_v1.py": "a444ad48d59864c96b672cb9c03c27a1fb576ab1892686fae7fe78021de12bf3",
+    "android_v1_report.py": "6f8a41c6d5af0e5d0d8c700ecc50d4b7f66eae03af0d9a117e7e98c55ec1eccb",
+    "android_v1_frames.sql": "6f6e106d31a4033eceb356aad217b7940c821d2e4aac79d2de35928ec98c1f0d"
+  },
+  "traceConfigSha256": "8dbae278259e13267aa6ffa83366570fe95542b1c4a8157bda52179dbfb74459",
+  "startedUtc": "2026-11-14T14:49:23Z",
+  "traceSha256": "6e122701464bc1ad45678d0e32e242d99944f59899e9b5c4285e629319ff7d27",
+  "instrumentationSucceeded": true,
+  "finishedUtc": "2026-11-14T14:50:40Z"
+}

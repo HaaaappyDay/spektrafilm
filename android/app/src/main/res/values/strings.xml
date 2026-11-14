@@ -44,5 +44,5 @@
     <string name="tab_export">Export</string>
     <string name="open_image">Open</string>
     <string name="compare_short">Compare</string>
-    <string name="film_preview_hint">Previews show each film at its default settings.</string>
+    <string name="film_selection_hint">Choose a film, then fine-tune it in Adjust.</string>
 </resources>

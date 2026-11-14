@@ -155,7 +155,7 @@ private fun EditorTools(state: EditorUiState, destination: EditorDestination, on
                 verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 when (destination) {
                     EditorDestination.FILMS -> PresetSelector(state.presets, state.params.presetId, state.editingEnabled,
-                        onPreset, state.presetThumbnails)
+                        onPreset)
                     EditorDestination.ADJUST -> AdjustmentControls(state.params, state.editingEnabled,
                         onStrength, onExposure, onTemperature, adjustment, onAdjustment, onReset)
                     EditorDestination.EXPORT -> {

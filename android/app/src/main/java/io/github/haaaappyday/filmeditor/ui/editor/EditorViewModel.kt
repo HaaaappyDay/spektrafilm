@@ -20,7 +20,6 @@ class EditorViewModel(
     private val exporter: PhotoExporter? = null,
     private val prepareExport: suspend () -> Unit = {},
     private val traces: PerformanceTrace = PerformanceTrace.app,
-    private val thumbnailGenerator: (suspend (Bitmap, List<FilmPreset>) -> Map<String, Bitmap>)? = null,
 ) : ViewModel() {
     private val mutableState = MutableStateFlow(EditorUiState(exportAvailable = exporter != null))
     val state: StateFlow<EditorUiState> = mutableState.asStateFlow()
@@ -30,7 +29,6 @@ class EditorViewModel(
     private var importJob: Job? = null
     private var initializeJob: Job? = null
     private var exportJob: Job? = null
-    private var thumbnailJob: Job? = null
     private var lastUri: Uri? = null
     private val renderJobs = mutableSetOf<Job>()
     private data class PreviewRequest(val version: Long, val sourceId: String, val input: Bitmap,
@@ -85,11 +83,9 @@ class EditorViewModel(
                     input = images.decode(saved.source, 1600)
                     ensureActive()
                     mutableState.update { it.copy(source = saved.source, input = input, params = saved.params,
-                        initializing = false, preview = null, previewValid = false, exportResult = null, exporting = false,
-                        presetThumbnails = emptyMap()) }
+                        initializing = false, preview = null, previewValid = false, exportResult = null, exporting = false) }
                     published = true
                     schedulePreview()
-                    scheduleThumbnails()
                 } else mutableState.update { it.copy(initializing = false) }
             } catch (cancelled: CancellationException) { throw cancelled }
             catch (error: EditorException) {
@@ -121,13 +117,11 @@ class EditorViewModel(
                 if (version != importVersion || closed) return@launch
                 val previous = state.value.source
                 mutableState.update { it.copy(source = source, input = input, preview = null, params = EditParams("kodak_portra_400"),
-                    importing = false, rendering = false, previewValid = false, showOriginal = false, error = null, errorStage = null,
-                    presetThumbnails = emptyMap()) }
+                    importing = false, rendering = false, previewValid = false, showOriginal = false, error = null, errorStage = null) }
                 accepted = true
                 if (previous != null && previous.id != imported.id) retiredSources[previous.id] = previous
                 persistCurrent()
                 schedulePreview()
-                scheduleThumbnails()
             } catch (cancelled: CancellationException) { throw cancelled }
             catch (error: EditorException) {
                 if (version == importVersion) {
@@ -147,28 +141,6 @@ class EditorViewModel(
         if (closed || !state.value.editingEnabled) return
         if (state.value.presets.none { it.id == id }) { invalidateRenders(); failPreview(EditorErrorCode.PRESET_UNAVAILABLE); return }
         updateParams(state.value.params.copy(presetId = id))
-    }
-    private fun scheduleThumbnails() {
-        val generate = thumbnailGenerator ?: return
-        val current = state.value
-        val source = current.source ?: return
-        val input = current.input ?: return
-        thumbnailJob?.cancel()
-        thumbnailJob = viewModelScope.launch {
-            var output: Map<String, Bitmap>? = null
-            var published = false
-            try {
-                val generated = generate(input, current.presets)
-                output = generated
-                ensureActive()
-                if (closed || state.value.source?.id != source.id || state.value.input !== input) return@launch
-                mutableState.update { it.copy(presetThumbnails = generated) }
-                published = true
-            } catch (cancelled: CancellationException) { throw cancelled }
-            catch (_: Exception) { /* Cards retain their labels; main preview/export remain usable. */ }
-            catch (_: OutOfMemoryError) { /* Optional small previews must not prevent editing. */ }
-            finally { if (!published) output?.values?.filter { it !== input }?.forEach { it.recycle() } }
-        }
     }
     fun setStrength(value: Float) {
         if (value.isFinite()) updateParams(state.value.params.copy(strength = (value.coerceIn(0f, 1f) * 100).roundToInt() / 100f))
@@ -285,7 +257,7 @@ class EditorViewModel(
         pendingPreview?.trace?.finish("discarded")
         pendingPreview = null
         writes.close()
-        val jobs = renderJobs.toList() + listOfNotNull(importJob, initializeJob, exportJob, persistenceJob, thumbnailJob)
+        val jobs = renderJobs.toList() + listOfNotNull(importJob, initializeJob, exportJob, persistenceJob)
         jobs.forEach { it.cancel() }
         CoroutineScope(Dispatchers.IO).launch {
             jobs.joinAll()

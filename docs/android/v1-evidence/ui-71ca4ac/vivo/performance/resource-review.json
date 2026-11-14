@@ -1,0 +1,55 @@
+{
+  "status": "pass-for-recorded-workload",
+  "sourceCommit": "71ca4acab807d0ca025f53e2ab834f868802a435",
+  "traceSha256": "6e122701464bc1ad45678d0e32e242d99944f59899e9b5c4285e629319ff7d27",
+  "checkpoints": 31,
+  "workload": "Three LUTs and one 12MP export warmed before baseline; 20 import/edit cycles and 10 measured exports.",
+  "metrics": {
+    "javaBytes": {
+      "start": 7193000,
+      "end": 7225688,
+      "delta": 32688,
+      "minimum": 7167448,
+      "maximum": 7257376,
+      "slopePerCycle": -755.4387096774194
+    },
+    "nativeBytes": {
+      "start": 51955696,
+      "end": 52015088,
+      "delta": 59392,
+      "minimum": 51955696,
+      "maximum": 52150880,
+      "slopePerCycle": -768.9483870967742
+    },
+    "graphicsPssBytes": {
+      "start": 138442752,
+      "end": 111642624,
+      "delta": -26800128,
+      "minimum": 107431936,
+      "maximum": 138512384,
+      "slopePerCycle": -1220915.2
+    },
+    "threads": {
+      "start": 45,
+      "end": 45,
+      "delta": 0,
+      "minimum": 45,
+      "maximum": 45,
+      "slopePerCycle": 0.0
+    },
+    "fileDescriptors": {
+      "start": 214,
+      "end": 214,
+      "delta": 0,
+      "minimum": 214,
+      "maximum": 214,
+      "slopePerCycle": 0.0
+    }
+  },
+  "assessment": "Thread and file-descriptor counts stay exactly constant at 45 and 214. Post-GC Java/native end deltas are 32688/59392 bytes with nonpositive fitted slopes; graphics PSS declines by 26800128 bytes. The recorded workload shows no sustained retained-resource growth after warmup.",
+  "limitations": [
+    "This finite run does not prove absence of every leak.",
+    "100ms export memory samples are lower bounds on peak allocations.",
+    "Graphics PSS is a device-reported counter, not a complete GPU allocation inventory."
+  ]
+}

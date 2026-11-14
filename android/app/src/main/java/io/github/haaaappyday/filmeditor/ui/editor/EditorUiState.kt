@@ -11,7 +11,6 @@ data class EditorUiState(
     val preview: Bitmap? = null,
     val params: EditParams = EditParams("kodak_portra_400"),
     val presets: List<FilmPreset> = emptyList(),
-    val presetThumbnails: Map<String, Bitmap> = emptyMap(),
     val initializing: Boolean = true,
     val servicesReady: Boolean = false,
     val importing: Boolean = false,

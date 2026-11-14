@@ -33,7 +33,6 @@ class EditorActivityTest {
         compose.waitUntil(15_000) { !editor.state.value.initializing }
         compose.runOnUiThread { editor.importPhoto(fixtureUri("orientation-1.jpg")) }
         compose.waitUntil(15_000) { editor.state.value.previewValid }
-        compose.waitUntil(15_000) { editor.state.value.presetThumbnails.size == 3 }
         return editor
     }
     @Test fun realEditorControlsRotationBackgroundAndFailedReplacement() {

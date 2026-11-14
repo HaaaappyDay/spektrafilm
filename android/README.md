@@ -88,6 +88,17 @@ Instrumented tests install a separate `io.github.haaaappyday.filmeditor.validati
 app and its own fixture provider. They may reset that validation app’s session;
 the regular debug app and its session remain separate.
 
+On the reference vivo, automated Activity launches required temporarily enabling
+**Background pop-up windows** for the isolated validation app in the phone's
+permission manager. Without it, `Instrumentation.startActivitySync` waited before
+any editor Activity opened, and the system later froze the background test process.
+The same APK passed after enabling that app-specific control. Restore its previous
+value after testing; the everyday app needs no extra manifest permission.
+Keep the phone unlocked and avoid clearing recent apps while instrumentation runs.
+USB-only stay-awake can be enabled with `adb -s SERIAL shell svc power stayon usb`;
+record `settings get global stay_on_while_plugged_in` first and restore that value
+afterward unless the device owner requests otherwise.
+
 The process-death check is a separate host-driven test. It keeps the prepared
 instrumentation process alive, verifies its PID, force-stops that exact validation
 package, and then checks restoration in a new process. The generated source and
