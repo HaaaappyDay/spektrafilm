@@ -13,7 +13,7 @@ import java.util.UUID
 
 class EditorSessionStoreTest {
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
-    private fun root() = File(context.cacheDir, "session-${UUID.randomUUID()}").apply { mkdirs() }
+    private fun root() = File(context.cacheDir, "session-${UUID.randomUUID()}").canonicalFile.apply { mkdirs() }
     private fun source(directory: File): ImageSource {
         directory.mkdirs(); val id = UUID.randomUUID().toString()
         val file = File(directory, "$id.source").apply { writeText("test bytes") }
@@ -64,6 +64,25 @@ class EditorSessionStoreTest {
                 try { store.load(); fail("Accepted corrupt session") }
                 catch (error: EditorException) { assertEquals(EditorErrorCode.READ_FAILED, error.code) }
             }
+        } finally { root.deleteRecursively() }
+    }
+    @Test fun silentlyFailedCommitMustNotReportSuccessOrLosePreviousSnapshot() = runBlocking {
+        val root = root(); val files = File(root, "sources"); val state = File(root, "state")
+        try {
+            var rejectCommit = false
+            val store = EditorSessionStore(context, state, files, finishWrite = { atomic, stream ->
+                // AtomicFile reports no exception when its commit fails. Model a failed
+                // commit which leaves the previous snapshot recoverable on both APIs.
+                if (rejectCommit) atomic.failWrite(stream) else atomic.finishWrite(stream)
+            })
+            val previous = StoredEdit(source(files), EditParams("kodak_portra_400"))
+            store.save(previous); assertEquals(previous, store.load())
+            val next = StoredEdit(source(files), EditParams("kodak_gold_200"))
+            rejectCommit = true
+            try { store.save(next); fail("Reported success without committing the new snapshot") }
+            catch (error: EditorException) { assertEquals(EditorErrorCode.READ_FAILED, error.code) }
+            assertEquals(previous, store.load())
+            assertTrue(File(previous.source.localPath).isFile)
         } finally { root.deleteRecursively() }
     }
 }

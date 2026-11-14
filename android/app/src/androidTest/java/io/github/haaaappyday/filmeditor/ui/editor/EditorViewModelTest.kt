@@ -13,11 +13,13 @@ class EditorViewModelTest {
         var decodes = 0
         val removed = mutableListOf<String>()
         var missing = false
+        var decodeFailure: EditorException? = null
         override suspend fun importImage(uri: Uri): ImageSource {
             if (uri.lastPathSegment == "bad") throw EditorException(EditorErrorCode.READ_FAILED)
             return ImageSource(uri.toString(), uri.toString(), 4, 3, "image/jpeg")
         }
         override suspend fun decode(source: ImageSource, maxLongEdge: Int): Bitmap {
+            decodeFailure?.let { throw it }
             if (missing) throw EditorException(EditorErrorCode.READ_FAILED)
             assertEquals(1600, maxLongEdge); decodes++
             return Bitmap.createBitmap(4, 3, Bitmap.Config.ARGB_8888).apply { eraseColor(0xff606060.toInt()) }
@@ -27,8 +29,13 @@ class EditorViewModelTest {
     private class Sessions : SessionPersistence {
         var saved: StoredEdit? = null
         var gate: CompletableDeferred<Unit>? = null
+        var failSave = false
         override suspend fun load() = saved
-        override suspend fun save(edit: StoredEdit?) { gate?.await(); saved = edit }
+        override suspend fun save(edit: StoredEdit?) {
+            gate?.await()
+            if (failSave) throw EditorException(EditorErrorCode.READ_FAILED)
+            saved = edit
+        }
     }
     private class Renderer(var automatic: Boolean = true) : FilmRenderer {
         data class Call(val params: EditParams, val gate: CompletableDeferred<Unit>, var bitmap: Bitmap? = null)
@@ -162,6 +169,43 @@ class EditorViewModelTest {
             assertNull(vm.state.value.source); assertEquals(EditorErrorCode.READ_FAILED, vm.state.value.error)
             assertFalse(vm.state.value.canExport)
             await { sessions.saved == null }
+        } finally { main { store.clear() } }
+    }
+
+    @Test fun temporaryDecodeFailurePreservesSessionAndRetryRestoresItsEdits() = runBlocking {
+        val images = Images().apply { decodeFailure = EditorException(EditorErrorCode.IMAGE_TOO_LARGE, OutOfMemoryError("injected")) }
+        val saved = StoredEdit(ImageSource("valid", "/valid", 4, 3, "image/jpeg"), EditParams("kodak_gold_200", .37f, -.7f, 31f))
+        val sessions = Sessions().apply { this.saved = saved }
+        val (vm, store) = create(images, Renderer(), sessions)
+        try {
+            await { !vm.state.value.initializing }
+            main { assertEquals(saved, sessions.saved) }
+            assertEquals(EditorErrorCode.IMAGE_TOO_LARGE, vm.state.value.error)
+            images.decodeFailure = null
+            main { vm.retry() }
+            await { !vm.state.value.initializing }
+            assertEquals(saved.source, vm.state.value.source)
+            assertEquals(saved.params, vm.state.value.params)
+            await { vm.state.value.previewValid }
+        } finally { main { store.clear() } }
+    }
+
+    @Test fun failedPersistenceKeepsDurableSourceUntilRetryCommitsReplacement() = runBlocking {
+        val images = Images(); val sessions = Sessions()
+        val (vm, store) = create(images, Renderer(), sessions)
+        try {
+            ready(vm); await { sessions.saved != null }
+            val previous = sessions.saved!!
+            sessions.failSave = true
+            main { vm.importPhoto(Uri.parse("content://fixture/second")) }
+            await { vm.state.value.errorStage == EditorErrorStage.SESSION }
+            assertEquals(previous, sessions.saved)
+            assertFalse(images.removed.contains(previous.source.id))
+            sessions.failSave = false
+            main { vm.retry() }
+            await { images.removed.contains(previous.source.id) }
+            assertEquals(vm.state.value.source, sessions.saved!!.source)
+            assertNull(vm.state.value.error)
         } finally { main { store.clear() } }
     }
 

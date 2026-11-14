@@ -11,6 +11,7 @@ import kotlinx.coroutines.sync.withLock
 import org.json.JSONObject
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.FileOutputStream
 
 /** Durable state contains descriptors and values only; export success is intentionally transient. */
 data class StoredEdit(val source: ImageSource, val params: EditParams)
@@ -23,6 +24,7 @@ class EditorSessionStore(
     context: Context,
     private val directory: File = File(context.applicationContext.noBackupFilesDir, "editor-session"),
     private val sourcesDirectory: File = File(context.applicationContext.noBackupFilesDir, "sources"),
+    private val finishWrite: (AtomicFile, FileOutputStream) -> Unit = { atomic, stream -> atomic.finishWrite(stream) },
 ) : SessionPersistence {
     private val file = AtomicFile(File(directory, "editor.json"))
 
@@ -58,7 +60,7 @@ class EditorSessionStore(
                 check(directory.isDirectory || directory.mkdirs())
                 val bytes = encode(edit).toString().toByteArray(Charsets.UTF_8)
                 val stream = file.startWrite()
-                try { stream.write(bytes); file.finishWrite(stream) }
+                try { stream.write(bytes); finishWrite(file, stream) }
                 catch (error: Throwable) { file.failWrite(stream); throw error }
             }
         }
