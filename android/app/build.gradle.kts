@@ -27,8 +27,18 @@ android {
             matchingFallbacks += "debug"
             manifestPlaceholders["fixtureAuthority"] = "io.github.haaaappyday.filmeditor.validation.test.fixtures"
         }
+        create("profileable") {
+            initWith(getByName("release"))
+            isDebuggable = false
+            signingConfig = signingConfigs.getByName("debug")
+            applicationIdSuffix = ".validation"
+            matchingFallbacks += "release"
+            manifestPlaceholders["fixtureAuthority"] = "io.github.haaaappyday.filmeditor.validation.test.fixtures"
+        }
     }
-    testBuildType = "validation"
+    testBuildType = providers.gradleProperty("validationBuildType").getOrElse("validation").also {
+        require(it in setOf("validation", "profileable")) { "Tests require an isolated validation build" }
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -52,6 +62,7 @@ dependencies {
     debugImplementation(libs.compose.ui.tooling)
     debugImplementation(libs.compose.ui.test.manifest)
     "validationImplementation"(libs.compose.ui.test.manifest)
+    "profileableImplementation"(libs.compose.ui.test.manifest)
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.compose.ui.test.junit4)

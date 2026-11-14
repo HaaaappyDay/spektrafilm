@@ -115,6 +115,21 @@ The maintainer's reference device is vivo X200 Pro mini. Its API, RAM, GPU and
 performance must be measured from the connected device; emulator results do
 not establish physical-device color/performance acceptance.
 
+The integrated API 29/36/37.2 results and remaining physical gates are recorded
+in [v1 validation](../docs/android/v1-validation.md). To build the isolated,
+non-debuggable, shell-profileable measurement app and its instrumentation APK:
+
+```sh
+./gradlew :app:assembleProfileable :app:assembleProfileableAndroidTest -PvalidationBuildType=profileable
+```
+
+It is signed with the local debug key and uses the validation app ID, so it
+replaces a previous validation installation. Its manifest enables shell profiling
+without making the app debuggable. The trace/workload harness is still being
+implemented; building this APK is not performance acceptance. The host process
+restoration driver above requires the debuggable `validation` variant, because
+it reads private ready markers with `run-as`.
+
 ## Boundaries and ownership
 
 One `app` module, package `io.github.haaaappyday.filmeditor`, constructor injection.
