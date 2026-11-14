@@ -65,10 +65,10 @@ def assemble_evidence(workload, frames, markers, health, *, physical):
         candidates = [row for row in frames if valid and row.get("changeId") == action.get("changeId")
                       and row.get("handlerNs") == operation["startNs"]
                       and type(row.get("drawNs")) is int
-                      and operation["endNs"] <= row["drawNs"] <= input_span["endNs"]]
+                      and operation["endNs"] <= row["drawNs"]]
         presented = [row for row in candidates if row.get("flowVerified") == 1
                      and type(row.get("presentNs")) is int
-                     and row["drawNs"] <= row["presentNs"] <= input_span["endNs"]]
+                     and row["drawNs"] <= row["presentNs"]]
         row = min(presented, key=lambda r: r["presentNs"]) if presented else (
             min(candidates, key=lambda r: r["drawNs"]) if candidates else {})
         for key in ("drawNs", "presentNs", "surfaceFrameToken", "displayFrameToken", "appFrameId", "displayFrameId"):

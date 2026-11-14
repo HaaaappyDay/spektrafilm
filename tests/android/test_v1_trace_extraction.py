@@ -56,6 +56,16 @@ def test_reused_or_unclosed_input_marker_cannot_supply_latency():
     assert extract(data)["previewSamples"][0]["actionNs"] is None
 
 
+def test_real_presentation_after_pacing_callbacks_is_still_counted():
+    data = fixture()
+    # The input marker ends at 700 after test pacing callbacks. It is not a
+    # presentation fence; real SF evidence must retain later frames/outliers.
+    data[1][0].update(drawNs=650, presentNs=750)
+    assert extract(data)["previewSamples"][0]["presentNs"] == 750
+    data[1][0].update(drawNs=750, presentNs=800)
+    assert extract(data)["previewSamples"][0]["presentNs"] == 800
+
+
 def test_cross_operation_frame_or_early_publication_is_rejected():
     data = fixture(); data[1][0]["handlerNs"] = 121
     assert extract(data)["previewSamples"][0]["presentNs"] is None

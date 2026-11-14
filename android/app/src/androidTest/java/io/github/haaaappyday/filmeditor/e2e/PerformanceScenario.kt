@@ -13,9 +13,11 @@ import androidx.test.platform.app.InstrumentationRegistry
 import io.github.haaaappyday.filmeditor.BuildConfig
 import io.github.haaaappyday.filmeditor.MainActivity
 import io.github.haaaappyday.filmeditor.R
+import io.github.haaaappyday.filmeditor.core.EditParams
 import io.github.haaaappyday.filmeditor.diagnostics.PerformanceTrace
 import io.github.haaaappyday.filmeditor.export.AndroidMediaStoreGateway
 import io.github.haaaappyday.filmeditor.export.PendingExport
+import io.github.haaaappyday.filmeditor.render.GlFilmRenderer
 import io.github.haaaappyday.filmeditor.testsupport.EmptyEditorSessionRule
 import io.github.haaaappyday.filmeditor.testsupport.fixtureUri
 import io.github.haaaappyday.filmeditor.testsupport.testOutputDirectory
@@ -24,6 +26,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import org.junit.Rule
 import org.junit.Test
+import kotlinx.coroutines.runBlocking
 import java.io.File
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
@@ -173,6 +176,17 @@ class PerformanceScenario {
             .put("fileDescriptors", File("/proc/self/fd").list()?.size ?: JSONObject.NULL)
     }
 
+    private fun graphicsMetadata(): JSONObject = runBlocking {
+        val renderer = GlFilmRenderer(context)
+        val input = Bitmap.createBitmap(2, 2, Bitmap.Config.ARGB_8888).apply { eraseColor(0xff808080.toInt()) }
+        try {
+            renderer.render(input, EditParams("kodak_portra_400")).recycle()
+            val info = renderer.diagnostics()
+            check(info.getValue("version").contains("OpenGL ES 3"))
+            JSONObject(info)
+        } finally { renderer.release(); input.recycle() }
+    }
+
     private fun exportOnce(sampler: MemorySampler): JSONObject {
         val label = context.getString(R.string.export_photo)
         var node = visible { it.text?.toString() == label }
@@ -211,8 +225,11 @@ class PerformanceScenario {
             .put("resourceCheckpointPolicy", "post-GC after three real foreground frames; callbacks are pacing only")
         val manager = context.getSystemService(ActivityManager::class.java)
         val ram = ActivityManager.MemoryInfo().also(manager::getMemoryInfo)
+        val version = context.packageManager.getPackageInfo(context.packageName, 0)
         report.put("device", JSONObject().put("manufacturer", Build.MANUFACTURER).put("model", Build.MODEL)
             .put("fingerprint", Build.FINGERPRINT).put("api", Build.VERSION.SDK_INT)
+            .put("abi", Build.SUPPORTED_ABIS.first()).put("gl", graphicsMetadata())
+            .put("versionName", version.versionName).put("versionCode", version.longVersionCode).put("buildType", "profileable")
             .put("totalRamBytes", ram.totalMem).put("javaHeapLimitBytes", Runtime.getRuntime().maxMemory())
             .put("debuggable", false).put("profileable", app.isProfileableByShell)
             .put("package", context.packageName))

@@ -56,6 +56,8 @@ def record(args):
                     appSha256=sha256(app), testApkSha256=sha256(test),
                     recorderSha256=sha256(args.recorder), traceProcessorLauncherSha256=sha256(args.trace_processor),
                     traceProcessorVersion=run([args.trace_processor, "--version"]),
+                    hostScriptSha256={name: sha256(ROOT / "scripts" / name) for name in (
+                        "record_android_v1.py", "extract_android_v1.py", "android_v1_report.py", "android_v1_frames.sql")},
                     traceConfigSha256=sha256(args.config), startedUtc=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()))
     (out / "recording.json").write_text(json.dumps(metadata, indent=2) + "\n")
     run(adb + ["install", "-r", app], timeout=180)
