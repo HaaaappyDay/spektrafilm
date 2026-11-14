@@ -1,8 +1,8 @@
 # Film presets and color validation — issue #12
 
-Work in progress on `feat/android-render`. The three genuine presets and Python
-reference are implemented. Android GPU validation, independent review and
-physical-device evidence are still pending; this is not a completion report.
+Implementation and independent review complete on `feat/android-render`.
+Emulator CPU/GPU validation passed; required physical-device evidence is pending.
+Issue #12 remains open until that gate is satisfied.
 
 ## Reproduction
 
@@ -38,8 +38,8 @@ assets. The independent approximation plots below are committed separately.
 
 The reference evaluates the deterministic physical pipeline at new points with
 the same gamut, transfer and headroom settings; it does not use another LUT as
-ground truth. Seed19103, fixed RGB8 edge/random patches, 4096 additional off-grid
-float samples and a1024-point gray ramp. See
+ground truth. Seed19103, 7227 samples: fixed RGB8 edge/random patches, 4096 additional
+off-grid float samples and a1024-point gray ramp. See
 [full samples and statistics](color-evidence/approximation.json).
 
 | Film | Mean RGB code error | p95 | Maximum | Mean ΔE00 | Maximum ΔE00 |
@@ -92,9 +92,29 @@ vendor driver/context-loss condition.
 
 Current CI: initial missing-parser/reference tests failed before implementation;
 parser/math build and unit/lint passed at75f494f. Device compilation then failed
-on the missing GlFilmRenderer, before its implementation. The first complete GPU
-implementation is f4c7f8e; [CI43543239126](https://github.com/HaaaappyDay/spektrafilm/actions/runs/43543239126)
-is pending. No CPU-vs-Python instrumented or GPU pass is claimed yet.
+on the missing GlFilmRenderer, before its implementation. The complete implementation
+at f4c7f8e passed [CI43543239126](https://github.com/HaaaappyDay/spektrafilm/actions/runs/43543239126):
+9 unit tests and31 device tests per API, zero failures/errors; lint0 errors,
+14 warnings. The reports include all pre-existing import tests.
+
+| Device/API | Reference | RGB channels | Mean code error | p95 | Max |
+| --- | --- | ---: | ---: | ---: | ---: |
+| x86_64 emulator /29 | CPU vs Python | 512001 | 0.00000390624 | 0 | 1 |
+| x86_64 emulator /29 | GPU vs Python | 512001 | 0.00127148 | 0 | 1 |
+| x86_64 emulator /36 | CPU vs Python | 512001 | 0.00000390624 | 0 | 1 |
+| x86_64 emulator /36 | GPU vs Python | 512001 | 0.00127148 | 0 | 1 |
+
+Both emulators report Google SwiftShader4.0.0.1 via Android Emulator OpenGL ES
+Translator, GLES3.0, fragment highp23bits, max texture8192. These are two Android
+API levels on the same software GPU implementation, not two hardware GPU vendors.
+Exact JSON is in `color-evidence/api{29,36}-{cpu,gpu}-color-error.json`; generated
+GPU patch PNGs and XML are retained in the linked CI artifacts.
+
+Independent whole-branch review found no critical or important defects. One minor
+coverage recommendation is deferred to driver/recovery validation: inject reported
+context loss and cancellation after a partial tile (current tests exercise healthy
+context recreation, cube-load cancellation and dispatcher-return cancellation).
+The current report makes no claim that those additional fault paths were tested.
 
 vivo X200 Pro mini ADB is not connected. Its actual API/GPU/RAM and real GPU
 results remain required before #12 closes. Preview/export performance is #15;

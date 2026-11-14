@@ -1,10 +1,10 @@
 name: Android
 on:
   pull_request:
-    paths: ['android/**', 'docs/android/**', 'docs/superpowers/plans/*android*', '.github/workflows/android.yml']
+    paths: ['android/**', 'docs/android/**', 'docs/superpowers/plans/*android*', '.github/workflows/android.yml', 'scripts/*android*', 'tests/android/**', 'tests/test_lut_mode.py', 'src/spektrafilm/**', 'src/spektrafilm_lut_creator/**', 'pyproject.toml']
   push:
     branches: [main, 'feat/android-*']
-    paths: ['android/**', 'docs/android/**', 'docs/superpowers/plans/*android*', '.github/workflows/android.yml']
+    paths: ['android/**', 'docs/android/**', 'docs/superpowers/plans/*android*', '.github/workflows/android.yml', 'scripts/*android*', 'tests/android/**', 'tests/test_lut_mode.py', 'src/spektrafilm/**', 'src/spektrafilm_lut_creator/**', 'pyproject.toml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -80,3 +80,31 @@ jobs:
             android/app/build/outputs/connected_android_test_additional_output/
             android/app/build/reports/androidTests/
             android/app/build/outputs/androidTest-results/
+
+  python-mobile-reference:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      MPLBACKEND: Agg
+      QT_QPA_PLATFORM: offscreen
+      NUMBA_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+          cache-dependency-path: pyproject.toml
+      - name: Install offline reference dependencies
+        run: python -m pip install -e '.[dev]'
+      - name: Test existing LUT behavior and mobile reference
+        run: python -m pytest tests/android tests/lut_creator/test_cube_format.py tests/lut_creator/test_builders.py tests/test_lut_mode.py --junitxml=reports/python-mobile.xml -q
+      - name: Reproduce committed reference bytes
+        run: |
+          python scripts/verify_android_color.py --presets android/app/src/main/assets/presets --out "$RUNNER_TEMP/mobile-reference"
+          diff -rq android/app/src/androidTest/assets/render-fixtures "$RUNNER_TEMP/mobile-reference"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: python-mobile-reference-${{ github.sha }}
+          path: reports/python-mobile.xml
