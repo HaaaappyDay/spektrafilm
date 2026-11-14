@@ -1,6 +1,7 @@
 package io.github.haaaappyday.filmeditor.image
 
 import android.net.Uri
+import io.github.haaaappyday.filmeditor.testsupport.fixtureUri
 import android.system.Os
 import androidx.test.platform.app.InstrumentationRegistry
 import io.github.haaaappyday.filmeditor.core.*
@@ -23,7 +24,7 @@ class AndroidImageRepositoryTest {
     @Test fun realContentUriCreatesDurableUnmodifiedCopyDespiteMisleadingProviderMime() = runBlocking {
         val directory = root()
         val repo = AndroidImageRepository(context, directory = { directory })
-        val uri = Uri.parse("content://io.github.haaaappyday.filmeditor.test.fixtures/orientation-3.jpg")
+        val uri = fixtureUri("orientation-3.jpg")
         val original = context.contentResolver.openInputStream(uri)!!.use { it.readBytes() }
         val source = repo.importImage(uri)
         try {

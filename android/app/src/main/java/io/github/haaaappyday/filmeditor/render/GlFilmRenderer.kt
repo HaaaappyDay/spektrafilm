@@ -10,7 +10,7 @@ import kotlinx.coroutines.sync.withLock
 import java.util.concurrent.Executors
 
 /** Owns one serialized offscreen GL context. release waits for active use and is terminal. */
-class GlFilmRenderer private constructor(
+class GlFilmRenderer internal constructor(
     private val cubeProvider: suspend (String) -> Cube,
     private val shaderReader: (String) -> String,
     private val tileEdge: Int,

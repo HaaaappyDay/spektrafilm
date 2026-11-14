@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.haaaappyday.filmeditor.core.*
+import io.github.haaaappyday.filmeditor.diagnostics.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
@@ -18,6 +19,7 @@ class EditorViewModel(
     private val sessions: SessionPersistence,
     private val exporter: PhotoExporter? = null,
     private val prepareExport: suspend () -> Unit = {},
+    private val traces: PerformanceTrace = PerformanceTrace.app,
 ) : ViewModel() {
     private val mutableState = MutableStateFlow(EditorUiState(exportAvailable = exporter != null))
     val state: StateFlow<EditorUiState> = mutableState.asStateFlow()
@@ -29,7 +31,8 @@ class EditorViewModel(
     private var exportJob: Job? = null
     private var lastUri: Uri? = null
     private val renderJobs = mutableSetOf<Job>()
-    private data class PreviewRequest(val version: Long, val sourceId: String, val input: Bitmap, val params: EditParams)
+    private data class PreviewRequest(val version: Long, val sourceId: String, val input: Bitmap,
+        val params: EditParams, val trace: TraceSpan)
     private var pendingPreview: PreviewRequest? = null
     private val retiredSources = mutableMapOf<String, ImageSource>()
     private val writes = Channel<StoredEdit?>(Channel.CONFLATED)
@@ -162,6 +165,7 @@ class EditorViewModel(
     private fun persistCurrent() { writes.trySend(currentSnapshot()) }
     private fun invalidateRenders() {
         renderVersion++
+        pendingPreview?.trace?.finish("discarded")
         pendingPreview = null
         renderJobs.toList().forEach { it.cancel() }
     }
@@ -174,7 +178,8 @@ class EditorViewModel(
         if (current.presets.none { it.id == current.params.presetId }) {
             invalidateRenders(); failPreview(EditorErrorCode.PRESET_UNAVAILABLE); return
         }
-        pendingPreview = PreviewRequest(version, source.id, input, current.params)
+        pendingPreview?.trace?.finish("discarded")
+        pendingPreview = PreviewRequest(version, source.id, input, current.params, traces.begin("FilmPreview"))
         mutableState.update { it.copy(rendering = true, previewValid = false) }
         renderJobs.toList().forEach { it.cancel() }
         startPendingPreview()
@@ -187,19 +192,25 @@ class EditorViewModel(
             var output: Bitmap? = null
             var published = false
             try {
-                output = renderer.render(request.input, request.params)
+                output = request.trace.phase("FilmPreviewRender") { renderer.render(request.input, request.params) }
                 ensureActive()
                 if (request.version != renderVersion || request.sourceId != state.value.source?.id || request.params != state.value.params) return@launch
                 mutableState.update { it.copy(preview = output, previewValid = true, rendering = false,
+                    previewTraceId = request.trace.id,
                     error = if (it.errorStage == EditorErrorStage.PREVIEW) null else it.error,
                     errorStage = if (it.errorStage == EditorErrorStage.PREVIEW) null else it.errorStage) }
                 published = true
             } catch (cancelled: CancellationException) { throw cancelled }
             catch (error: EditorException) { if (request.version == renderVersion) failPreview(error.code) }
-            finally { if (!published) output?.recycle() }
+            finally {
+                if (!published) output?.recycle()
+                request.trace.finish(if (published) "accepted" else "discarded")
+            }
         }
         renderJobs.add(job)
         job.invokeOnCompletion {
+            // Also closes a request if its scope was cancelled before the body ran.
+            request.trace.finish("discarded")
             viewModelScope.launch { renderJobs.remove(job); startPendingPreview() }
         }
         job.start()
@@ -216,15 +227,20 @@ class EditorViewModel(
         val current = state.value
         if (closed || !current.canExport) return
         val request = ExportRequest(checkNotNull(current.source), current.params)
-        mutableState.update { it.copy(exporting = true, error = null, errorStage = null, exportResult = null) }
+        val trace = traces.begin("FilmExport")
+        mutableState.update { it.copy(exporting = true, error = null, errorStage = null, exportResult = null, exportTraceId = trace.id) }
         exportJob = viewModelScope.launch {
+            var success = false
             try {
-                val result = saver.export(request)
+                val result = withContext(ExportTraceContext(trace)) { saver.export(request) }
                 ensureActive()
                 mutableState.update { it.copy(exporting = false, exportResult = result) }
+                success = true
             } catch (cancelled: CancellationException) { throw cancelled }
             catch (error: EditorException) { mutableState.update { it.copy(exporting = false, error = error.code, errorStage = EditorErrorStage.EXPORT) } }
+            finally { trace.finish(if (success) "success" else "discarded") }
         }
+        exportJob?.invokeOnCompletion { trace.finish("discarded") }
     }
     fun retry() {
         if (closed || state.value.exporting || state.value.importing || state.value.initializing) return
@@ -238,6 +254,7 @@ class EditorViewModel(
     }
     override fun onCleared() {
         closed = true
+        pendingPreview?.trace?.finish("discarded")
         pendingPreview = null
         writes.close()
         val jobs = renderJobs.toList() + listOfNotNull(importJob, initializeJob, exportJob, persistenceJob)

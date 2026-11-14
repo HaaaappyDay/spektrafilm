@@ -1,0 +1,10 @@
+{
+  "sourceWidth": 8000,
+  "sourceHeight": 6000,
+  "previewWidth": 1600,
+  "previewHeight": 1200,
+  "exportDecodeWidth": 4096,
+  "exportDecodeHeight": 3072,
+  "newPhotoReset": true,
+  "failedAndCancelledImportPreservedEdits": true
+}

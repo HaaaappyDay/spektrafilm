@@ -40,7 +40,7 @@ class ExportActivityTest {
             compose.runOnUiThread { editor = ViewModelProvider(compose.activity)[EditorViewModel::class.java] }
             compose.waitUntil(20_000) { !editor.state.value.initializing }
             assertNull(editor.state.value.error)
-            compose.runOnUiThread { editor.importPhoto(Uri.parse("content://io.github.haaaappyday.filmeditor.test.fixtures/12mp.jpg")) }
+            compose.runOnUiThread { editor.importPhoto(fixtureUri("12mp.jpg")) }
             compose.waitUntil(30_000) { editor.state.value.previewValid }
             compose.runOnUiThread { editor.setExposure(.7f); editor.setTemperature(30f) }
             compose.waitUntil(30_000) { editor.state.value.previewValid }
@@ -116,7 +116,7 @@ class ExportActivityTest {
             lateinit var editor: EditorViewModel
             compose.runOnUiThread { editor = ViewModelProvider(compose.activity)[EditorViewModel::class.java] }
             compose.waitUntil(20_000) { !editor.state.value.initializing }
-            compose.runOnUiThread { editor.importPhoto(Uri.parse("content://io.github.haaaappyday.filmeditor.test.fixtures/orientation-1.jpg")) }
+            compose.runOnUiThread { editor.importPhoto(fixtureUri("orientation-1.jpg")) }
             compose.waitUntil(20_000) { editor.state.value.previewValid }
             compose.onNodeWithTag("export").performScrollTo().assertIsEnabled().performClick()
             compose.waitUntil(20_000) { editor.state.value.exportResult != null }

@@ -3,7 +3,6 @@ package io.github.haaaappyday.filmeditor.ui.editor
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.graphics.Bitmap
-import android.net.Uri
 import android.os.ParcelFileDescriptor
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.semantics.SemanticsActions
@@ -32,7 +31,7 @@ class EditorActivityTest {
         lateinit var editor: EditorViewModel
         compose.runOnUiThread { editor = vm() }
         compose.waitUntil(15_000) { !editor.state.value.initializing }
-        compose.runOnUiThread { editor.importPhoto(Uri.parse("content://io.github.haaaappyday.filmeditor.test.fixtures/orientation-1.jpg")) }
+        compose.runOnUiThread { editor.importPhoto(fixtureUri("orientation-1.jpg")) }
         compose.waitUntil(15_000) { editor.state.value.previewValid }
         return editor
     }
@@ -62,7 +61,7 @@ class EditorActivityTest {
             screenshot("editor-landscape")
             compose.activityRule.scenario.moveToState(Lifecycle.State.CREATED)
             compose.activityRule.scenario.moveToState(Lifecycle.State.RESUMED)
-            compose.runOnUiThread { editor.importPhoto(Uri.parse("content://io.github.haaaappyday.filmeditor.test.fixtures/missing.jpg")) }
+            compose.runOnUiThread { editor.importPhoto(fixtureUri("missing.jpg")) }
             compose.waitUntil(10_000) { editor.state.value.error != null && !editor.state.value.importing }
             assertSame(input, editor.state.value.input); assertEquals(params, editor.state.value.params)
             compose.onNodeWithTag("retry").performScrollTo().assertIsDisplayed()

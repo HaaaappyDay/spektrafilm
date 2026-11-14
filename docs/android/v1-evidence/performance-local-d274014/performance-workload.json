@@ -1,0 +1,1325 @@
+{
+  "completed": true,
+  "sourceCommit": "d274014c5b37cab19d157d99a02b026c3325b66a",
+  "previewActions": [
+    {
+      "inputId": 16,
+      "changeId": 17,
+      "width": 1600,
+      "height": 1200
+    },
+    {
+      "inputId": 18,
+      "changeId": 19,
+      "width": 1600,
+      "height": 1200
+    },
+    {
+      "inputId": 20,
+      "changeId": 21,
+      "width": 1600,
+      "height": 1200
+    },
+    {
+      "inputId": 22,
+      "changeId": 23,
+      "width": 1600,
+      "height": 1200
+    },
+    {
+      "inputId": 24,
+      "changeId": 25,
+      "width": 1600,
+      "height": 1200
+    },
+    {
+      "inputId": 26,
+      "changeId": 27,
+      "width": 1600,
+      "height": 1200
+    },
+    {
+      "inputId": 28,
+      "changeId": 29,
+      "width": 1600,
+      "height": 1200
+    },
+    {
+      "inputId": 30,
+      "changeId": 31,
+      "width": 1600,
+      "height": 1200
+    },
+    {
+      "inputId": 32,
+      "changeId": 33,
+      "width": 1600,
+      "height": 1200
+    },
+    {
+      "inputId": 34,
+      "changeId": 35,
+      "width": 1600,
+      "height": 1200
+    },
+    {
+      "inputId": 36,
+      "changeId": 37,
+      "width": 1600,
+      "height": 1200
+    },
+    {
+      "inputId": 38,
+      "changeId": 39,
+      "width": 1600,
+      "height": 1200
+    },
+    {
+      "inputId": 40,
+      "changeId": 41,
+      "width": 1600,
+      "height": 1200
+    },
+    {
+      "inputId": 42,
+      "changeId": 43,
+      "width": 1600,
+      "height": 1200
+    },
+    {
+      "inputId": 44,
+      "changeId": 45,
+      "width": 1600,
+      "height": 1200
+    },
+    {
+      "inputId": 46,
+      "changeId": 47,
+      "width": 1600,
+      "height": 1200
+    },
+    {
+      "inputId": 48,
+      "changeId": 49,
+      "width": 1600,
+      "height": 1200
+    },
+    {
+      "inputId": 50,
+      "changeId": 51,
+      "width": 1600,
+      "height": 1200
+    },
+    {
+      "inputId": 52,
+      "changeId": 53,
+      "width": 1600,
+      "height": 1200
+    },
+    {
+      "inputId": 54,
+      "changeId": 55,
+      "width": 1600,
+      "height": 1200
+    },
+    {
+      "inputId": 56,
+      "changeId": 57,
+      "width": 1600,
+      "height": 1200
+    },
+    {
+      "inputId": 58,
+      "changeId": 59,
+      "width": 1600,
+      "height": 1200
+    },
+    {
+      "inputId": 60,
+      "changeId": 61,
+      "width": 1600,
+      "height": 1200
+    },
+    {
+      "inputId": 62,
+      "changeId": 63,
+      "width": 1600,
+      "height": 1200
+    },
+    {
+      "inputId": 64,
+      "changeId": 65,
+      "width": 1600,
+      "height": 1200
+    },
+    {
+      "inputId": 66,
+      "changeId": 67,
+      "width": 1600,
+      "height": 1200
+    },
+    {
+      "inputId": 68,
+      "changeId": 69,
+      "width": 1600,
+      "height": 1200
+    },
+    {
+      "inputId": 70,
+      "changeId": 71,
+      "width": 1600,
+      "height": 1200
+    },
+    {
+      "inputId": 72,
+      "changeId": 73,
+      "width": 1600,
+      "height": 1200
+    },
+    {
+      "inputId": 74,
+      "changeId": 75,
+      "width": 1600,
+      "height": 1200
+    }
+  ],
+  "exportActions": [
+    {
+      "inputId": 136,
+      "exportId": 137,
+      "sourceWidth": 4000,
+      "sourceHeight": 3000,
+      "outputWidth": 4000,
+      "outputHeight": 3000,
+      "success": true,
+      "sampleIntervalMs": 100,
+      "memorySamples": [
+        {
+          "elapsedNs": 1104305704603,
+          "javaBytes": 9167200,
+          "nativeBytes": 37373088,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1104387657119,
+          "javaBytes": 9298272,
+          "nativeBytes": 85561728,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1104473513529,
+          "javaBytes": 5181792,
+          "nativeBytes": 133301552,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1104589143674,
+          "javaBytes": 13615456,
+          "nativeBytes": 133302160,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1104681385044,
+          "javaBytes": 13615456,
+          "nativeBytes": 133302160,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1104777278518,
+          "javaBytes": 13615456,
+          "nativeBytes": 133302160,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1104883970930,
+          "javaBytes": 13615456,
+          "nativeBytes": 133302160,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1104981338920,
+          "javaBytes": 13615456,
+          "nativeBytes": 133302160,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1105086813915,
+          "javaBytes": 13648224,
+          "nativeBytes": 169561040,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1105176444130,
+          "javaBytes": 13721952,
+          "nativeBytes": 133301504,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1105282943565,
+          "javaBytes": 13926752,
+          "nativeBytes": 37309632,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1105304120224,
+          "javaBytes": 14025056,
+          "nativeBytes": 37383760,
+          "graphicsPssBytes": 0
+        }
+      ]
+    },
+    {
+      "inputId": 138,
+      "exportId": 139,
+      "sourceWidth": 4000,
+      "sourceHeight": 3000,
+      "outputWidth": 4000,
+      "outputHeight": 3000,
+      "success": true,
+      "sampleIntervalMs": 100,
+      "memorySamples": [
+        {
+          "elapsedNs": 1105600355057,
+          "javaBytes": 5579104,
+          "nativeBytes": 37311088,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1105675451791,
+          "javaBytes": 5775712,
+          "nativeBytes": 85504000,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1105780369410,
+          "javaBytes": 13545824,
+          "nativeBytes": 133302160,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1105884818055,
+          "javaBytes": 13545824,
+          "nativeBytes": 133304112,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1105993631723,
+          "javaBytes": 13545824,
+          "nativeBytes": 133304112,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1106077153232,
+          "javaBytes": 13545824,
+          "nativeBytes": 133304112,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1106177304003,
+          "javaBytes": 13545824,
+          "nativeBytes": 133304112,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1106287075482,
+          "javaBytes": 13545824,
+          "nativeBytes": 133304112,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1106376134143,
+          "javaBytes": 13611360,
+          "nativeBytes": 169562896,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1106478117058,
+          "javaBytes": 13824352,
+          "nativeBytes": 85312912,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1106509106885,
+          "javaBytes": 13955424,
+          "nativeBytes": 37326880,
+          "graphicsPssBytes": 0
+        }
+      ]
+    },
+    {
+      "inputId": 140,
+      "exportId": 141,
+      "sourceWidth": 4000,
+      "sourceHeight": 3000,
+      "outputWidth": 4000,
+      "outputHeight": 3000,
+      "success": true,
+      "sampleIntervalMs": 100,
+      "memorySamples": [
+        {
+          "elapsedNs": 1106854486933,
+          "javaBytes": 5591392,
+          "nativeBytes": 37312960,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1106876832337,
+          "javaBytes": 5656928,
+          "nativeBytes": 37318064,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1106977513714,
+          "javaBytes": 5788000,
+          "nativeBytes": 85506864,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1107074299773,
+          "javaBytes": 13554016,
+          "nativeBytes": 133304080,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1107179454116,
+          "javaBytes": 13554016,
+          "nativeBytes": 133305056,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1107281985913,
+          "javaBytes": 13554016,
+          "nativeBytes": 133305056,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1107380144768,
+          "javaBytes": 13554016,
+          "nativeBytes": 133305056,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1107478079888,
+          "javaBytes": 13554016,
+          "nativeBytes": 133305056,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1107577515672,
+          "javaBytes": 13586784,
+          "nativeBytes": 133302416,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1107677937829,
+          "javaBytes": 13660512,
+          "nativeBytes": 133304608,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1107766521658,
+          "javaBytes": 13963616,
+          "nativeBytes": 37334480,
+          "graphicsPssBytes": 0
+        }
+      ]
+    },
+    {
+      "inputId": 142,
+      "exportId": 143,
+      "sourceWidth": 4000,
+      "sourceHeight": 3000,
+      "outputWidth": 4000,
+      "outputHeight": 3000,
+      "success": true,
+      "sampleIntervalMs": 100,
+      "memorySamples": [
+        {
+          "elapsedNs": 1108073041057,
+          "javaBytes": 5628256,
+          "nativeBytes": 37314608,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1108179752640,
+          "javaBytes": 5792096,
+          "nativeBytes": 133332320,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1108279138968,
+          "javaBytes": 13562208,
+          "nativeBytes": 133304272,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1108376571512,
+          "javaBytes": 13562208,
+          "nativeBytes": 133306224,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1108478069122,
+          "javaBytes": 13562208,
+          "nativeBytes": 133306224,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1108582248693,
+          "javaBytes": 13562208,
+          "nativeBytes": 133306224,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1108682757089,
+          "javaBytes": 13562208,
+          "nativeBytes": 133306224,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1108779536558,
+          "javaBytes": 13562208,
+          "nativeBytes": 133306224,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1108879667131,
+          "javaBytes": 13627744,
+          "nativeBytes": 169565104,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1108976035358,
+          "javaBytes": 13668704,
+          "nativeBytes": 133305568,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1109065683069,
+          "javaBytes": 13939040,
+          "nativeBytes": 37316080,
+          "graphicsPssBytes": 0
+        }
+      ]
+    },
+    {
+      "inputId": 144,
+      "exportId": 145,
+      "sourceWidth": 4000,
+      "sourceHeight": 3000,
+      "outputWidth": 4000,
+      "outputHeight": 3000,
+      "success": true,
+      "sampleIntervalMs": 100,
+      "memorySamples": [
+        {
+          "elapsedNs": 1109391843851,
+          "javaBytes": 5603680,
+          "nativeBytes": 37314880,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1109479020980,
+          "javaBytes": 5800288,
+          "nativeBytes": 85511040,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1109582534528,
+          "javaBytes": 13562208,
+          "nativeBytes": 133307376,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1109675317151,
+          "javaBytes": 13562208,
+          "nativeBytes": 133307376,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1109778578298,
+          "javaBytes": 13562208,
+          "nativeBytes": 133307376,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1109881407594,
+          "javaBytes": 13562208,
+          "nativeBytes": 133307376,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1109977259116,
+          "javaBytes": 13562208,
+          "nativeBytes": 133307376,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1110073818486,
+          "javaBytes": 13594976,
+          "nativeBytes": 169566256,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1110186186015,
+          "javaBytes": 13840736,
+          "nativeBytes": 37314928,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1110221681823,
+          "javaBytes": 13939040,
+          "nativeBytes": 37315152,
+          "graphicsPssBytes": 0
+        }
+      ]
+    },
+    {
+      "inputId": 146,
+      "exportId": 147,
+      "sourceWidth": 4000,
+      "sourceHeight": 3000,
+      "outputWidth": 4000,
+      "outputHeight": 3000,
+      "success": true,
+      "sampleIntervalMs": 100,
+      "memorySamples": [
+        {
+          "elapsedNs": 1110516550488,
+          "javaBytes": 5607776,
+          "nativeBytes": 37317312,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1110591485979,
+          "javaBytes": 5771616,
+          "nativeBytes": 85515104,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1110685678351,
+          "javaBytes": 13549920,
+          "nativeBytes": 133308368,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1110784341975,
+          "javaBytes": 13582688,
+          "nativeBytes": 133308848,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1110884415843,
+          "javaBytes": 13582688,
+          "nativeBytes": 133308848,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1110981262795,
+          "javaBytes": 13582688,
+          "nativeBytes": 133308848,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1111078923924,
+          "javaBytes": 13582688,
+          "nativeBytes": 133308848,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1111181050441,
+          "javaBytes": 13582688,
+          "nativeBytes": 133308848,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1111275136114,
+          "javaBytes": 13615456,
+          "nativeBytes": 169567728,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1111389078438,
+          "javaBytes": 13791584,
+          "nativeBytes": 133316432,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1111486901795,
+          "javaBytes": 13893984,
+          "nativeBytes": 37316176,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1111509667109,
+          "javaBytes": 13992288,
+          "nativeBytes": 37390560,
+          "graphicsPssBytes": 0
+        }
+      ]
+    },
+    {
+      "inputId": 148,
+      "exportId": 149,
+      "sourceWidth": 4000,
+      "sourceHeight": 3000,
+      "outputWidth": 4000,
+      "outputHeight": 3000,
+      "success": true,
+      "sampleIntervalMs": 100,
+      "memorySamples": [
+        {
+          "elapsedNs": 1111858835230,
+          "javaBytes": 5656928,
+          "nativeBytes": 37317088,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1111893174722,
+          "javaBytes": 5788000,
+          "nativeBytes": 37332000,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1111973613159,
+          "javaBytes": 5820768,
+          "nativeBytes": 133338336,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1112074372729,
+          "javaBytes": 13574496,
+          "nativeBytes": 133309872,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1112179696164,
+          "javaBytes": 13574496,
+          "nativeBytes": 133309872,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1112282114366,
+          "javaBytes": 13574496,
+          "nativeBytes": 133309872,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1112375898190,
+          "javaBytes": 13574496,
+          "nativeBytes": 133309872,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1112483094863,
+          "javaBytes": 13574496,
+          "nativeBytes": 133309872,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1112577495833,
+          "javaBytes": 13607264,
+          "nativeBytes": 169568752,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1112679753945,
+          "javaBytes": 13713760,
+          "nativeBytes": 133318048,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1112762177293,
+          "javaBytes": 13984096,
+          "nativeBytes": 37332384,
+          "graphicsPssBytes": 0
+        }
+      ]
+    },
+    {
+      "inputId": 150,
+      "exportId": 151,
+      "sourceWidth": 4000,
+      "sourceHeight": 3000,
+      "outputWidth": 4000,
+      "outputHeight": 3000,
+      "success": true,
+      "sampleIntervalMs": 100,
+      "memorySamples": [
+        {
+          "elapsedNs": 1113063525199,
+          "javaBytes": 5648736,
+          "nativeBytes": 37320064,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1113095340805,
+          "javaBytes": 5812576,
+          "nativeBytes": 37335216,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1113188323497,
+          "javaBytes": 5132640,
+          "nativeBytes": 133346112,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1113281090115,
+          "javaBytes": 13594976,
+          "nativeBytes": 133310944,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1113376895208,
+          "javaBytes": 13594976,
+          "nativeBytes": 133310944,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1113481025321,
+          "javaBytes": 13594976,
+          "nativeBytes": 133310944,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1113580833491,
+          "javaBytes": 13594976,
+          "nativeBytes": 133310944,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1113685465701,
+          "javaBytes": 13594976,
+          "nativeBytes": 133310944,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1113776046130,
+          "javaBytes": 13627744,
+          "nativeBytes": 169569824,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1113884743035,
+          "javaBytes": 13701472,
+          "nativeBytes": 133308192,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1114005869296,
+          "javaBytes": 13906272,
+          "nativeBytes": 37318368,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1114030583043,
+          "javaBytes": 13971808,
+          "nativeBytes": 37318336,
+          "graphicsPssBytes": 0
+        }
+      ]
+    },
+    {
+      "inputId": 152,
+      "exportId": 153,
+      "sourceWidth": 4000,
+      "sourceHeight": 3000,
+      "outputWidth": 4000,
+      "outputHeight": 3000,
+      "success": true,
+      "sampleIntervalMs": 100,
+      "memorySamples": [
+        {
+          "elapsedNs": 1114354813734,
+          "javaBytes": 5603680,
+          "nativeBytes": 37319408,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1114384175619,
+          "javaBytes": 5701984,
+          "nativeBytes": 37330992,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1114480372690,
+          "javaBytes": 5833056,
+          "nativeBytes": 133343472,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1114581707488,
+          "javaBytes": 13586784,
+          "nativeBytes": 133312944,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1114681166199,
+          "javaBytes": 13586784,
+          "nativeBytes": 133312944,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1114775532197,
+          "javaBytes": 13586784,
+          "nativeBytes": 133312944,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1114883614201,
+          "javaBytes": 13586784,
+          "nativeBytes": 133312944,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1114979708215,
+          "javaBytes": 13586784,
+          "nativeBytes": 133312944,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1115076174224,
+          "javaBytes": 13619552,
+          "nativeBytes": 169571824,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1115187371275,
+          "javaBytes": 13865312,
+          "nativeBytes": 133322432,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1115251611663,
+          "javaBytes": 13963616,
+          "nativeBytes": 37328896,
+          "graphicsPssBytes": 0
+        }
+      ]
+    },
+    {
+      "inputId": 154,
+      "exportId": 155,
+      "sourceWidth": 4000,
+      "sourceHeight": 3000,
+      "outputWidth": 4000,
+      "outputHeight": 3000,
+      "success": true,
+      "sampleIntervalMs": 100,
+      "memorySamples": [
+        {
+          "elapsedNs": 1115551190033,
+          "javaBytes": 5661024,
+          "nativeBytes": 37324464,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1115574529857,
+          "javaBytes": 5792096,
+          "nativeBytes": 37392176,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1115683175047,
+          "javaBytes": 5140832,
+          "nativeBytes": 133352848,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1115781653656,
+          "javaBytes": 13603168,
+          "nativeBytes": 133315552,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1115883138428,
+          "javaBytes": 13603168,
+          "nativeBytes": 133315552,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1115982372615,
+          "javaBytes": 13603168,
+          "nativeBytes": 133315552,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1116078179281,
+          "javaBytes": 13603168,
+          "nativeBytes": 133315552,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1116182796492,
+          "javaBytes": 13603168,
+          "nativeBytes": 133315552,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1116277390683,
+          "javaBytes": 13635936,
+          "nativeBytes": 169574432,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1116382357558,
+          "javaBytes": 13881696,
+          "nativeBytes": 133325376,
+          "graphicsPssBytes": 0
+        },
+        {
+          "elapsedNs": 1116432899166,
+          "javaBytes": 14045536,
+          "nativeBytes": 37397568,
+          "graphicsPssBytes": 0
+        }
+      ]
+    }
+  ],
+  "resourceSamples": [
+    {
+      "elapsedNs": 1081718513284,
+      "javaBytes": 5103968,
+      "nativeBytes": 37191248,
+      "graphicsPssBytes": 0,
+      "index": 0,
+      "phase": "baseline",
+      "threads": 34,
+      "fileDescriptors": 149
+    },
+    {
+      "elapsedNs": 1086057119165,
+      "javaBytes": 5132640,
+      "nativeBytes": 37232880,
+      "graphicsPssBytes": 0,
+      "index": 1,
+      "phase": "import",
+      "threads": 34,
+      "fileDescriptors": 149
+    },
+    {
+      "elapsedNs": 1088712185904,
+      "javaBytes": 5103968,
+      "nativeBytes": 37235376,
+      "graphicsPssBytes": 0,
+      "index": 2,
+      "phase": "import",
+      "threads": 34,
+      "fileDescriptors": 149
+    },
+    {
+      "elapsedNs": 1089847176391,
+      "javaBytes": 5120352,
+      "nativeBytes": 37243072,
+      "graphicsPssBytes": 0,
+      "index": 3,
+      "phase": "import",
+      "threads": 34,
+      "fileDescriptors": 149
+    },
+    {
+      "elapsedNs": 1091051343316,
+      "javaBytes": 5108064,
+      "nativeBytes": 37247024,
+      "graphicsPssBytes": 0,
+      "index": 4,
+      "phase": "import",
+      "threads": 34,
+      "fileDescriptors": 148
+    },
+    {
+      "elapsedNs": 1092279252012,
+      "javaBytes": 5112160,
+      "nativeBytes": 37249008,
+      "graphicsPssBytes": 0,
+      "index": 5,
+      "phase": "import",
+      "threads": 34,
+      "fileDescriptors": 148
+    },
+    {
+      "elapsedNs": 1093617642766,
+      "javaBytes": 5103968,
+      "nativeBytes": 37253568,
+      "graphicsPssBytes": 0,
+      "index": 6,
+      "phase": "import",
+      "threads": 34,
+      "fileDescriptors": 149
+    },
+    {
+      "elapsedNs": 1094524872302,
+      "javaBytes": 5128544,
+      "nativeBytes": 37258512,
+      "graphicsPssBytes": 0,
+      "index": 7,
+      "phase": "import",
+      "threads": 34,
+      "fileDescriptors": 149
+    },
+    {
+      "elapsedNs": 1095239008422,
+      "javaBytes": 5128544,
+      "nativeBytes": 37259296,
+      "graphicsPssBytes": 0,
+      "index": 8,
+      "phase": "import",
+      "threads": 34,
+      "fileDescriptors": 149
+    },
+    {
+      "elapsedNs": 1095903577198,
+      "javaBytes": 5128544,
+      "nativeBytes": 37262144,
+      "graphicsPssBytes": 0,
+      "index": 9,
+      "phase": "import",
+      "threads": 34,
+      "fileDescriptors": 149
+    },
+    {
+      "elapsedNs": 1096601956170,
+      "javaBytes": 5128544,
+      "nativeBytes": 37263120,
+      "graphicsPssBytes": 0,
+      "index": 10,
+      "phase": "import",
+      "threads": 34,
+      "fileDescriptors": 149
+    },
+    {
+      "elapsedNs": 1097390801968,
+      "javaBytes": 5112160,
+      "nativeBytes": 37264880,
+      "graphicsPssBytes": 0,
+      "index": 11,
+      "phase": "import",
+      "threads": 34,
+      "fileDescriptors": 149
+    },
+    {
+      "elapsedNs": 1098197447059,
+      "javaBytes": 5116256,
+      "nativeBytes": 37267152,
+      "graphicsPssBytes": 0,
+      "index": 12,
+      "phase": "import",
+      "threads": 34,
+      "fileDescriptors": 149
+    },
+    {
+      "elapsedNs": 1098852348844,
+      "javaBytes": 5132640,
+      "nativeBytes": 37269056,
+      "graphicsPssBytes": 0,
+      "index": 13,
+      "phase": "import",
+      "threads": 34,
+      "fileDescriptors": 149
+    },
+    {
+      "elapsedNs": 1099479473277,
+      "javaBytes": 5132640,
+      "nativeBytes": 37270288,
+      "graphicsPssBytes": 0,
+      "index": 14,
+      "phase": "import",
+      "threads": 34,
+      "fileDescriptors": 149
+    },
+    {
+      "elapsedNs": 1100137060608,
+      "javaBytes": 5132640,
+      "nativeBytes": 37271984,
+      "graphicsPssBytes": 0,
+      "index": 15,
+      "phase": "import",
+      "threads": 34,
+      "fileDescriptors": 149
+    },
+    {
+      "elapsedNs": 1100784564354,
+      "javaBytes": 5124448,
+      "nativeBytes": 37273776,
+      "graphicsPssBytes": 0,
+      "index": 16,
+      "phase": "import",
+      "threads": 34,
+      "fileDescriptors": 149
+    },
+    {
+      "elapsedNs": 1101432340711,
+      "javaBytes": 5120352,
+      "nativeBytes": 37275360,
+      "graphicsPssBytes": 0,
+      "index": 17,
+      "phase": "import",
+      "threads": 34,
+      "fileDescriptors": 149
+    },
+    {
+      "elapsedNs": 1102092857594,
+      "javaBytes": 5128544,
+      "nativeBytes": 37276864,
+      "graphicsPssBytes": 0,
+      "index": 18,
+      "phase": "import",
+      "threads": 34,
+      "fileDescriptors": 149
+    },
+    {
+      "elapsedNs": 1102754161882,
+      "javaBytes": 5136736,
+      "nativeBytes": 37291040,
+      "graphicsPssBytes": 0,
+      "index": 19,
+      "phase": "import",
+      "threads": 34,
+      "fileDescriptors": 149
+    },
+    {
+      "elapsedNs": 1103510247751,
+      "javaBytes": 5136736,
+      "nativeBytes": 37293168,
+      "graphicsPssBytes": 0,
+      "index": 20,
+      "phase": "import",
+      "threads": 34,
+      "fileDescriptors": 149
+    },
+    {
+      "elapsedNs": 1105500227886,
+      "javaBytes": 5153120,
+      "nativeBytes": 37305344,
+      "graphicsPssBytes": 0,
+      "index": 21,
+      "phase": "export",
+      "threads": 34,
+      "fileDescriptors": 149
+    },
+    {
+      "elapsedNs": 1106717022705,
+      "javaBytes": 5165408,
+      "nativeBytes": 37307568,
+      "graphicsPssBytes": 0,
+      "index": 22,
+      "phase": "export",
+      "threads": 34,
+      "fileDescriptors": 149
+    },
+    {
+      "elapsedNs": 1107971698813,
+      "javaBytes": 5169504,
+      "nativeBytes": 37307968,
+      "graphicsPssBytes": 0,
+      "index": 23,
+      "phase": "export",
+      "threads": 34,
+      "fileDescriptors": 149
+    },
+    {
+      "elapsedNs": 1109276308808,
+      "javaBytes": 5177696,
+      "nativeBytes": 37309328,
+      "graphicsPssBytes": 0,
+      "index": 24,
+      "phase": "export",
+      "threads": 34,
+      "fileDescriptors": 149
+    },
+    {
+      "elapsedNs": 1110435660335,
+      "javaBytes": 5181792,
+      "nativeBytes": 37310352,
+      "graphicsPssBytes": 0,
+      "index": 25,
+      "phase": "export",
+      "threads": 34,
+      "fileDescriptors": 149
+    },
+    {
+      "elapsedNs": 1111724575860,
+      "javaBytes": 5198176,
+      "nativeBytes": 37311328,
+      "graphicsPssBytes": 0,
+      "index": 26,
+      "phase": "export",
+      "threads": 34,
+      "fileDescriptors": 149
+    },
+    {
+      "elapsedNs": 1112957724221,
+      "javaBytes": 5189984,
+      "nativeBytes": 37313104,
+      "graphicsPssBytes": 0,
+      "index": 27,
+      "phase": "export",
+      "threads": 34,
+      "fileDescriptors": 149
+    },
+    {
+      "elapsedNs": 1114237177917,
+      "javaBytes": 5210464,
+      "nativeBytes": 37313792,
+      "graphicsPssBytes": 0,
+      "index": 28,
+      "phase": "export",
+      "threads": 34,
+      "fileDescriptors": 149
+    },
+    {
+      "elapsedNs": 1115452982568,
+      "javaBytes": 5202272,
+      "nativeBytes": 37317632,
+      "graphicsPssBytes": 0,
+      "index": 29,
+      "phase": "export",
+      "threads": 34,
+      "fileDescriptors": 149
+    },
+    {
+      "elapsedNs": 1116610192026,
+      "javaBytes": 5218656,
+      "nativeBytes": 37318144,
+      "graphicsPssBytes": 0,
+      "index": 30,
+      "phase": "export",
+      "threads": 34,
+      "fileDescriptors": 149
+    }
+  ],
+  "warmedPresets": [
+    "kodak_portra_400",
+    "kodak_gold_200",
+    "kodak_ektar_100"
+  ],
+  "resourceCheckpointPolicy": "post-GC after three real foreground frames; callbacks are pacing only",
+  "device": {
+    "manufacturer": "unknown",
+    "model": "Android SDK built for x86_64",
+    "pid": 3020,
+    "fingerprint": "Android\/sdk_phone64_x86_64\/emu64x:16\/BE2A.250530.026.D1\/13818094:userdebug\/test-keys",
+    "api": 36,
+    "abi": "x86_64",
+    "gl": {
+      "vendor": "Google (Google Inc.)",
+      "renderer": "Android Emulator OpenGL ES Translator (Google SwiftShader)",
+      "version": "OpenGL ES 3.0 (OpenGL ES 3.0 SwiftShader 4.0.0.1)",
+      "fragmentHighpBits": "23",
+      "maxTextureSize": "8192",
+      "tileLimit": "2048"
+    },
+    "versionName": "0.1.0",
+    "versionCode": 1,
+    "buildType": "profileable",
+    "totalRamBytes": 2593083392,
+    "javaHeapLimitBytes": 201326592,
+    "debuggable": false,
+    "profileable": true,
+    "package": "io.github.haaaappyday.filmeditor.validation"
+  },
+  "warmupExports": 1,
+  "warmupChanges": 5,
+  "cleanupVerified": true
+}
