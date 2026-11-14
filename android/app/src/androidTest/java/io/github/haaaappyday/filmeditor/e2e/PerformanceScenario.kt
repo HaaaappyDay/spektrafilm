@@ -227,6 +227,7 @@ class PerformanceScenario {
         val ram = ActivityManager.MemoryInfo().also(manager::getMemoryInfo)
         val version = context.packageManager.getPackageInfo(context.packageName, 0)
         report.put("device", JSONObject().put("manufacturer", Build.MANUFACTURER).put("model", Build.MODEL)
+            .put("pid", android.os.Process.myPid())
             .put("fingerprint", Build.FINGERPRINT).put("api", Build.VERSION.SDK_INT)
             .put("abi", Build.SUPPORTED_ABIS.first()).put("gl", graphicsMetadata())
             .put("versionName", version.versionName).put("versionCode", version.longVersionCode).put("buildType", "profileable")

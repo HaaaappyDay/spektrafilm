@@ -7,7 +7,7 @@ from extract_android_v1 import assemble_evidence
 
 
 def fixture():
-    workload = dict(completed=True, cleanupVerified=True, device=dict(profileable=True, debuggable=False),
+    workload = dict(completed=True, cleanupVerified=True, device=dict(profileable=True, debuggable=False, pid=100),
         warmupChanges=5, previewActions=[dict(inputId=1, changeId=2, width=1600, height=1200)],
         exportActions=[dict(inputId=3, exportId=4, sourceWidth=4000, sourceHeight=3000,
             outputWidth=4000, outputHeight=3000, success=True, sampleIntervalMs=100,
@@ -92,3 +92,9 @@ def test_duplicate_scenario_input_ids_are_reported():
 def test_incomplete_workload_and_cleanup_are_not_accepted():
     data = fixture(); data[0].update(completed=False, cleanupVerified=False)
     assert len(extract(data)["validationErrors"]) == 2
+
+
+def test_unknown_or_invalid_instrumented_process_identity_is_incomplete():
+    for pid in (None, 0, True, "100; DROP TABLE process"):
+        data = fixture(); data[0]["device"]["pid"] = pid
+        assert extract(data)["validationErrors"]

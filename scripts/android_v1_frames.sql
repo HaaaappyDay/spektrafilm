@@ -13,7 +13,7 @@ draws AS (
   JOIN slice handler ON handler.name = 'FilmPreview:' || SUBSTR(d.name, 17)
   JOIN process_track ht ON ht.id = handler.track_id AND ht.upid = t.upid
   WHERE d.name GLOB 'FilmPreviewDraw:[0-9]*'
-    AND p.name = 'io.github.haaaappyday.filmeditor.validation'
+    AND p.pid = __APP_PID__
     AND d.dur >= 0 AND handler.dur >= 0
     AND d.ts >= handler.ts + handler.dur
     AND EXISTS (

@@ -2,7 +2,7 @@
 from pathlib import Path
 import sqlite3
 
-SQL = (Path(__file__).resolve().parents[2] / "scripts/android_v1_frames.sql").read_text()
+SQL = (Path(__file__).resolve().parents[2] / "scripts/android_v1_frames.sql").read_text().replace("__APP_PID__", "100")
 
 
 def trace():
@@ -12,12 +12,12 @@ def trace():
         CREATE TABLE slice(id INTEGER, ts INTEGER, dur INTEGER, track_id INTEGER, name TEXT, parent_id INTEGER);
         CREATE TABLE thread_track(id INTEGER, utid INTEGER);
         CREATE TABLE thread(utid INTEGER, upid INTEGER);
-        CREATE TABLE process(upid INTEGER, name TEXT);
+        CREATE TABLE process(upid INTEGER, pid INTEGER, name TEXT);
         CREATE TABLE process_track(id INTEGER, upid INTEGER);
         CREATE TABLE actual_frame_timeline_slice(id INTEGER, ts INTEGER, dur INTEGER, upid INTEGER,
           surface_frame_token INTEGER, display_frame_token INTEGER, layer_name TEXT, present_type TEXT);
         CREATE TABLE flow(slice_out INTEGER, slice_in INTEGER);
-        INSERT INTO process VALUES(1, 'io.github.haaaappyday.filmeditor.validation'), (2, '/system/bin/surfaceflinger'), (3, 'other');
+        INSERT INTO process VALUES(1,100,'io.github.haaaappyday.filmeditor.validation'), (2,200,'/system/bin/surfaceflinger'), (3,300,'other');
         INSERT INTO thread VALUES(1, 1);
         INSERT INTO thread_track VALUES(10, 1);
         INSERT INTO process_track VALUES(20, 1);
@@ -62,6 +62,13 @@ def test_surfaceflinger_display_frame_uses_null_surface_token_in_real_android_tr
     assert result(db)["presentNs"] == 300
     db.execute("UPDATE actual_frame_timeline_slice SET surface_frame_token=99 WHERE id=31")
     assert result(db)["presentNs"] is None  # Another SurfaceFrame is not DisplayFrame proof.
+
+
+def test_recorded_pid_survives_stale_zygote_name_and_excludes_other_processes():
+    db = trace(); db.execute("UPDATE process SET name='zygote64' WHERE upid=1")
+    assert result(db)["presentNs"] == 300
+    db.execute("UPDATE process SET pid=101 WHERE upid=1")
+    assert list(db.execute(SQL)) == []
 
 
 def test_unrelated_process_layer_or_dropped_frame_cannot_supply_presentation():

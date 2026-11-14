@@ -12,13 +12,13 @@ from android_v1_report import export_report, preview_report, resource_report
 
 
 APP = "io.github.haaaappyday.filmeditor.validation"
-MARKERS_SQL = f"""
+MARKERS_SQL = """
 SELECT s.name, s.ts, s.dur FROM slice s
 LEFT JOIN process_track pt ON pt.id = s.track_id
 LEFT JOIN thread_track tt ON tt.id = s.track_id
 LEFT JOIN thread t ON t.utid = tt.utid
 JOIN process p ON p.upid = COALESCE(pt.upid, t.upid)
-WHERE p.name = '{APP}' AND s.name GLOB 'Film*'
+WHERE p.pid = __APP_PID__ AND s.name GLOB 'Film*'
 ORDER BY s.ts;
 """
 HEALTH_SQL = """
@@ -46,6 +46,9 @@ def assemble_evidence(workload, frames, markers, health, *, physical):
         return bool(child and parent and parent["startNs"] <= child["startNs"] <= child["endNs"] <= parent["endNs"])
 
     errors = []
+    pid = workload.get("device", {}).get("pid")
+    if type(pid) is not int or not 0 < pid <= 2147483647:
+        errors.append("Instrumented application PID is unknown or invalid")
     for key in ("completed", "cleanupVerified"):
         if workload.get(key) is not True:
             errors.append(f"Workload {key} is not proven")
@@ -131,8 +134,11 @@ def query(processor, trace, sql):
 def extract(processor, trace, workload, out, *, physical):
     """Save raw query rows as well as reports so every join is inspectable."""
     out = Path(out)
-    frames = query(processor, trace, Path(__file__).with_name("android_v1_frames.sql").read_text())
-    markers = query(processor, trace, MARKERS_SQL)
+    pid = workload.get("device", {}).get("pid")
+    if type(pid) is not int or not 0 < pid <= 2147483647:
+        raise ValueError("Workload must record its actual application PID")
+    frames = query(processor, trace, Path(__file__).with_name("android_v1_frames.sql").read_text().replace("__APP_PID__", str(pid)))
+    markers = query(processor, trace, MARKERS_SQL.replace("__APP_PID__", str(pid)))
     health_rows = query(processor, trace, HEALTH_SQL)
     if len(health_rows) != 1:
         raise ValueError("Trace health query returned no unique result")
