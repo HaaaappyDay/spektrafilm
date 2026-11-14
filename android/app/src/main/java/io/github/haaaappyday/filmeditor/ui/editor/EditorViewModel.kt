@@ -64,12 +64,10 @@ class EditorViewModel(
         initializeJob = viewModelScope.launch {
             var input: Bitmap? = null
             var published = false
-            var readingSession = false
             try {
                 val available = presets.listPresets()
                 ensureActive()
                 mutableState.update { it.copy(presets = available) }
-                readingSession = true
                 val saved = sessions.load()
                 ensureActive()
                 if (saved != null) {
@@ -82,7 +80,9 @@ class EditorViewModel(
                 } else mutableState.update { it.copy(initializing = false) }
             } catch (cancelled: CancellationException) { throw cancelled }
             catch (error: EditorException) {
-                if (readingSession) writes.trySend(null)
+                // A typed decode/read error does not prove that a durable source is
+                // irrecoverable (for example, IMAGE_TOO_LARGE also wraps memory
+                // pressure). Retry the same snapshot; a new import can replace it.
                 mutableState.update { it.copy(initializing = false, error = error.code, errorStage = EditorErrorStage.INITIALIZE) }
             } finally { if (!published) input?.recycle() }
         }

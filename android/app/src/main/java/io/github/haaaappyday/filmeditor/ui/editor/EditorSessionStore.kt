@@ -1,6 +1,8 @@
 package io.github.haaaappyday.filmeditor.ui.editor
 
 import android.content.Context
+import android.system.Os
+import android.system.OsConstants
 import android.util.AtomicFile
 import io.github.haaaappyday.filmeditor.core.*
 import io.github.haaaappyday.filmeditor.image.ImageSizing
@@ -55,15 +57,33 @@ class EditorSessionStore(
     override suspend fun save(edit: StoredEdit?) = withContext(Dispatchers.IO) {
         storageFailure {
             storageMutex.withLock {
-                if (edit == null) { file.delete(); return@withLock }
+                if (edit == null) {
+                    file.delete()
+                    check(listOf("editor.json", "editor.json.bak", "editor.json.new").none { File(directory, it).exists() })
+                    if (directory.isDirectory) syncDirectory()
+                    return@withLock
+                }
                 validate(edit)
                 check(directory.isDirectory || directory.mkdirs())
                 val bytes = encode(edit).toString().toByteArray(Charsets.UTF_8)
                 val stream = file.startWrite()
-                try { stream.write(bytes); finishWrite(file, stream) }
+                try {
+                    stream.write(bytes)
+                    // AtomicFile logs sync/close/rename failures instead of throwing.
+                    // A reported commit permits deletion of the previous source, so
+                    // explicitly sync and verify the recoverable snapshot first.
+                    stream.fd.sync()
+                    finishWrite(file, stream)
+                    check(file.openRead().use { it.readBytes() }.contentEquals(bytes)) { "Session commit failed" }
+                    syncDirectory()
+                }
                 catch (error: Throwable) { file.failWrite(stream); throw error }
             }
         }
+    }
+    private fun syncDirectory() {
+        val descriptor = Os.open(directory.absolutePath, OsConstants.O_RDONLY or OsConstants.O_DIRECTORY, 0)
+        try { Os.fsync(descriptor) } finally { Os.close(descriptor) }
     }
     private fun validate(edit: StoredEdit) {
         val source = edit.source

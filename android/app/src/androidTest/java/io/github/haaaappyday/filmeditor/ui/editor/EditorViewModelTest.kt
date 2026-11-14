@@ -168,7 +168,9 @@ class EditorViewModelTest {
             await { !vm.state.value.initializing }
             assertNull(vm.state.value.source); assertEquals(EditorErrorCode.READ_FAILED, vm.state.value.error)
             assertFalse(vm.state.value.canExport)
-            await { sessions.saved == null }
+            // Missing source still returns to the import UI, without treating a
+            // generic READ_FAILED as permission to discard durable parameters.
+            assertNotNull(sessions.saved)
         } finally { main { store.clear() } }
     }
 

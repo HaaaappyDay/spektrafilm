@@ -33,7 +33,7 @@
     <string name="photo_saved">照片已保存到相册。</string>
     <string name="open_photo">打开照片</string>
     <string name="open_photo_failed">没有应用可以打开这张照片。</string>
-    <string name="restore_failed">无法恢复上次的照片，请重新导入。</string>
+    <string name="restore_failed">无法恢复上次的照片，请重试或重新导入。</string>
     <string name="session_save_failed">无法保存编辑进度，请重试。</string>
     <string name="preset_unavailable">这款胶片暂时不可用，请重试或选择其他胶片。</string>
     <string name="preview_failed">无法更新预览，请重试。</string>
