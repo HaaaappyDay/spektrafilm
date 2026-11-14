@@ -39,9 +39,10 @@ fun EditorScreen(state: EditorUiState, onImport: () -> Unit, onPreset: (String) 
                         onReset, onToggleOriginal, onRetry, onExport, onOpenExport)
                 }
                 if (maxWidth >= 600.dp || maxWidth > maxHeight) {
+                    val controlsWidth = (maxWidth * .45f).coerceAtMost(360.dp)
                     Row(Modifier.fillMaxSize()) {
                         BeforeAfterPreview(state, Modifier.weight(1f).fillMaxHeight())
-                        controls(Modifier.width((maxWidth * .45f).coerceAtMost(360.dp)).fillMaxHeight())
+                        controls(Modifier.width(controlsWidth).fillMaxHeight())
                     }
                 } else {
                     Column(Modifier.fillMaxSize()) {

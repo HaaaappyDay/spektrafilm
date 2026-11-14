@@ -83,7 +83,10 @@ class EditorActivityTest {
         compose.waitUntil(10_000) { previous.state.value.previewValid }
         val file = File(compose.activity.noBackupFilesDir, "editor-session/editor.json")
         compose.waitUntil(10_000) {
-            try { JSONObject(file.readText()).getJSONObject("params").getDouble("exposureEv").toFloat() == -.6f }
+            try {
+                val params = JSONObject(file.readText()).getJSONObject("params")
+                params.getDouble("exposureEv").toFloat() == -.6f && params.getDouble("temperature").toFloat() == -31f
+            }
             catch (_: Exception) { false }
         }
         val expected = previous.state.value.params
