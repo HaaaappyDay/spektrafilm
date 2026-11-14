@@ -33,6 +33,7 @@ class EditorActivityTest {
         compose.waitUntil(15_000) { !editor.state.value.initializing }
         compose.runOnUiThread { editor.importPhoto(fixtureUri("orientation-1.jpg")) }
         compose.waitUntil(15_000) { editor.state.value.previewValid }
+        compose.waitUntil(15_000) { editor.state.value.presetThumbnails.size == 3 }
         return editor
     }
     @Test fun realEditorControlsRotationBackgroundAndFailedReplacement() {
@@ -41,30 +42,38 @@ class EditorActivityTest {
         val path = "/sdcard/Download/FilmEditor-test-${UUID.randomUUID()}.mp4"
         val recording = automation.executeShellCommand("screenrecord --bit-rate 1000000 --time-limit 12 $path")
         try {
+            compose.onNodeWithTag("tab-adjust").performClick()
             compose.onNodeWithTag("strength").performScrollTo().performSemanticsAction(SemanticsActions.SetProgress) { it(.4f) }
+            compose.onNodeWithTag("adjust-exposure").performScrollTo().performClick()
             compose.onNodeWithTag("exposure").performScrollTo().performSemanticsAction(SemanticsActions.SetProgress) { it(.7f) }
+            compose.onNodeWithTag("adjust-temperature").performScrollTo().performClick()
             compose.onNodeWithTag("temperature").performScrollTo().performSemanticsAction(SemanticsActions.SetProgress) { it(30f) }
-            compose.onNodeWithTag("preset-selector").performScrollTo().performClick()
-            compose.onNodeWithText("Kodak Gold 200").performClick()
+            compose.onNodeWithTag("tab-films").performClick()
+            compose.onNodeWithTag("preset-kodak_gold_200").performScrollTo().performClick()
             compose.waitUntil(15_000) { editor.state.value.previewValid }
-            compose.onNodeWithTag("original").performScrollTo().performClick()
+            compose.onNodeWithTag("original").performClick()
             assertTrue(editor.state.value.showOriginal)
             compose.onNodeWithTag("original").performClick()
             val params = editor.state.value.params
             val input = editor.state.value.input
             compose.onNodeWithContentDescription(compose.activity.getString(R.string.photo_preview)).assertIsDisplayed()
             screenshot("editor-portrait")
+            compose.onNodeWithTag("tab-adjust").performClick()
+            compose.onNodeWithTag("adjust-exposure").performScrollTo().performClick()
             compose.runOnUiThread { compose.activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE }
             compose.waitUntil(10_000) { compose.activity.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE }
             compose.onNodeWithContentDescription(compose.activity.getString(R.string.photo_preview)).assertIsDisplayed()
             assertSame(input, editor.state.value.input); assertEquals(params, editor.state.value.params)
+            compose.onNodeWithTag("tab-adjust").assertIsSelected()
+            compose.onNodeWithTag("adjust-exposure").assertIsSelected()
+            compose.onNodeWithTag("exposure").performScrollTo().assertIsDisplayed()
             screenshot("editor-landscape")
             compose.activityRule.scenario.moveToState(Lifecycle.State.CREATED)
             compose.activityRule.scenario.moveToState(Lifecycle.State.RESUMED)
             compose.runOnUiThread { editor.importPhoto(fixtureUri("missing.jpg")) }
             compose.waitUntil(10_000) { editor.state.value.error != null && !editor.state.value.importing }
             assertSame(input, editor.state.value.input); assertEquals(params, editor.state.value.params)
-            compose.onNodeWithTag("retry").performScrollTo().assertIsDisplayed()
+            compose.onNodeWithTag("retry").assertIsDisplayed()
             screenshot("editor-error-preserves-photo")
         } finally {
             val output = testOutputDirectory()

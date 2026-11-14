@@ -39,4 +39,10 @@
     <string name="preset_unavailable">This film is unavailable. Try again or choose another film.</string>
     <string name="preview_failed">Could not update the preview. Try again.</string>
     <string name="export_failed">Could not save the photo. Try again.</string>
+    <string name="tab_films">Films</string>
+    <string name="tab_adjust">Adjust</string>
+    <string name="tab_export">Export</string>
+    <string name="open_image">Open</string>
+    <string name="compare_short">Compare</string>
+    <string name="film_preview_hint">Previews show each film at its default settings.</string>
 </resources>

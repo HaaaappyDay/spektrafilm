@@ -1,53 +1,99 @@
 package io.github.haaaappyday.filmeditor.ui.editor
 
 import android.net.Uri
-import androidx.compose.foundation.ScrollState
+import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.*
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.github.haaaappyday.filmeditor.R
 import io.github.haaaappyday.filmeditor.core.EditorErrorCode
 import io.github.haaaappyday.filmeditor.image.ImageSizing
 
+private enum class EditorDestination(val tag: String, val label: Int) {
+    FILMS("films", R.string.tab_films), ADJUST("adjust", R.string.tab_adjust), EXPORT("export", R.string.tab_export)
+}
+
 @Composable
 fun EditorScreen(state: EditorUiState, onImport: () -> Unit, onPreset: (String) -> Unit,
     onStrength: (Float) -> Unit, onExposure: (Float) -> Unit, onTemperature: (Float) -> Unit,
     onReset: () -> Unit, onToggleOriginal: () -> Unit, onRetry: () -> Unit, onExport: () -> Unit, onOpenExport: (Uri) -> Unit) {
-    val scroll = rememberScrollState()
-    Surface(Modifier.fillMaxSize()) {
+    var destination by rememberSaveable { mutableStateOf(EditorDestination.FILMS) }
+    var adjustment by rememberSaveable { mutableStateOf("strength") }
+    BackHandler(state.source != null && destination != EditorDestination.FILMS && !state.exporting) {
+        destination = EditorDestination.FILMS
+    }
+    Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
         Column(Modifier.fillMaxSize().safeDrawingPadding()) {
-            Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp),
-                verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            Row(Modifier.fillMaxWidth().heightIn(min = 56.dp).padding(horizontal = 16.dp),
+                verticalAlignment = Alignment.CenterVertically) {
                 Text(stringResource(R.string.app_name), Modifier.weight(1f), style = MaterialTheme.typography.titleLarge,
                     maxLines = 1, overflow = TextOverflow.Ellipsis)
-                TextButton(onClick = onImport, enabled = state.canImport, modifier = Modifier.heightIn(min = 48.dp).testTag("import")) {
-                    Text(stringResource(R.string.import_photo))
+                if (state.source != null) {
+                    val importDescription = stringResource(R.string.import_photo)
+                    val compareDescription = stringResource(if (state.showOriginal) R.string.return_to_edit else R.string.compare_original)
+                    TextButton(onClick = onImport, enabled = state.canImport,
+                        modifier = Modifier.heightIn(min = 48.dp).testTag("import").semantics { contentDescription = importDescription }) {
+                        Text(stringResource(R.string.open_image))
+                    }
+                    TextButton(onClick = onToggleOriginal, enabled = state.editingEnabled,
+                        colors = ButtonDefaults.textButtonColors(containerColor = if (state.showOriginal)
+                            MaterialTheme.colorScheme.secondaryContainer else Color.Transparent),
+                        modifier = Modifier.heightIn(min = 48.dp).testTag("original").semantics {
+                            selected = state.showOriginal; contentDescription = compareDescription
+                        }) { Text(stringResource(R.string.compare_short)) }
                 }
             }
-            BoxWithConstraints(Modifier.weight(1f).fillMaxWidth()) {
-                val controls: @Composable (Modifier) -> Unit = { modifier ->
-                    EditorControls(state, scroll, modifier, onPreset, onStrength, onExposure, onTemperature,
-                        onReset, onToggleOriginal, onRetry, onExport, onOpenExport)
+            if (state.error != null) {
+                Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp),
+                    verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(stringResource(errorMessage(state)), Modifier.weight(1f).semantics { liveRegion = LiveRegionMode.Assertive },
+                        color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodyMedium)
+                    TextButton(onClick = onRetry, enabled = !state.initializing && !state.importing && !state.exporting,
+                        modifier = Modifier.heightIn(min = 48.dp).testTag("retry")) { Text(stringResource(R.string.retry)) }
+                }
+            }
+            if (state.source == null) {
+                EmptyEditor(state, onImport, Modifier.weight(1f).fillMaxWidth())
+            } else BoxWithConstraints(Modifier.weight(1f).fillMaxWidth()) {
+                val tools: @Composable (Modifier) -> Unit = { modifier ->
+                    EditorTools(state, destination, { destination = it }, adjustment, { adjustment = it }, modifier,
+                        onPreset, onStrength, onExposure, onTemperature, onReset, onExport, onOpenExport)
                 }
                 if (maxWidth >= 600.dp || maxWidth > maxHeight) {
-                    val controlsWidth = (maxWidth * .45f).coerceAtMost(360.dp)
+                    val panelWidth = (maxWidth * .42f).coerceIn(280.dp, 360.dp)
                     Row(Modifier.fillMaxSize()) {
-                        BeforeAfterPreview(state, Modifier.weight(1f).fillMaxHeight())
-                        controls(Modifier.width(controlsWidth).fillMaxHeight())
+                        Box(Modifier.weight(1f).fillMaxHeight().testTag("photo-workspace")) {
+                            BeforeAfterPreview(state, Modifier.fillMaxSize())
+                        }
+                        tools(Modifier.width(panelWidth).fillMaxHeight())
                     }
                 } else {
+                    val panelHeight = (maxHeight * .28f).coerceIn(160.dp, 224.dp).coerceAtMost(maxHeight * .5f)
                     Column(Modifier.fillMaxSize()) {
-                        BeforeAfterPreview(state, Modifier.weight(.45f).fillMaxWidth())
-                        controls(Modifier.weight(.55f).fillMaxWidth())
+                        Box(Modifier.weight(1f).fillMaxWidth().testTag("photo-workspace")) {
+                            BeforeAfterPreview(state, Modifier.fillMaxSize())
+                        }
+                        tools(Modifier.fillMaxWidth().height(panelHeight))
                     }
                 }
             }
@@ -56,37 +102,95 @@ fun EditorScreen(state: EditorUiState, onImport: () -> Unit, onPreset: (String) 
 }
 
 @Composable
-private fun EditorControls(state: EditorUiState, scroll: ScrollState, modifier: Modifier,
-    onPreset: (String) -> Unit, onStrength: (Float) -> Unit, onExposure: (Float) -> Unit, onTemperature: (Float) -> Unit,
-    onReset: () -> Unit, onToggleOriginal: () -> Unit, onRetry: () -> Unit, onExport: () -> Unit, onOpenExport: (Uri) -> Unit) {
-    Surface(modifier, color = MaterialTheme.colorScheme.surfaceContainerLow) {
-        Column(Modifier.fillMaxSize().verticalScroll(scroll).padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            if (state.error != null) {
-                Text(stringResource(errorMessage(state)), Modifier.semantics { liveRegion = LiveRegionMode.Assertive },
-                    color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodyMedium)
-                OutlinedButton(onClick = onRetry, enabled = !state.initializing && !state.importing && !state.exporting,
-                    modifier = Modifier.heightIn(min = 48.dp).testTag("retry")) { Text(stringResource(R.string.retry)) }
-            }
-            PresetSelector(state.presets, state.params.presetId, state.editingEnabled, onPreset)
-            AdjustmentControls(state.params, state.editingEnabled, onStrength, onExposure, onTemperature)
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                OutlinedButton(onClick = onToggleOriginal, enabled = state.editingEnabled,
-                    modifier = Modifier.weight(1f).heightIn(min = 48.dp).testTag("original").semantics { selected = state.showOriginal }) {
-                    Text(stringResource(if (state.showOriginal) R.string.return_to_edit else R.string.compare_original))
+private fun EmptyEditor(state: EditorUiState, onImport: () -> Unit, modifier: Modifier) {
+    val ink = MaterialTheme.colorScheme.onSurfaceVariant
+    Column(modifier.verticalScroll(rememberScrollState()).padding(28.dp),
+        verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+        Canvas(Modifier.size(72.dp)) {
+            val stroke = Stroke(2.dp.toPx())
+            drawRoundRect(ink, Offset(8.dp.toPx(), 12.dp.toPx()), Size(size.width - 16.dp.toPx(), size.height - 24.dp.toPx()),
+                CornerRadius(6.dp.toPx()), style = stroke)
+            drawCircle(ink, 4.dp.toPx(), Offset(size.width * .68f, size.height * .36f), style = stroke)
+            drawPath(Path().apply {
+                moveTo(size.width * .2f, size.height * .7f); lineTo(size.width * .42f, size.height * .47f)
+                lineTo(size.width * .58f, size.height * .63f); lineTo(size.width * .7f, size.height * .53f)
+                lineTo(size.width * .82f, size.height * .7f)
+            }, ink, style = stroke)
+        }
+        Spacer(Modifier.height(24.dp))
+        Text(stringResource(R.string.empty_title), style = MaterialTheme.typography.headlineSmall, textAlign = TextAlign.Center)
+        Spacer(Modifier.height(12.dp))
+        Text(stringResource(R.string.empty_description), style = MaterialTheme.typography.bodyMedium,
+            color = ink, textAlign = TextAlign.Center)
+        Spacer(Modifier.height(28.dp))
+        if (state.initializing || state.importing) {
+            CircularProgressIndicator(Modifier.size(24.dp), strokeWidth = 2.dp)
+            Spacer(Modifier.height(12.dp))
+            Text(stringResource(if (state.importing) R.string.importing_photo else R.string.restoring_editor),
+                style = MaterialTheme.typography.labelMedium, modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite })
+        }
+        Button(onClick = onImport, enabled = state.canImport, modifier = Modifier.heightIn(min = 48.dp).testTag("import")) {
+            Text(stringResource(R.string.import_photo))
+        }
+    }
+}
+
+@Composable
+private fun EditorTools(state: EditorUiState, destination: EditorDestination, onDestination: (EditorDestination) -> Unit,
+    adjustment: String, onAdjustment: (String) -> Unit, modifier: Modifier, onPreset: (String) -> Unit,
+    onStrength: (Float) -> Unit, onExposure: (Float) -> Unit, onTemperature: (Float) -> Unit, onReset: () -> Unit,
+    onExport: () -> Unit, onOpenExport: (Uri) -> Unit) {
+    val filmScroll = rememberScrollState()
+    val adjustmentScroll = rememberScrollState()
+    val exportScroll = rememberScrollState()
+    val scroll = when (destination) {
+        EditorDestination.FILMS -> filmScroll
+        EditorDestination.ADJUST -> adjustmentScroll
+        EditorDestination.EXPORT -> exportScroll
+    }
+    Surface(modifier, color = MaterialTheme.colorScheme.surface) {
+        Column(Modifier.fillMaxSize()) {
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+            Column(Modifier.weight(1f).fillMaxWidth().verticalScroll(scroll).padding(horizontal = 16.dp, vertical = 8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                when (destination) {
+                    EditorDestination.FILMS -> PresetSelector(state.presets, state.params.presetId, state.editingEnabled,
+                        onPreset, state.presetThumbnails)
+                    EditorDestination.ADJUST -> AdjustmentControls(state.params, state.editingEnabled,
+                        onStrength, onExposure, onTemperature, adjustment, onAdjustment, onReset)
+                    EditorDestination.EXPORT -> {
+                        state.source?.let { source ->
+                            val (width, height) = ImageSizing.fit(source.width, source.height, 4096)
+                            Text(stringResource(R.string.export_dimensions, width, height), style = MaterialTheme.typography.bodyMedium)
+                        }
+                        Button(onClick = onExport, enabled = state.canExport,
+                            modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("export")) {
+                            Text(stringResource(if (state.exporting) R.string.saving_photo else R.string.export_photo))
+                        }
+                        state.exportResult?.let { saved ->
+                            Text(stringResource(R.string.photo_saved), Modifier.semantics { liveRegion = LiveRegionMode.Polite },
+                                style = MaterialTheme.typography.bodyMedium)
+                            OutlinedButton(onClick = { onOpenExport(saved.uri) }, modifier = Modifier.heightIn(min = 48.dp)) {
+                                Text(stringResource(R.string.open_photo))
+                            }
+                        }
+                    }
                 }
-                TextButton(onClick = onReset, enabled = state.editingEnabled,
-                    modifier = Modifier.heightIn(min = 48.dp).testTag("reset")) { Text(stringResource(R.string.reset_adjustments)) }
             }
-            state.source?.let { source ->
-                val (width, height) = ImageSizing.fit(source.width, source.height, 4096)
-                Text(stringResource(R.string.export_dimensions, width, height), style = MaterialTheme.typography.labelMedium)
-            }
-            Button(onClick = onExport, enabled = state.canExport, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("export")) {
-                Text(stringResource(if (state.exporting) R.string.saving_photo else R.string.export_photo))
-            }
-            state.exportResult?.let { result ->
-                Text(stringResource(R.string.photo_saved), Modifier.semantics { liveRegion = LiveRegionMode.Polite })
-                OutlinedButton(onClick = { onOpenExport(result.uri) }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.open_photo)) }
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+            Row(Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
+                for (item in EditorDestination.entries) {
+                    val chosen = destination == item
+                    Column(Modifier.weight(1f).heightIn(min = 56.dp).selectable(chosen, enabled = !state.exporting,
+                        role = Role.Tab, onClick = { onDestination(item) }).testTag("tab-${item.tag}").padding(vertical = 8.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+                        Text(stringResource(item.label), style = MaterialTheme.typography.labelLarge,
+                            color = if (chosen) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant,
+                            textAlign = TextAlign.Center)
+                        Spacer(Modifier.height(6.dp))
+                        Box(Modifier.width(24.dp).height(2.dp).background(if (chosen) MaterialTheme.colorScheme.primary else Color.Transparent))
+                    }
+                }
             }
         }
     }

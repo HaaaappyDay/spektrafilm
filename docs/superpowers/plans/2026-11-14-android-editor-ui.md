@@ -27,19 +27,19 @@
 
 Files: render/PresetThumbnailRenderer.kt; ui/editor/EditorUiState.kt; ui/editor/EditorViewModel.kt; MainActivity.kt; corresponding instrumented renderer/ViewModel tests.
 Interfaces: add an optional `(suspend (Bitmap, List<FilmPreset>) -> Map<String, Bitmap>)?` thumbnail generator to EditorViewModel, supplied by MainActivity; expose `presetThumbnails: Map<String, Bitmap>` in EditorUiState. PresetThumbnailRenderer consumes the existing AssetPresetRepository and calls ColorMath.transform with EditParams(preset.id), returns complete owned output map.
-- [ ] Write pixel/dimension/source-preservation tests for 3 default film thumbnails, max160px/no upscale, offMain/cancellation cleanup. Run and observe missing implementation RED.
-- [ ] Implement the renderer on Dispatchers.Default, cancellation checks per row, shared checked cubes; recycle only unpublished temporaries.
-- [ ] Add gated VM tests: current source gets thumbnails, manual edits do not regenerate them, obsolete/noncooperative completion cannot publish after replacement, thumbnail failure leaves editing/export usable. Observe RED, then implement generation lifecycle and identity guards.
-- [ ] Run thumbnail and VM instrumented tests; existing unit/lint. Expected: all pass, stale source not shown, no pipeline parameter changes. Commit task.
+- [x] Write pixel/dimension/source-preservation tests for 3 default film thumbnails, max160px/no upscale, offMain/cancellation cleanup. Run and observe missing implementation RED.
+- [x] Implement the renderer on Dispatchers.Default, cancellation checks per row, shared checked cubes; recycle only unpublished temporaries.
+- [x] Add gated VM tests: current source gets thumbnails, manual edits do not regenerate them, obsolete/noncooperative completion cannot publish after replacement, thumbnail failure leaves editing/export usable. Observe RED, then implement generation lifecycle and identity guards.
+- [x] Run thumbnail and VM instrumented tests; existing unit/lint. Expected: all pass, stale source not shown, no pipeline parameter changes. Commit task.
 
 ### Task 2: Photo-first navigation and native visual refinement
 
 Files: ui/editor/EditorScreen.kt, BeforeAfterPreview.kt, AdjustmentControls.kt, PresetSelector.kt, ui/theme/Theme.kt, localized strings; EditorScreenTest.kt and lifecycle tests.
 Interfaces: keep EditorScreen public callback signature; consume new thumbnail map; save destination/selected adjustment in rememberSaveable. Expose stable tags `tab-films`, `tab-adjust`, `tab-export`, `adjust-strength`, `adjust-exposure`, `adjust-temperature`, `preset-<id>`; retain `import`, `original`, `reset`, `export`, `retry`, slider tags and localized accessibility labels. Add no new image-processing callback.
-- [ ] Add interaction tests for empty import, explicit navigation/no edit or save side effects, one visible adjustment/SetProgress, film-card selection, save lockout, 2x font retry/dimensions, destination restoration/back and portrait preview bounds. Observe failures on existing form.
-- [ ] Implement neutral light/dark theme, compact top bar with comparison, large fitted photo, responsive bottom/side tool pane and three labeled destinations. Empty state has clear import; every error remains reachable.
-- [ ] Replace dropdown with thumbnail cards; replace stacked sliders with one selected parameter and tick-free slider retaining quantization/accessibility; create explicit export panel with dimensions and success/open.
-- [ ] Update existing screen/activity tests to exercise visible destinations, preserving original state/export invariants. Run UI/lifecycle tests and unit/lint. Expected: behavior tests pass and generated portrait/landscape/large-text screenshots show usable layout. Commit task.
+- [x] Add interaction tests for empty import, explicit navigation/no edit or save side effects, one visible adjustment/SetProgress, film-card selection, save lockout, 2x font retry/dimensions, destination restoration/back and portrait preview bounds. Observe failures on existing form.
+- [x] Implement neutral light/dark theme, compact top bar with comparison, large fitted photo, responsive bottom/side tool pane and three labeled destinations. Empty state has clear import; every error remains reachable.
+- [x] Replace dropdown with thumbnail cards; replace stacked sliders with one selected parameter and tick-free slider retaining quantization/accessibility; create explicit export panel with dimensions and success/open.
+- [x] Update existing screen/activity tests to exercise visible destinations, preserving original state/export invariants. Run UI/lifecycle tests and unit/lint. Expected: behavior tests pass and generated portrait/landscape/large-text screenshots show usable layout. Commit task.
 
 ### Task 3: Real-flow, performance and final delivery reconciliation
 
