@@ -56,6 +56,7 @@ Qt, preset baking or developer-specific paths are required to build Android.
 | Lifecycle | 2.9.4 |
 | Coroutines | 1.10.2 |
 | ExifInterface | 1.4.2 |
+| Espresso (instrumentation only) | 3.7.0 |
 
 These are intentionally pinned stable versions, not an assertion that each is
 the newest release. AGP 8.13 supports SDK 36 and requires Gradle 8.13/JDK 17.
@@ -66,6 +67,10 @@ The Kotlin Compose plugin shares the Kotlin compiler version. Compatibility sour
 [Compose BOM](https://developer.android.com/develop/ui/compose/bom/bom-mapping),
 [Gradle checksums](https://gradle.org/release-checksums/).
 Dependency versions are centralized in `gradle/libs.versions.toml`.
+Espresso is pinned explicitly because Compose's transitive 3.5.0 reflects a
+removed `InputManager.getInstance` method on API 37; the stable
+[3.7.0 release](https://developer.android.com/jetpack/androidx/releases/test#espresso-3.7.0)
+uses the public system service instead. This dependency is only in the test APK.
 
 ## Device verification
 

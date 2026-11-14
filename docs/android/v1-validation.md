@@ -12,7 +12,9 @@ final clean-checkout delivery and prerequisite merges remain incomplete.
   API 29 and 36 each completed 75 connected tests successfully. The subsequent
   host driver failed while polling an absent ready file (empty ADB output). A
   tested polling fix is prepared; process restoration is not yet a pass. API 37.2
-  is still pending.
+  completed 75 tests with 15 UI failures caused by transitive Espresso 3.5.0
+  reflecting the removed `InputManager.getInstance` API. The other 60 tests
+  passed. Stable Espresso 3.7.0 is now pinned; its runtime verification is pending.
 - Local Ubuntu: Temurin 17.0.21, Gradle 8.13, SDK compile/target 36,
   Build Tools 35.0.0. Validation APK and instrumentation APK compile; 9 debug
   unit tests pass, lint has no errors. Python regression: 119 passed, including
@@ -28,14 +30,14 @@ final clean-checkout delivery and prerequisite merges remain incomplete.
 
 | Requirement | Test/evidence | Acceptance state |
 | --- | --- | --- |
-| API 29, current stable API, physical GLES 3 | CI API 29/36/37.2; `DeviceEnvironmentTest` | API 29/36:75 tests pass; API 37.2 pending; vivo not run |
+| API 29, current stable API, physical GLES 3 | CI API 29/36/37.2; `DeviceEnvironmentTest` | API 29/36:75 tests pass; API 37.2 UI dependency failure; fix pending verification; vivo not run |
 | Generated orientation/color/size/error fixtures | `AndroidImageRepositoryTest`, normalization/sizing tests; [import report](import-validation.md) | Prior emulator evidence available; current candidate pending |
-| Each film, all controls, original/reset, airplane-mode gallery | `PhotoEditingFlowTest`; `v1-flow.json`, gallery screenshot | API 29/36 connected tests pass; API 37.2 pending |
-| Failed/cancelled import preserves edits; 48MP replacement resets/samples | `LifecycleAndRecoveryTest`; `v1-48mp.json` | API 29/36 connected tests pass; API 37.2 pending |
+| Each film, all controls, original/reset, airplane-mode gallery | `PhotoEditingFlowTest`; `v1-flow.json`, gallery screenshot | API 29/36 connected tests pass; API 37.2 UI dependency failure; fix pending verification |
+| Failed/cancelled import preserves edits; 48MP replacement resets/samples | `LifecycleAndRecoveryTest`; `v1-48mp.json` | API 29/36 connected tests pass; API 37.2 UI dependency failure; fix pending verification |
 | No-photo controls, latest result, temperature-only race, stale import | `EditorScreenTest`, `EditorViewModelTest`; [editor report](editor-validation.md) | Prior coverage plus new deterministic races; candidate pending |
 | Background/rotation/export exclusivity | `EditorActivityTest`, `ExportActivityTest` | Prior emulator evidence; candidate pending |
 | Actual process kill/restoration and unpublished output recovery | Host driver + `ProcessRestorePhases`; `process-restoration.json` | Host polling failed; tested fix awaits runtime verification |
-| Missing private source recovers to import | `LifecycleAndRecoveryTest` | API 29/36 connected tests pass; API 37.2 pending |
+| Missing private source recovers to import | `LifecycleAndRecoveryTest` | API 29/36 connected tests pass; API 37.2 UI dependency failure; fix pending verification |
 | GL context recreation and cancellation | `GlFilmRendererTest`; new partial-tile and injected-loss tests | Existing recreation passes; new cancellation and bounded-retry cases compile, runtime pending |
 | No space, I/O failure, cancellation, guarded rollback | `MediaStorePhotoExporterTest`; [export report](export-validation.md) | Prior emulator evidence; candidate pending |
 | Shared preview/export math; same-size pre-JPEG max error ≤2 codes | Real GLES/Python fixture comparisons and export tests | Prior emulator max 1 code; physical GPU not run |
@@ -49,7 +51,9 @@ linked reports. They are not evidence for an untested candidate or physical GPU.
 ## Performance and sustained resources
 
 Reference phone: maintainer-provided vivo X200 Pro mini. No authorized device is
-currently visible to ADB. Its actual API/RAM/GPU/driver must be measured on connection.
+currently visible to ADB. Its actual API/RAM/GPU/driver must be measured on connection. The API 37.2
+emulator reports Android 17/API 37, `sdk_gphone16k_x86_64`, and GLES 3 SwiftShader;
+these values describe the emulator only.
 
 | Measurement | Required evidence | Status |
 | --- | --- | --- |
