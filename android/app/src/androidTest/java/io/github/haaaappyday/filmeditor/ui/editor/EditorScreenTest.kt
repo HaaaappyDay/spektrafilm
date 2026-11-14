@@ -22,12 +22,12 @@ class EditorScreenTest {
     private fun ready(): EditorUiState {
         val bitmap = photo()
         return EditorUiState(source = ImageSource("source", "/source", 6000, 4000, "image/jpeg"),
-            input = bitmap, preview = bitmap, initializing = false, previewValid = true, exportAvailable = true,
+            input = bitmap, preview = bitmap, initializing = false, servicesReady = true, previewValid = true, exportAvailable = true,
             presets = listOf(FilmPreset("kodak_portra_400", "Portra 400", "p", "0".repeat(64)), FilmPreset("kodak_gold_200", "Gold 200", "g", "1".repeat(64))))
     }
     @Test fun noPhotoDisablesEditingAndSaving() {
         compose.setContent { FilmEditorTheme {
-            EditorScreen(EditorUiState(initializing = false), {}, {}, {}, {}, {}, {}, {}, {}, {}, {})
+            EditorScreen(EditorUiState(initializing = false, servicesReady = true), {}, {}, {}, {}, {}, {}, {}, {}, {}, {})
         } }
         compose.onNodeWithTag("import").assertIsEnabled()
         for (tag in listOf("preset-selector", "strength", "exposure", "temperature", "reset", "original", "export")) {

@@ -1,0 +1,8 @@
+{
+  "width": 4000,
+  "height": 3000,
+  "outputs": 1,
+  "airplaneMode": true,
+  "paramsPreserved": true,
+  "resumedActivity": "    mResumedActivity: ActivityRecord{bafa63b u0 com.android.gallery3d\/.app.GalleryActivity t10}\n ResumedActivity:ActivityRecord{bafa63b u0 com.android.gallery3d\/.app.GalleryActivity t10}\n  ResumedActivity: ActivityRecord{bafa63b u0 com.android.gallery3d\/.app.GalleryActivity t10}"
+}

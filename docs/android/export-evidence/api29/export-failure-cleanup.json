@@ -1,0 +1,22 @@
+[
+  {
+    "fault": "INSERT",
+    "cleaned": true
+  },
+  {
+    "fault": "OPEN",
+    "cleaned": true
+  },
+  {
+    "fault": "WRITE",
+    "cleaned": true
+  },
+  {
+    "fault": "CLOSE",
+    "cleaned": true
+  },
+  {
+    "fault": "PUBLISH",
+    "cleaned": true
+  }
+]

@@ -17,6 +17,7 @@ class EditorViewModel(
     private val renderer: FilmRenderer,
     private val sessions: SessionPersistence,
     private val exporter: PhotoExporter? = null,
+    private val prepareExport: suspend () -> Unit = {},
 ) : ViewModel() {
     private val mutableState = MutableStateFlow(EditorUiState(exportAvailable = exporter != null))
     val state: StateFlow<EditorUiState> = mutableState.asStateFlow()
@@ -60,14 +61,19 @@ class EditorViewModel(
     private fun initialize() {
         if (closed) return
         initializeJob?.cancel()
-        mutableState.update { it.copy(initializing = true, error = null, errorStage = null) }
+        mutableState.update { it.copy(initializing = true, servicesReady = false, error = null, errorStage = null) }
         initializeJob = viewModelScope.launch {
             var input: Bitmap? = null
             var published = false
             try {
+                prepareExport()
+                ensureActive()
                 val available = presets.listPresets()
                 ensureActive()
-                mutableState.update { it.copy(presets = available) }
+                if (available.isEmpty()) throw EditorException(EditorErrorCode.PRESET_UNAVAILABLE)
+                // Source restoration may fail after services become ready. In that
+                // case importing a replacement is valid; earlier failures must retry.
+                mutableState.update { it.copy(presets = available, servicesReady = true) }
                 val saved = sessions.load()
                 ensureActive()
                 if (saved != null) {
@@ -89,7 +95,7 @@ class EditorViewModel(
     }
 
     fun importPhoto(uri: Uri?) {
-        if (uri == null || closed || state.value.initializing || state.value.exporting) return
+        if (uri == null || closed || !state.value.servicesReady || state.value.initializing || state.value.exporting) return
         lastUri = uri
         val version = ++importVersion
         importJob?.cancel()

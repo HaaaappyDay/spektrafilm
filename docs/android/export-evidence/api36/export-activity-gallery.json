@@ -1,0 +1,8 @@
+{
+  "width": 4000,
+  "height": 3000,
+  "outputs": 1,
+  "airplaneMode": true,
+  "paramsPreserved": true,
+  "resumedActivity": "    topResumedActivity=ActivityRecord{227791952 u0 com.android.gallery3d\/.app.GalleryActivity t12}\n  ResumedActivity: ActivityRecord{227791952 u0 com.android.gallery3d\/.app.GalleryActivity t12}"
+}

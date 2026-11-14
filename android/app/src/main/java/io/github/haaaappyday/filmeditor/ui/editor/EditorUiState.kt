@@ -12,6 +12,7 @@ data class EditorUiState(
     val params: EditParams = EditParams("kodak_portra_400"),
     val presets: List<FilmPreset> = emptyList(),
     val initializing: Boolean = true,
+    val servicesReady: Boolean = false,
     val importing: Boolean = false,
     val rendering: Boolean = false,
     val exporting: Boolean = false,
@@ -22,8 +23,8 @@ data class EditorUiState(
     val previewValid: Boolean = false,
     val exportAvailable: Boolean = false,
 ) {
-    val editingEnabled: Boolean get() = source != null && !initializing && !importing && !exporting
-    val canImport: Boolean get() = !initializing && !importing && !exporting
+    val editingEnabled: Boolean get() = servicesReady && source != null && !initializing && !importing && !exporting
+    val canImport: Boolean get() = servicesReady && !initializing && !importing && !exporting
     val canExport: Boolean get() = editingEnabled && exportAvailable && previewValid && !rendering
     val displayedBitmap: Bitmap? get() = if (showOriginal || preview == null) input else preview
 }

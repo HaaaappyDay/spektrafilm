@@ -93,6 +93,7 @@ private fun EditorControls(state: EditorUiState, scroll: ScrollState, modifier: 
 }
 
 private fun errorMessage(state: EditorUiState): Int = when {
+    state.errorStage == EditorErrorStage.INITIALIZE && state.error == EditorErrorCode.EXPORT_FAILED -> R.string.export_recovery_failed
     state.errorStage == EditorErrorStage.INITIALIZE && state.error != EditorErrorCode.PRESET_UNAVAILABLE -> R.string.restore_failed
     state.errorStage == EditorErrorStage.SESSION -> R.string.session_save_failed
     state.error == EditorErrorCode.PRESET_UNAVAILABLE -> R.string.preset_unavailable

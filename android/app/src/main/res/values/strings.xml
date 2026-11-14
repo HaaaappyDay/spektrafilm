@@ -34,6 +34,7 @@
     <string name="open_photo">Open photo</string>
     <string name="open_photo_failed">No app could open this photo.</string>
     <string name="restore_failed">Your last photo could not be restored. Retry or import a photo to continue.</string>
+    <string name="export_recovery_failed">Could not clean up an interrupted save. Please retry.</string>
     <string name="session_save_failed">Could not save your editing progress. Try again.</string>
     <string name="preset_unavailable">This film is unavailable. Try again or choose another film.</string>
     <string name="preview_failed">Could not update the preview. Try again.</string>

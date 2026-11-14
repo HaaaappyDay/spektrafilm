@@ -1,0 +1,25 @@
+{
+  "sourceCommit": "030a6a3a744e407953e3b2e6a1b9a00631553503",
+  "testedPrMergeCommit": "3de79dc0dc9cd95710c358ef409d2e8b1e056ac0",
+  "ciRun": 43554098196,
+  "buildType": "debug",
+  "emulatorRamMiB": 2048,
+  "emulatorJavaHeapMiB": 128,
+  "api29": {
+    "tests": 68,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "api36": {
+    "tests": 68,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "unitTests": 9,
+  "pythonTests": 109,
+  "lintErrors": 0,
+  "lintWarnings": 16,
+  "physicalDeviceVerified": false
+}

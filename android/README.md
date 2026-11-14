@@ -5,13 +5,14 @@ is tracked in [issue #9](https://github.com/HaaaappyDay/spektrafilm/issues/9).
 
 ## Current milestone
 
-Editor (#13, dependent on renderer #12): import a static SDR JPEG/PNG, choose
+Editor and gallery export (#13/#14, dependent on renderer #12): import a static SDR JPEG/PNG, choose
 Portra 400, Gold 200 or Ektar 100, adjust film strength/exposure/temperature,
 compare with the normalized original and reset the selected film's controls.
 Gain-map JPEGs use their SDR base; direct HLG/PQ inputs are rejected. The source
 is copied privately without modifying the original. Failed/cancelled imports
-keep the old photo; retry is available. Gallery export remains disabled until
-#14 supplies the real PhotoExporter; no simulated save success is shown.
+keep the old photo; retry is available. Save re-decodes the original at a 4096
+long-edge cap and publishes a real JPEG to `Pictures/FilmEditor`. The Open action
+displays the saved URI in an available system image viewer.
 
 See [import validation](../docs/android/import-validation.md) for size limits,
 color/orientation behavior, synthetic fixture provenance and verification status.
@@ -20,6 +21,8 @@ committed private session by decoding/rendering again after process death.
 See [color validation](../docs/android/color-validation.md) for the numerical
 reference and outstanding physical-GPU gate, and
 [editor validation](../docs/android/editor-validation.md) for state/UI evidence.
+See [export validation](../docs/android/export-validation.md) for JPEG metadata,
+original preservation, publication/recovery and fault-injection evidence.
 
 ## Reproducible build
 
@@ -52,6 +55,7 @@ Qt, preset baking or developer-specific paths are required to build Android.
 | Activity / Core | 1.11.0 / 1.17.0 |
 | Lifecycle | 2.9.4 |
 | Coroutines | 1.10.2 |
+| ExifInterface | 1.4.2 |
 
 These are intentionally pinned stable versions, not an assertion that each is
 the newest release. AGP 8.13 supports SDK 36 and requires Gradle 8.13/JDK 17.
@@ -100,7 +104,10 @@ errors instead of substituting defaults. No Bitmap/GL objects enter saved state.
 Final v1 imports static SDR JPEG/PNG only, previews at long edge ≤1600 and exports
 JPEG quality 95 to `Pictures/FilmEditor` at long edge ≤4096 without upscaling.
 Output dimensions are shown before saving; original GPS/ICC/orientation metadata
-is not copied. Gallery export is pending #14; the import repository already supports the 4096 decode cap.
+is not copied. A fresh EXIF sRGB/normal-orientation marker describes the normalized
+pixels. Saving disables edits/import/duplicate requests. Interrupted unpublished
+outputs are recovered using provider-verified ownership; published or foreign
+gallery photos are preserved. Export results are never replayed after process death.
 
 ## Attribution
 
