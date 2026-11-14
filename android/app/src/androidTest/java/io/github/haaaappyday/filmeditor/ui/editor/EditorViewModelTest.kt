@@ -34,7 +34,9 @@ class EditorViewModelTest {
         data class Call(val params: EditParams, val gate: CompletableDeferred<Unit>, var bitmap: Bitmap? = null)
         val calls = mutableListOf<Call>()
         var released = false
+        var fail = false
         override suspend fun render(input: Bitmap, params: EditParams): Bitmap = withContext(NonCancellable) {
+            if (fail) throw EditorException(EditorErrorCode.RENDER_FAILED)
             val call = Call(params, CompletableDeferred()); calls.add(call)
             if (!automatic) call.gate.await()
             Bitmap.createBitmap(input.width, input.height, Bitmap.Config.ARGB_8888).apply {
@@ -189,4 +191,20 @@ class EditorViewModelTest {
             assertEquals(2, requests.size); assertEquals(expected, requests.last())
         } finally { gate.complete(Unit); main { store.clear() } }
     }
+    @Test fun failedPreviewNeverClaimsOldPixelsMatchNewParameters() = runBlocking {
+        val renderer = Renderer(); val (vm, store) = create(Images(), renderer, Sessions())
+        try {
+            ready(vm); val input = vm.state.value.input
+            renderer.fail = true
+            main { vm.setExposure(1f) }
+            await { vm.state.value.error == EditorErrorCode.RENDER_FAILED && !vm.state.value.rendering }
+            assertFalse(vm.state.value.previewValid); assertFalse(vm.state.value.canExport)
+            assertNull(vm.state.value.preview); assertSame(input, vm.state.value.input)
+            renderer.fail = false; main { vm.retry() }
+            await { vm.state.value.previewValid }
+            assertEquals(1f, vm.state.value.params.exposureEv)
+            assertNull(vm.state.value.error)
+        } finally { main { store.clear() } }
+    }
+
 }
