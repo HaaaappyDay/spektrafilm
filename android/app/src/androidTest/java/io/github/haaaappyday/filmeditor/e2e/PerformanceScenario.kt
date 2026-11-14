@@ -131,8 +131,10 @@ class PerformanceScenario {
     private fun selectControl(labelId: Int) {
         val label = context.getString(labelId)
         var node = visible { it.text?.toString() == label }
-        while (!node.isClickable) node = checkNotNull(node.parent)
-        check(node.isEnabled && node.performAction(AccessibilityNodeInfo.ACTION_CLICK))
+        // Compose exposes an already-selected Tab as selected without a click action.
+        while (!node.isClickable && !node.isSelected) node = checkNotNull(node.parent)
+        check(node.isEnabled)
+        if (!node.isSelected) check(node.performAction(AccessibilityNodeInfo.ACTION_CLICK))
         settled()
     }
     private fun change(index: Int): JSONObject {
@@ -221,6 +223,20 @@ class PerformanceScenario {
                 .put("outputWidth", result.width).put("outputHeight", result.height)
                 .put("success", true).put("sampleIntervalMs", 100).put("memorySamples", sampler.end())
         } finally { input.finish("ended"); sampler.end() }
+    }
+
+    @Test fun repeatedVisibleToolSelectionPreservesEdits() {
+        ActivityScenario.launch(MainActivity::class.java).use { scenario ->
+            scenario.onActivity { editor = ViewModelProvider(it)[EditorViewModel::class.java] }
+            await("initialization") { !editor.state.value.initializing }
+            importFixture()
+            val before = editor.state.value.params
+            repeat(2) {
+                selectControl(R.string.tab_adjust)
+                selectControl(R.string.film_strength)
+            }
+            check(editor.state.value.params == before)
+        }
     }
 
     @Test fun warmPreviewImportsAndExports() {
