@@ -44,7 +44,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        api: [29, 36]
+        api: [29, 36, 37]
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -73,7 +73,7 @@ jobs:
           heap-size: 128M
           disable-animations: true
           working-directory: android
-          script: ./gradlew :app:connectedDebugAndroidTest
+          script: ./gradlew :app:connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.sourceCommit=${{ github.event.pull_request.head.sha || github.sha }} -Pandroid.testInstrumentationRunnerArguments.testedCommit=${{ github.sha }}
       - uses: actions/upload-artifact@v4
         if: always()
         with:

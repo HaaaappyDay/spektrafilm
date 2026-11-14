@@ -47,7 +47,8 @@ class EditorViewModelTest {
             val call = Call(params, CompletableDeferred()); calls.add(call)
             if (!automatic) call.gate.await()
             Bitmap.createBitmap(input.width, input.height, Bitmap.Config.ARGB_8888).apply {
-                eraseColor(0xff000000.toInt() or ((100 + params.exposureEv * 20).toInt() shl 16))
+                eraseColor(0xff000000.toInt() or ((100 + params.exposureEv * 20).toInt() shl 16) or
+                    ((params.temperature + 100).toInt() shl 8))
                 call.bitmap = this
             }
         }
@@ -59,7 +60,7 @@ class EditorViewModelTest {
     }
     private suspend fun await(predicate: () -> Boolean) = withTimeout(10_000) { while (!predicate()) delay(10) }
     private suspend fun main(action: () -> Unit) = withContext(Dispatchers.Main) { action() }
-    private suspend fun create(images: Images, renderer: Renderer, sessions: Sessions, exporter: PhotoExporter? = null): Pair<EditorViewModel, ViewModelStore> = withContext(Dispatchers.Main) {
+    private suspend fun create(images: ImageRepository, renderer: FilmRenderer, sessions: Sessions, exporter: PhotoExporter? = null): Pair<EditorViewModel, ViewModelStore> = withContext(Dispatchers.Main) {
         val vm = EditorViewModel(images, presets, renderer, sessions, exporter)
         vm to ViewModelStore().apply { put("editor", vm) }
     }
@@ -111,6 +112,46 @@ class EditorViewModelTest {
             assertSame(current, vm.state.value.preview)
             assertEquals(EditParams("kodak_portra_400"), vm.state.value.params)
         } finally { renderer.automatic = true; renderer.finishAll(); main { store.clear() } }
+    }
+
+    @Test fun temperatureOnlyLateRenderCannotReplaceNewTemperaturePixels() = runBlocking {
+        val renderer = Renderer(); val (vm, store) = create(Images(), renderer, Sessions())
+        try {
+            ready(vm); renderer.automatic = false
+            main { vm.setTemperature(-20f) }; await { renderer.calls.size == 2 }
+            val obsolete = renderer.calls.last()
+            main { vm.setTemperature(42f) }; await { renderer.calls.size == 3 }
+            renderer.calls.last().gate.complete(Unit)
+            await { vm.state.value.previewValid }
+            val newest = vm.state.value.preview!!
+            assertEquals(142, (newest.getPixel(0, 0) shr 8) and 255)
+            obsolete.gate.complete(Unit); await { obsolete.bitmap?.isRecycled == true }
+            assertSame(newest, vm.state.value.preview)
+            assertEquals(42f, vm.state.value.params.temperature)
+        } finally { renderer.automatic = true; renderer.finishAll(); main { store.clear() } }
+    }
+
+    @Test fun noncooperativeOldImportCompletionCannotReplaceNewSourceOrEdits() = runBlocking {
+        val delegate = Images(); val entered = CompletableDeferred<Unit>(); val gate = CompletableDeferred<Unit>()
+        val images = object : ImageRepository by delegate {
+            override suspend fun importImage(uri: Uri): ImageSource = if (uri.lastPathSegment == "slow") withContext(NonCancellable) {
+                entered.complete(Unit); gate.await(); delegate.importImage(uri)
+            } else delegate.importImage(uri)
+        }
+        val (vm, store) = create(images, Renderer(), Sessions())
+        try {
+            ready(vm)
+            main { vm.importPhoto(Uri.parse("content://fixture/slow")) }; entered.await()
+            main { vm.importPhoto(Uri.parse("content://fixture/latest")) }
+            await { vm.state.value.source?.id?.endsWith("latest") == true && vm.state.value.previewValid }
+            main { vm.setTemperature(41f) }; await { vm.state.value.previewValid }
+            val expected = vm.state.value
+            gate.complete(Unit)
+            await { "content://fixture/slow" in delegate.removed }
+            assertEquals(expected.source, vm.state.value.source); assertEquals(expected.params, vm.state.value.params)
+            assertSame(expected.preview, vm.state.value.preview)
+            assertEquals(2, delegate.decodes)
+        } finally { gate.complete(Unit); main { store.clear() } }
     }
 
     @Test fun valuesResetComparisonAndFailedImportFollowTheContract() = runBlocking {
