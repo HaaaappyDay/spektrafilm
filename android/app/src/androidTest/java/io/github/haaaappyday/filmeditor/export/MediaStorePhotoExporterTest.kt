@@ -12,6 +12,7 @@ import android.util.Base64
 import androidx.exifinterface.media.ExifInterface
 import androidx.test.platform.app.InstrumentationRegistry
 import io.github.haaaappyday.filmeditor.core.*
+import io.github.haaaappyday.filmeditor.diagnostics.*
 import io.github.haaaappyday.filmeditor.image.AndroidImageRepository
 import io.github.haaaappyday.filmeditor.render.AssetPresetRepository
 import io.github.haaaappyday.filmeditor.render.GlFilmRenderer
@@ -126,6 +127,46 @@ class MediaStorePhotoExporterTest {
             assertEquals(result.width, bitmap.width); assertEquals(result.height, bitmap.height)
             assertEquals(ColorSpace.get(ColorSpace.Named.SRGB), bitmap.colorSpace)
         } finally { bitmap.recycle() }
+    }
+    @Test fun realExportStagesAndPublicationMarkersFollowActualProviderSuccess() = runBlocking {
+        val events = java.util.Collections.synchronizedList(mutableListOf<String>())
+        val backend = object : TraceBackend {
+            override val enabled = true
+            override fun beginAsync(name: String, cookie: Int) {
+                if (name.startsWith("FilmExport") && !name.startsWith("FilmExport:")) {
+                    assertNotEquals(android.os.Looper.getMainLooper().thread, Thread.currentThread())
+                }
+                events += "begin:$name"
+            }
+            override fun endAsync(name: String, cookie: Int) { events += "end:$name" }
+            override fun beginSection(name: String) { events += "mark:$name" }
+            override fun endSection() = Unit
+        }
+        val trace = PerformanceTrace(backend); val h = Harness()
+        try {
+            val source = h.source("orientation-1.jpg")
+            val span = trace.begin("FilmExport")
+            h.gateway.afterPublish = { events += "provider-published" }
+            withContext(ExportTraceContext(span)) { h.exporter.export(ExportRequest(source, EditParams("kodak_portra_400"))) }
+            span.finish("success")
+            for (stage in listOf("Decode", "Render", "Encode", "Io")) {
+                assertTrue("Missing $stage timing", events.contains("begin:FilmExport$stage:${span.id}"))
+                assertEquals(1, events.count { it == "end:FilmExport$stage:${span.id}" })
+            }
+            val published = events.indexOf("mark:FilmExportPublished:${span.id}")
+            assertTrue(published > events.indexOf("provider-published"))
+            assertTrue(published < events.indexOf("end:FilmExportIo:${span.id}"))
+            val failed = trace.begin("FilmExport")
+            h.encoderFailure = true
+            try {
+                withContext(ExportTraceContext(failed)) { h.exporter.export(ExportRequest(source, EditParams("kodak_portra_400"))) }
+                fail("Encoder failure must remain a failure")
+            } catch (expected: EditorException) { assertEquals(EditorErrorCode.EXPORT_FAILED, expected.code) }
+            finally { failed.finish("discarded") }
+            assertFalse(events.contains("mark:FilmExportPublished:${failed.id}"))
+            assertTrue(events.contains("end:FilmExportEncode:${failed.id}"))
+            h.assertNoUnpublishedOutput()
+        } finally { h.close() }
     }
     @Test fun realOutputSizesMetadataAndOriginalHashes() = runBlocking {
         val h = Harness(); val evidence = JSONArray()

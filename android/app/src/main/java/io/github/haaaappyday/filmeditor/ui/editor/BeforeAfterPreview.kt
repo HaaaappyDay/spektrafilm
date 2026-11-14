@@ -6,6 +6,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
@@ -13,13 +14,18 @@ import androidx.compose.ui.semantics.*
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.github.haaaappyday.filmeditor.R
+import io.github.haaaappyday.filmeditor.diagnostics.PerformanceTrace
 
 @Composable
 fun BeforeAfterPreview(state: EditorUiState, modifier: Modifier = Modifier) {
     Column(modifier.padding(12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
         val bitmap = state.displayedBitmap
         Box(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
-            if (bitmap != null) Image(bitmap.asImageBitmap(), stringResource(R.string.photo_preview), Modifier.fillMaxSize(), contentScale = ContentScale.Fit)
+            if (bitmap != null) Image(bitmap.asImageBitmap(), stringResource(R.string.photo_preview),
+                Modifier.fillMaxSize().drawWithContent {
+                    val id = if (state.previewValid && !state.showOriginal && bitmap === state.preview) state.previewTraceId else 0
+                    PerformanceTrace.app.draw(id) { drawContent() }
+                }, contentScale = ContentScale.Fit)
             else Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Text(stringResource(R.string.empty_title), style = MaterialTheme.typography.headlineSmall, textAlign = TextAlign.Center)
                 Text(stringResource(R.string.empty_description), textAlign = TextAlign.Center)
