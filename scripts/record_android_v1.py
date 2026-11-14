@@ -94,6 +94,9 @@ def record(args):
         pulled = subprocess.run(adb + ["pull", remote + "/performance-workload.json", str(out / "performance-workload.json")],
                                 capture_output=True, text=True, timeout=60)
         (out / "pull.log").write_text(pulled.stdout + pulled.stderr)
+        for name in ("performance-accessibility.json", "performance-screen.png"):
+            subprocess.run(adb + ["pull", remote + "/" + name, str(out / name)],
+                           capture_output=True, text=True, timeout=60)
         # Only this UUID output directory, never the validation app's other files.
         subprocess.run(adb + ["shell", "rm", "-rf", remote], check=True, capture_output=True, timeout=30)
     if not trace.exists() or not (out / "performance-workload.json").exists():

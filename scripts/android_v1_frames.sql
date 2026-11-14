@@ -51,7 +51,7 @@ matching_frames AS (
     AND app.layer_name GLOB '*io.github.haaaappyday.filmeditor.validation*MainActivity*'
     AND app.present_type IN ('On-time Present', 'Early Present', 'Late Present')
     AND display.present_type IN ('On-time Present', 'Early Present', 'Late Present')
-    AND display.surface_frame_token = 0
+    AND (display.surface_frame_token IS NULL OR display.surface_frame_token = 0)
     AND compositor.name IN ('/system/bin/surfaceflinger', 'surfaceflinger')
     AND app.dur >= 0 AND display.dur >= 0
     AND app.ts <= d.ts AND app.ts + app.dur >= d.ts + d.dur

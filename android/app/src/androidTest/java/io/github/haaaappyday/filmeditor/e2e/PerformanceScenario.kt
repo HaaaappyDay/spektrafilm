@@ -2,6 +2,8 @@ package io.github.haaaappyday.filmeditor.e2e
 
 import android.app.ActivityManager
 import android.content.pm.ApplicationInfo
+import android.graphics.Bitmap
+import android.graphics.Rect
 import android.os.*
 import android.view.Choreographer
 import android.view.accessibility.AccessibilityNodeInfo
@@ -72,27 +74,53 @@ class PerformanceScenario {
     }
     private fun visible(predicate: (AccessibilityNodeInfo) -> Boolean): AccessibilityNodeInfo {
         await("accessibility window", 15_000) { automation.rootInActiveWindow != null }
+        val scrolls = JSONArray()
+        fun scroll(action: Int) {
+            val node = find { it.isScrollable }
+            scrolls.put(JSONObject().put("action", action).put("node", node?.let(::nodeDetails) ?: JSONObject.NULL))
+            node?.performAction(action)
+        }
         var result = find(predicate)
         if (result == null) {
             // Some platform/Compose versions omit clipped semantics nodes.
             repeat(10) {
                 if (result == null) {
-                    find { it.isScrollable }?.performAction(AccessibilityNodeInfo.ACTION_SCROLL_BACKWARD)
+                    scroll(AccessibilityNodeInfo.ACTION_SCROLL_BACKWARD)
                     settled(); result = find(predicate)
                 }
             }
             repeat(15) {
                 if (result == null) {
-                    find { it.isScrollable }?.performAction(AccessibilityNodeInfo.ACTION_SCROLL_FORWARD)
+                    scroll(AccessibilityNodeInfo.ACTION_SCROLL_FORWARD)
                     settled(); result = find(predicate)
                 }
             }
         }
-        checkNotNull(result) { "Accessible control not found" }
+        if (result == null) {
+            val root = automation.rootInActiveWindow
+            if (root?.packageName?.toString() == context.packageName) {
+                fun tree(node: AccessibilityNodeInfo): JSONObject = nodeDetails(node).put("children", JSONArray().apply {
+                    for (i in 0 until node.childCount) node.getChild(i)?.let { put(tree(it)) }
+                })
+                File(testOutputDirectory(), "performance-accessibility.json").writeText(
+                    JSONObject().put("scrollAttempts", scrolls).put("root", tree(root)).toString(2))
+                automation.takeScreenshot()?.let { bitmap ->
+                    try { File(testOutputDirectory(), "performance-screen.png").outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) } }
+                    finally { bitmap.recycle() }
+                }
+            }
+            error("Accessible control not found")
+        }
         result!!.performAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_SHOW_ON_SCREEN.id)
         settled()
         return checkNotNull(find(predicate)) { "Control disappeared" }
     }
+    private fun nodeDetails(node: AccessibilityNodeInfo): JSONObject = JSONObject()
+        .put("class", node.className).put("text", node.text).put("description", node.contentDescription)
+        .put("scrollable", node.isScrollable).put("visible", node.isVisibleToUser)
+        .put("bounds", Rect().also(node::getBoundsInScreen).toShortString())
+        .put("actions", JSONArray(node.actionList.map { it.id }))
+        .put("range", node.rangeInfo?.let { JSONObject().put("min", it.min).put("max", it.max).put("current", it.current) } ?: JSONObject.NULL)
     private fun change(index: Int): JSONObject {
         val label = context.getString(R.string.film_strength)
         val slider = visible { it.contentDescription?.toString() == label && it.rangeInfo != null }

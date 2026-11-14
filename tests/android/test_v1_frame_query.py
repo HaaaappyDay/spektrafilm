@@ -57,6 +57,13 @@ def test_missing_flow_preserves_draw_only_and_cannot_prove_presentation():
     assert row["presentNs"] is None and row["flowVerified"] == 0
 
 
+def test_surfaceflinger_display_frame_uses_null_surface_token_in_real_android_trace():
+    db = trace(); db.execute("UPDATE actual_frame_timeline_slice SET surface_frame_token=NULL WHERE id=31")
+    assert result(db)["presentNs"] == 300
+    db.execute("UPDATE actual_frame_timeline_slice SET surface_frame_token=99 WHERE id=31")
+    assert result(db)["presentNs"] is None  # Another SurfaceFrame is not DisplayFrame proof.
+
+
 def test_unrelated_process_layer_or_dropped_frame_cannot_supply_presentation():
     for mutation in ("UPDATE actual_frame_timeline_slice SET upid=3 WHERE id=30",
                      "UPDATE actual_frame_timeline_slice SET layer_name='StatusBar' WHERE id=30",
