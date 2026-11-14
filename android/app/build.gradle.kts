@@ -26,6 +26,7 @@ android {
 kotlin { jvmToolchain(17) }
 
 dependencies {
+    implementation(libs.androidx.exifinterface)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.core.ktx)
