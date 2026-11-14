@@ -75,9 +75,12 @@ class PerformanceScenario {
     private fun visible(predicate: (AccessibilityNodeInfo) -> Boolean): AccessibilityNodeInfo {
         await("accessibility window", 15_000) { automation.rootInActiveWindow != null }
         val scrolls = JSONArray()
+        fun tree(node: AccessibilityNodeInfo): JSONObject = nodeDetails(node).put("children", JSONArray().apply {
+            for (i in 0 until node.childCount) node.getChild(i)?.let { put(tree(it)) }
+        })
         fun scroll(action: Int) {
             val node = find { it.isScrollable }
-            scrolls.put(JSONObject().put("action", action).put("node", node?.let(::nodeDetails) ?: JSONObject.NULL))
+            scrolls.put(JSONObject().put("action", action).put("node", node?.let(::tree) ?: JSONObject.NULL))
             node?.performAction(action)
         }
         var result = find(predicate)
@@ -99,9 +102,6 @@ class PerformanceScenario {
         if (result == null) {
             val root = automation.rootInActiveWindow
             if (root?.packageName?.toString() == context.packageName) {
-                fun tree(node: AccessibilityNodeInfo): JSONObject = nodeDetails(node).put("children", JSONArray().apply {
-                    for (i in 0 until node.childCount) node.getChild(i)?.let { put(tree(it)) }
-                })
                 File(testOutputDirectory(), "performance-accessibility.json").writeText(
                     JSONObject().put("scrollAttempts", scrolls).put("root", tree(root)).toString(2))
                 automation.takeScreenshot()?.let { bitmap ->
