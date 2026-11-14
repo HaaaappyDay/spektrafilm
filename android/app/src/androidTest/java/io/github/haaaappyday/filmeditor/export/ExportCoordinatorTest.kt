@@ -33,23 +33,23 @@ class ExportCoordinatorTest {
         } finally { finish.complete(Unit); running.cancelAndJoin() }
     }
     @Test fun cancellationAndFailureReleaseGateForRetry() = runBlocking {
-        var fail = false; var block = true
+        var shouldFail = false; var block = true
         val entered = CompletableDeferred<Unit>()
         val delegate = object : PhotoExporter {
             override suspend fun export(request: ExportRequest): ExportResult {
                 entered.complete(Unit)
                 if (block) awaitCancellation()
-                if (fail) throw EditorException(EditorErrorCode.EXPORT_FAILED)
+                if (shouldFail) throw EditorException(EditorErrorCode.EXPORT_FAILED)
                 return ExportResult(Uri.parse("content://media/external_primary/images/media/124"), 4, 3)
             }
         }
         val coordinator = ExportCoordinator(delegate) {}
         val cancelled = launch { coordinator.export(request) }
         entered.await(); cancelled.cancelAndJoin()
-        block = false; fail = true
+        block = false; shouldFail = true
         try { coordinator.export(request); fail("Swallowed export failure") }
         catch (error: EditorException) { assertEquals(EditorErrorCode.EXPORT_FAILED, error.code) }
-        fail = false
+        shouldFail = false
         assertEquals(3, coordinator.export(request).height)
         coordinator.recover()
     }
