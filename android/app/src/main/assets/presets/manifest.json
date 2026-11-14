@@ -1,0 +1,208 @@
+{
+  "schemaVersion": 1,
+  "engineCommit": "f37a1604c24abe60d14731754fc0d36abcb2e238",
+  "generator": {
+    "name": "build_android_presets.py",
+    "version": 1,
+    "sha256": "fc6d378d1762e2c3ce17244e6abe173e14e70b631605d5ad848e1aeec099d44b",
+    "python": "3.13.18",
+    "dependencies": {
+      "spektrafilm": "0.3.4",
+      "numpy": "2.5.4",
+      "scipy": "1.18.1",
+      "colour-science": "0.4.7",
+      "numba": "0.68.1",
+      "Pillow": "12.3.0"
+    }
+  },
+  "bakeSpec": {
+    "kodak_portra_400": {
+      "film_profile": "kodak_portra_400",
+      "print_profiles": [
+        "kodak_portra_endura"
+      ],
+      "input_color_space": "sRGB",
+      "output_color_space": "sRGB",
+      "name": "spektrafilm_v034_portra400_portraendura_1lut_srgb_srgb",
+      "topology": "1lut",
+      "resolution": 33,
+      "target": null,
+      "container": "directory",
+      "qa": true,
+      "qa_print_index": null,
+      "input_gamut_compress": {
+        "active": true,
+        "algorithm": "xy",
+        "knee": [
+          0.0,
+          1.0,
+          6.0
+        ]
+      },
+      "stops_above_midgray": null,
+      "output_gamut_compress": {
+        "algorithm": "cam16ucs",
+        "knee": [
+          0.0,
+          1.0,
+          6.0
+        ],
+        "lightness_compression": [
+          0.7,
+          1.0,
+          2.2
+        ]
+      },
+      "ocio_config": false,
+      "include_combinations": false
+    },
+    "kodak_gold_200": {
+      "film_profile": "kodak_gold_200",
+      "print_profiles": [
+        "kodak_portra_endura"
+      ],
+      "input_color_space": "sRGB",
+      "output_color_space": "sRGB",
+      "name": "spektrafilm_v034_gold200_portraendura_1lut_srgb_srgb",
+      "topology": "1lut",
+      "resolution": 33,
+      "target": null,
+      "container": "directory",
+      "qa": true,
+      "qa_print_index": null,
+      "input_gamut_compress": {
+        "active": true,
+        "algorithm": "xy",
+        "knee": [
+          0.0,
+          1.0,
+          6.0
+        ]
+      },
+      "stops_above_midgray": null,
+      "output_gamut_compress": {
+        "algorithm": "cam16ucs",
+        "knee": [
+          0.0,
+          1.0,
+          6.0
+        ],
+        "lightness_compression": [
+          0.7,
+          1.0,
+          2.2
+        ]
+      },
+      "ocio_config": false,
+      "include_combinations": false
+    },
+    "kodak_ektar_100": {
+      "film_profile": "kodak_ektar_100",
+      "print_profiles": [
+        "kodak_portra_endura"
+      ],
+      "input_color_space": "sRGB",
+      "output_color_space": "sRGB",
+      "name": "spektrafilm_v034_ektar100_portraendura_1lut_srgb_srgb",
+      "topology": "1lut",
+      "resolution": 33,
+      "target": null,
+      "container": "directory",
+      "qa": true,
+      "qa_print_index": null,
+      "input_gamut_compress": {
+        "active": true,
+        "algorithm": "xy",
+        "knee": [
+          0.0,
+          1.0,
+          6.0
+        ]
+      },
+      "stops_above_midgray": null,
+      "output_gamut_compress": {
+        "algorithm": "cam16ucs",
+        "knee": [
+          0.0,
+          1.0,
+          6.0
+        ],
+        "lightness_compression": [
+          0.7,
+          1.0,
+          2.2
+        ]
+      },
+      "ocio_config": false,
+      "include_combinations": false
+    }
+  },
+  "presets": [
+    {
+      "id": "kodak_portra_400",
+      "displayName": "Kodak Portra 400",
+      "assetPath": "presets/kodak_portra_400.cube",
+      "sha256": "c5ec5786d1ada6d9347cb6ee47c87249643bfa2eb758037fc1cd18215688ed85",
+      "filmProfile": "kodak_portra_400",
+      "printProfile": "kodak_portra_endura",
+      "inputColorSpace": "sRGB",
+      "outputColorSpace": "sRGB",
+      "resolution": 33,
+      "domainMin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "domainMax": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "attribution": "Generated from spektrafilm by Andrea Volpato and contributors; https://github.com/andreavolpato/spektrafilm. See LICENSE.txt."
+    },
+    {
+      "id": "kodak_gold_200",
+      "displayName": "Kodak Gold 200",
+      "assetPath": "presets/kodak_gold_200.cube",
+      "sha256": "e8729012ef0fb83f3c4c30f422da73b16af5acd99fe960dd1e0dc545fcd2ddc6",
+      "filmProfile": "kodak_gold_200",
+      "printProfile": "kodak_portra_endura",
+      "inputColorSpace": "sRGB",
+      "outputColorSpace": "sRGB",
+      "resolution": 33,
+      "domainMin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "domainMax": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "attribution": "Generated from spektrafilm by Andrea Volpato and contributors; https://github.com/andreavolpato/spektrafilm. See LICENSE.txt."
+    },
+    {
+      "id": "kodak_ektar_100",
+      "displayName": "Kodak Ektar 100",
+      "assetPath": "presets/kodak_ektar_100.cube",
+      "sha256": "e01828450e028c30f65d6bff3be8838bdc2de7ea7235a2f8d77e68c9795aa697",
+      "filmProfile": "kodak_ektar_100",
+      "printProfile": "kodak_portra_endura",
+      "inputColorSpace": "sRGB",
+      "outputColorSpace": "sRGB",
+      "resolution": 33,
+      "domainMin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "domainMax": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "attribution": "Generated from spektrafilm by Andrea Volpato and contributors; https://github.com/andreavolpato/spektrafilm. See LICENSE.txt."
+    }
+  ]
+}
