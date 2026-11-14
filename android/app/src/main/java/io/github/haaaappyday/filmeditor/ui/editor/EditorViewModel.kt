@@ -17,6 +17,7 @@ class EditorViewModel(
     private val renderer: FilmRenderer,
     private val sessions: SessionPersistence,
     private val exporter: PhotoExporter? = null,
+    private val prepareExport: suspend () -> Unit = {},
 ) : ViewModel() {
     private val mutableState = MutableStateFlow(EditorUiState(exportAvailable = exporter != null))
     val state: StateFlow<EditorUiState> = mutableState.asStateFlow()
@@ -65,6 +66,8 @@ class EditorViewModel(
             var input: Bitmap? = null
             var published = false
             try {
+                prepareExport()
+                ensureActive()
                 val available = presets.listPresets()
                 ensureActive()
                 mutableState.update { it.copy(presets = available) }

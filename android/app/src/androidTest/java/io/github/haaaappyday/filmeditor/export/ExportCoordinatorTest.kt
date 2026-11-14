@@ -53,4 +53,23 @@ class ExportCoordinatorTest {
         assertEquals(3, coordinator.export(request).height)
         coordinator.recover()
     }
+    @Test fun failedCleanupPreventsAnotherExportUntilRetryRecovers() = runBlocking {
+        var rejectCleanup = true; var exports = 0; var recoveries = 0
+        val delegate = object : PhotoExporter {
+            override suspend fun export(request: ExportRequest): ExportResult {
+                exports++
+                return ExportResult(Uri.parse("content://media/external_primary/images/media/125"), 4, 3)
+            }
+        }
+        val coordinator = ExportCoordinator(delegate) {
+            recoveries++
+            if (rejectCleanup) throw EditorException(EditorErrorCode.EXPORT_FAILED)
+        }
+        try { coordinator.export(request); fail("Export started before failed cleanup recovered") }
+        catch (error: EditorException) { assertEquals(EditorErrorCode.EXPORT_FAILED, error.code) }
+        assertEquals(0, exports)
+        rejectCleanup = false
+        assertEquals(4, coordinator.export(request).width)
+        assertEquals(1, exports); assertEquals(2, recoveries)
+    }
 }
