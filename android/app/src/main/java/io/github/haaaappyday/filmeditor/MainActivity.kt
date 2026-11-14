@@ -16,6 +16,7 @@ import io.github.haaaappyday.filmeditor.export.MediaStorePhotoExporter
 import io.github.haaaappyday.filmeditor.image.rememberPhotoPicker
 import io.github.haaaappyday.filmeditor.render.AssetPresetRepository
 import io.github.haaaappyday.filmeditor.render.GlFilmRenderer
+import io.github.haaaappyday.filmeditor.render.PresetThumbnailRenderer
 import io.github.haaaappyday.filmeditor.ui.editor.*
 import io.github.haaaappyday.filmeditor.ui.theme.FilmEditorTheme
 
@@ -33,7 +34,7 @@ class MainActivity : ComponentActivity() {
                 val exporter = MediaStorePhotoExporter(applicationContext, images, renderer)
                 val coordinator = ExportCoordinator(exporter, exporter::recover)
                 return EditorViewModel(images, presets, renderer, EditorSessionStore(applicationContext),
-                    coordinator, coordinator::recover) as T
+                    coordinator, coordinator::recover, thumbnailGenerator = PresetThumbnailRenderer(presets)::render) as T
             }
         })[EditorViewModel::class.java]
         setContent {
