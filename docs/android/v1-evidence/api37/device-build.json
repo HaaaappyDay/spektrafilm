@@ -1,0 +1,26 @@
+{
+  "manufacturer": "Google",
+  "model": "sdk_gphone16k_x86_64",
+  "api": 37,
+  "release": "17",
+  "fingerprint": "google\/sdk_gphone16k_x86_64\/emu64xa16k:17\/CP41.260831.015\/16516427:userdebug\/dev-keys",
+  "abi": "x86_64",
+  "totalRamBytes": 4103217152,
+  "javaHeapLimitBytes": 201326592,
+  "memoryClassMiB": 192,
+  "gl": {
+    "vendor": "Google (Google Inc.)",
+    "renderer": "Android Emulator OpenGL ES Translator (Google SwiftShader)",
+    "version": "OpenGL ES 3.0 (OpenGL ES 3.0 SwiftShader 4.0.0.1)",
+    "fragmentHighpBits": "23",
+    "maxTextureSize": "8192",
+    "tileLimit": "2048"
+  },
+  "package": "io.github.haaaappyday.filmeditor.validation",
+  "versionName": "0.1.0",
+  "versionCode": 1,
+  "debuggable": true,
+  "sourceCommit": "683d15eb8495205f0e6defd48cad2c6d6985a8ac",
+  "testedCommit": "683d15eb8495205f0e6defd48cad2c6d6985a8ac",
+  "physicalAcceptance": false
+}

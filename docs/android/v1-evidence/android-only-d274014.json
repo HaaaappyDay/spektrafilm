@@ -1,0 +1,46 @@
+{
+  "sourceCommit": "d274014c5b37cab19d157d99a02b026c3325b66a",
+  "buildType": "debug",
+  "apkSha256": "4c5a1ca6bfdcd2eeb0fd4d0d28c3d4e85f8c8e59079c85b891a699eeb6ad3fa8",
+  "apkBytes": 30622420,
+  "package": "io.github.haaaappyday.filmeditor",
+  "versionName": "0.1.0",
+  "versionCode": "1",
+  "manifestSha256": "5e2e1a7821b70346e9f861828510ea893cf33095461889955c44dd3a98ef8e7b",
+  "assetLicenseSha256": "76d629501783ae52e8d63aee1e054c1e1a9713b9fe7d36fb306e25b1d14b24e9",
+  "assetLicenseMatchesSource": true,
+  "bakeReportsPresent": true,
+  "pythonOrQtRuntimePackaged": false,
+  "permissions": [
+    "io.github.haaaappyday.filmeditor.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+  ],
+  "presets": [
+    {
+      "id": "kodak_portra_400",
+      "path": "assets/presets/kodak_portra_400.cube",
+      "bytes": 1398135,
+      "sha256": "c5ec5786d1ada6d9347cb6ee47c87249643bfa2eb758037fc1cd18215688ed85"
+    },
+    {
+      "id": "kodak_gold_200",
+      "path": "assets/presets/kodak_gold_200.cube",
+      "bytes": 1396958,
+      "sha256": "e8729012ef0fb83f3c4c30f422da73b16af5acd99fe960dd1e0dc545fcd2ddc6"
+    },
+    {
+      "id": "kodak_ektar_100",
+      "path": "assets/presets/kodak_ektar_100.cube",
+      "bytes": 1398906,
+      "sha256": "e01828450e028c30f65d6bff3be8838bdc2de7ea7235a2f8d77e68c9795aa697"
+    }
+  ],
+  "origin": "fresh Android-only sparse checkout; locally debug-signed",
+  "sourceCommitEmbedded": true,
+  "buildCommand": "./gradlew :app:assembleDebug :app:testDebugUnitTest :app:lintDebug -PsourceCommit=d274014c5b37cab19d157d99a02b026c3325b66a",
+  "unitTests": 13,
+  "unitFailures": 0,
+  "lintErrors": 0,
+  "lintWarnings": 11,
+  "finalDelivery": false,
+  "artifactLocation": "/tmp/spektrafilm-android-only-d274014/android/app/build/outputs/apk/debug/app-debug.apk"
+}

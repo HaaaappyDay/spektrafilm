@@ -1,0 +1,39 @@
+{
+  "sourceCommit": "683d15eb8495205f0e6defd48cad2c6d6985a8ac",
+  "testedCommit": "683d15eb8495205f0e6defd48cad2c6d6985a8ac",
+  "runUrl": "https://github.com/HaaaappyDay/spektrafilm/actions/runs/43557947368",
+  "apis": [
+    {
+      "api": 29,
+      "tests": 77,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "processRestoration": true,
+      "xmlSha256": "933a4b972cbc277b51415ede7e2f2d1608f4ecea0b48822923145af2c9ec5b1f"
+    },
+    {
+      "api": 36,
+      "tests": 77,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "processRestoration": true,
+      "xmlSha256": "16b0f60fc4ae0c1185bd082475080a27335ba4f10a25cabf2d7db65a4e86e6c5"
+    },
+    {
+      "api": 37,
+      "tests": 77,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "processRestoration": true,
+      "xmlSha256": "7f9ff664706426fb6772575d9fbe4879f10b3f02b9e2d8a14af49d7b300cb6bc"
+    }
+  ],
+  "physicalAcceptance": false,
+  "unitTests": 9,
+  "pythonTests": 119,
+  "lintErrors": 0,
+  "debugApkSha256": "ed855c35e9813fb3baee1e9da0b3744bca7cfc85ff4b3dc00335c7a650d1a154"
+}

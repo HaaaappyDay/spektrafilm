@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import androidx.lifecycle.ViewModelStore
 import io.github.haaaappyday.filmeditor.core.*
+import io.github.haaaappyday.filmeditor.diagnostics.*
 import kotlinx.coroutines.*
 import org.junit.Assert.*
 import org.junit.Test
@@ -47,7 +48,8 @@ class EditorViewModelTest {
             val call = Call(params, CompletableDeferred()); calls.add(call)
             if (!automatic) call.gate.await()
             Bitmap.createBitmap(input.width, input.height, Bitmap.Config.ARGB_8888).apply {
-                eraseColor(0xff000000.toInt() or ((100 + params.exposureEv * 20).toInt() shl 16))
+                eraseColor(0xff000000.toInt() or ((100 + params.exposureEv * 20).toInt() shl 16) or
+                    ((params.temperature + 100).toInt() shl 8))
                 call.bitmap = this
             }
         }
@@ -59,14 +61,69 @@ class EditorViewModelTest {
     }
     private suspend fun await(predicate: () -> Boolean) = withTimeout(10_000) { while (!predicate()) delay(10) }
     private suspend fun main(action: () -> Unit) = withContext(Dispatchers.Main) { action() }
-    private suspend fun create(images: Images, renderer: Renderer, sessions: Sessions, exporter: PhotoExporter? = null): Pair<EditorViewModel, ViewModelStore> = withContext(Dispatchers.Main) {
-        val vm = EditorViewModel(images, presets, renderer, sessions, exporter)
+    private suspend fun create(images: ImageRepository, renderer: FilmRenderer, sessions: Sessions, exporter: PhotoExporter? = null,
+        traces: PerformanceTrace = PerformanceTrace.app): Pair<EditorViewModel, ViewModelStore> = withContext(Dispatchers.Main) {
+        val vm = EditorViewModel(images, presets, renderer, sessions, exporter, traces = traces)
         vm to ViewModelStore().apply { put("editor", vm) }
     }
     private suspend fun ready(vm: EditorViewModel) {
         await { !vm.state.value.initializing }
         main { vm.importPhoto(Uri.parse("content://fixture/first")) }
         await { vm.state.value.previewValid }
+    }
+
+    private class Traces : TraceBackend {
+        override val enabled = true
+        val begun = java.util.Collections.synchronizedList(mutableListOf<Pair<String, Int>>())
+        val ended = java.util.Collections.synchronizedList(mutableListOf<Pair<String, Int>>())
+        override fun beginAsync(name: String, cookie: Int) { begun += name to cookie }
+        override fun endAsync(name: String, cookie: Int) { ended += name to cookie }
+        override fun beginSection(name: String) = Unit
+        override fun endSection() = Unit
+    }
+
+    @Test fun previewTraceIdentityFollowsAcceptedContentAndClosesSupersededQueuedWork() = runBlocking {
+        val backend = Traces(); val renderer = Renderer()
+        val (vm, store) = create(Images(), renderer, Sessions(), traces = PerformanceTrace(backend))
+        try {
+            ready(vm)
+            assertTrue(vm.state.value.previewTraceId > 0)
+            renderer.automatic = false
+            main { vm.setExposure(.1f) }; await { renderer.calls.size == 2 }
+            main { vm.setExposure(.2f) }; await { renderer.calls.size == 3 }
+            main { vm.setExposure(.3f); vm.setExposure(.4f) }
+            val latestId = backend.begun.last { it.first.startsWith("FilmPreview:") }.second
+            renderer.calls[1].gate.complete(Unit); renderer.calls[2].gate.complete(Unit)
+            await { renderer.calls.size == 4 }
+            renderer.calls.last().gate.complete(Unit)
+            await { vm.state.value.previewValid }
+            assertEquals(.4f, vm.state.value.params.exposureEv)
+            assertEquals(latestId, vm.state.value.previewTraceId)
+            await { backend.ended.size == backend.begun.size }
+            assertEquals(5, backend.begun.count { it.first.startsWith("FilmPreview:") }) // initial +4, including never-started .3
+            assertEquals(backend.begun.toSet(), backend.ended.toSet())
+            assertEquals(backend.ended.size, backend.ended.toSet().size)
+        } finally { renderer.finishAll(); main { store.clear() } }
+    }
+
+    @Test fun exportTraceIdentityCrossesIoDispatcherAndMatchesPublishedResult() = runBlocking {
+        val backend = Traces(); val seen = CompletableDeferred<TraceSpan?>()
+        val saver = object : PhotoExporter {
+            override suspend fun export(request: ExportRequest) = withContext(Dispatchers.IO) {
+                seen.complete(currentCoroutineContext()[ExportTraceContext]?.span)
+                ExportResult(Uri.parse("content://fixture/exported"), 4, 3)
+            }
+        }
+        val (vm, store) = create(Images(), Renderer(), Sessions(), saver, PerformanceTrace(backend))
+        try {
+            ready(vm); main { vm.export() }
+            val span = seen.await()
+            assertNotNull(span)
+            await { !vm.state.value.exporting }
+            assertNotNull(vm.state.value.exportResult)
+            assertEquals(span!!.id, vm.state.value.exportTraceId)
+            assertTrue(backend.ended.contains("FilmExport:${span.id}" to span.id))
+        } finally { main { store.clear() } }
     }
 
     @Test fun cancelledOldRenderCannotOverwriteNewerResultAndWorkIsBounded() = runBlocking {
@@ -111,6 +168,46 @@ class EditorViewModelTest {
             assertSame(current, vm.state.value.preview)
             assertEquals(EditParams("kodak_portra_400"), vm.state.value.params)
         } finally { renderer.automatic = true; renderer.finishAll(); main { store.clear() } }
+    }
+
+    @Test fun temperatureOnlyLateRenderCannotReplaceNewTemperaturePixels() = runBlocking {
+        val renderer = Renderer(); val (vm, store) = create(Images(), renderer, Sessions())
+        try {
+            ready(vm); renderer.automatic = false
+            main { vm.setTemperature(-20f) }; await { renderer.calls.size == 2 }
+            val obsolete = renderer.calls.last()
+            main { vm.setTemperature(42f) }; await { renderer.calls.size == 3 }
+            renderer.calls.last().gate.complete(Unit)
+            await { vm.state.value.previewValid }
+            val newest = vm.state.value.preview!!
+            assertEquals(142, (newest.getPixel(0, 0) shr 8) and 255)
+            obsolete.gate.complete(Unit); await { obsolete.bitmap?.isRecycled == true }
+            assertSame(newest, vm.state.value.preview)
+            assertEquals(42f, vm.state.value.params.temperature)
+        } finally { renderer.automatic = true; renderer.finishAll(); main { store.clear() } }
+    }
+
+    @Test fun noncooperativeOldImportCompletionCannotReplaceNewSourceOrEdits() = runBlocking {
+        val delegate = Images(); val entered = CompletableDeferred<Unit>(); val gate = CompletableDeferred<Unit>()
+        val images = object : ImageRepository by delegate {
+            override suspend fun importImage(uri: Uri): ImageSource = if (uri.lastPathSegment == "slow") withContext(NonCancellable) {
+                entered.complete(Unit); gate.await(); delegate.importImage(uri)
+            } else delegate.importImage(uri)
+        }
+        val (vm, store) = create(images, Renderer(), Sessions())
+        try {
+            ready(vm)
+            main { vm.importPhoto(Uri.parse("content://fixture/slow")) }; entered.await()
+            main { vm.importPhoto(Uri.parse("content://fixture/latest")) }
+            await { vm.state.value.source?.id?.endsWith("latest") == true && vm.state.value.previewValid }
+            main { vm.setTemperature(41f) }; await { vm.state.value.previewValid }
+            val expected = vm.state.value
+            gate.complete(Unit)
+            await { "content://fixture/slow" in delegate.removed }
+            assertEquals(expected.source, vm.state.value.source); assertEquals(expected.params, vm.state.value.params)
+            assertSame(expected.preview, vm.state.value.preview)
+            assertEquals(2, delegate.decodes)
+        } finally { gate.complete(Unit); main { store.clear() } }
     }
 
     @Test fun valuesResetComparisonAndFailedImportFollowTheContract() = runBlocking {

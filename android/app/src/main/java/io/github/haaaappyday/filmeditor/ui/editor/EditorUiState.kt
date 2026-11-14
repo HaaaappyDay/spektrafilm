@@ -22,6 +22,9 @@ data class EditorUiState(
     val exportResult: ExportResult? = null,
     val previewValid: Boolean = false,
     val exportAvailable: Boolean = false,
+    /** Trace content identities; zero when tracing is disabled. Never persisted. */
+    val previewTraceId: Int = 0,
+    val exportTraceId: Int = 0,
 ) {
     val editingEnabled: Boolean get() = servicesReady && source != null && !initializing && !importing && !exporting
     val canImport: Boolean get() = servicesReady && !initializing && !importing && !exporting

@@ -56,6 +56,7 @@ Qt, preset baking or developer-specific paths are required to build Android.
 | Lifecycle | 2.9.4 |
 | Coroutines | 1.10.2 |
 | ExifInterface | 1.4.2 |
+| Espresso (instrumentation only) | 3.7.0 |
 
 These are intentionally pinned stable versions, not an assertion that each is
 the newest release. AGP 8.13 supports SDK 36 and requires Gradle 8.13/JDK 17.
@@ -66,6 +67,10 @@ The Kotlin Compose plugin shares the Kotlin compiler version. Compatibility sour
 [Compose BOM](https://developer.android.com/develop/ui/compose/bom/bom-mapping),
 [Gradle checksums](https://gradle.org/release-checksums/).
 Dependency versions are centralized in `gradle/libs.versions.toml`.
+Espresso is pinned explicitly because Compose's transitive 3.5.0 reflects a
+removed `InputManager.getInstance` method on API 37; the stable
+[3.7.0 release](https://developer.android.com/jetpack/androidx/releases/test#espresso-3.7.0)
+uses the public system service instead. This dependency is only in the test APK.
 
 ## Device verification
 
@@ -76,15 +81,90 @@ For multiple devices set `ANDROID_SERIAL` to the chosen device.
 ```sh
 adb install -r app/build/outputs/apk/debug/app-debug.apk
 adb shell am start -W -n io.github.haaaappyday.filmeditor/.MainActivity
-./gradlew :app:connectedDebugAndroidTest
+./gradlew :app:connectedValidationAndroidTest
 ```
 
+Instrumented tests install a separate `io.github.haaaappyday.filmeditor.validation`
+app and its own fixture provider. They may reset that validation app’s session;
+the regular debug app and its session remain separate.
+
+The process-death check is a separate host-driven test. It keeps the prepared
+instrumentation process alive, verifies its PID, force-stops that exact validation
+package, and then checks restoration in a new process. The generated source and
+edits must survive; an unpublished export must be removed, and an already
+published JPEG must remain byte-identical with no duplicate save. Run after the
+connected suite (replace `SERIAL` with the selected device's serial):
+
+```sh
+adb -s SERIAL install -r app/build/outputs/apk/validation/app-validation.apk
+adb -s SERIAL install -r app/build/outputs/apk/androidTest/validation/app-validation-androidTest.apk
+python3 ../scripts/verify_android_process_restore.py --serial SERIAL --out app/build/reports/process-restoration
+```
+
+The driver uses Python's standard library, requires no Python project install,
+and cleans up only its tracked generated images in the validation app. Its
+`process-restoration.json` and phase logs are retained in CI. This check models
+death after pending-row journaling; it does not claim to reproduce every possible
+instruction boundary during export. Normal connected tests exclude the host-only
+phases, which must not be run alone without their driver.
+
 CI builds, unit-tests and lints on Linux, uploads APK/reports, and runs device
-checks on API 29 and 36 emulators. Reports live under `app/build/reports/` and
+checks on API 29, 36 and 37.2 emulators (37.2 uses the Google APIs 16 KB image). Reports live under `app/build/reports/` and
 `app/build/outputs/androidTest-results/`. See [testing strategy](../docs/android/testing.md).
 The maintainer's reference device is vivo X200 Pro mini. Its API, RAM, GPU and
 performance must be measured from the connected device; emulator results do
 not establish physical-device color/performance acceptance.
+
+The integrated API 29/36/37.2 results and remaining physical gates are recorded
+in [v1 validation](../docs/android/v1-validation.md). To build the isolated,
+non-debuggable, shell-profileable measurement app and its instrumentation APK:
+
+```sh
+source_commit="$(git rev-parse HEAD)"
+./gradlew :app:assembleProfileable :app:assembleProfileableAndroidTest -PvalidationBuildType=profileable -PsourceCommit="$source_commit"
+```
+
+It is signed with the local debug key and uses the validation app ID, so it
+replaces a previous validation installation. Its manifest enables shell profiling
+without making the app debuggable. Building this APK is not performance acceptance. The host process
+restoration driver above requires the debuggable `validation` variant, because
+it reads private ready markers with `run-as`.
+
+For the performance workload, use Android 12+ with FrameTimeline and an unlocked
+screen. The host requires Python 3.11+, ADB, the pinned build-tools `aapt2`, and
+the official Perfetto helpers (v59.1). Install the helpers once:
+
+```sh
+mkdir -p "$HOME/.cache/perfetto-tools"
+curl -fL https://raw.githubusercontent.com/google/perfetto/v59.1/tools/record_android_trace -o "$HOME/.cache/perfetto-tools/record_android_trace"
+curl -fL https://raw.githubusercontent.com/google/perfetto/v59.1/tools/trace_processor -o "$HOME/.cache/perfetto-tools/trace_processor"
+chmod +x "$HOME/.cache/perfetto-tools/trace_processor"
+python3 ../scripts/record_android_v1.py --serial SERIAL --source-commit "$source_commit" --out app/build/reports/performance-RUN
+```
+
+Use a new output directory for each run. The driver installs only the isolated
+profileable APKs, verifies the APK's embedded commit, records SHA256 identities,
+and retains the workload JSON, raw trace, query rows and report. It warms all
+three LUTs and one 12MP export, then measures 30 real accessibility slider
+actions after five warmups, followed by 20 import/edit cycles and 10 exports.
+Only generated fixtures and new validation-app outputs are cleaned up.
+
+Preview latency starts before accessibility dispatch and ends at the linked
+SurfaceFlinger display frame; a draw or application GPU completion alone cannot
+pass. Export timing ends at successful MediaStore publication and includes
+decode/render/encode/IO stage details. Memory is sampled every 100ms, so reported
+peaks are sampled lower bounds; Java used heap, native allocated bytes and
+graphics PSS describe different memory categories. Unknown counters stay unknown.
+Resource checkpoints use a consistent post-GC policy outside timed operations;
+all 31 checkpoints and trends are retained. They require trace/retention review
+and never automatically certify the absence of a leak. Emulator reports remain
+`emulator-only`, regardless of timings. The complete local harness dry run and
+API 36 CI workload have passed artifact validation at commit `d274014`; see
+[v1 validation](../docs/android/v1-validation.md) for the retained samples and
+limitations. The local preview p95 was 263.906ms, above the 200ms target; no
+samples were discarded. Physical v1 acceptance still requires the reference phone.
+The helper tag identifies the downloaded scripts; `recording.json` records the
+actual trace-processor version, which may differ from the helper tag.
 
 ## Boundaries and ownership
 
