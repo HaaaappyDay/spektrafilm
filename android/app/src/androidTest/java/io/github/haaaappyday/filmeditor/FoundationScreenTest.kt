@@ -2,7 +2,7 @@ package io.github.haaaappyday.filmeditor
 
 import android.content.pm.PackageManager
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertIsNotEnabled
+import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import org.junit.Assert.*
@@ -12,12 +12,12 @@ import org.junit.Test
 class FoundationScreenTest {
     @get:Rule val compose = createAndroidComposeRule<MainActivity>()
 
-    @Test fun emptyScreenDoesNotPretendImportWorks() {
+    @Test fun emptyScreenOffersImportAndSurvivesRecreation() {
         val importLabel = compose.activity.getString(R.string.import_photo)
-        compose.onNodeWithText(importLabel).assertIsDisplayed().assertIsNotEnabled()
-        compose.onNodeWithText(compose.activity.getString(R.string.foundation_notice)).assertIsDisplayed()
+        compose.onNodeWithText(importLabel).assertIsDisplayed().assertIsEnabled()
+        compose.onNodeWithText(compose.activity.getString(R.string.empty_description)).assertIsDisplayed()
         compose.activityRule.scenario.recreate()
-        compose.onNodeWithText(importLabel).assertIsDisplayed().assertIsNotEnabled()
+        compose.onNodeWithText(importLabel).assertIsDisplayed().assertIsEnabled()
     }
 
     @Suppress("DEPRECATION")
