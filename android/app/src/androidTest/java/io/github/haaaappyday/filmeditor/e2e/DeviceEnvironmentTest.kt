@@ -15,6 +15,16 @@ import org.junit.Test
 import java.io.File
 
 class DeviceEnvironmentTest {
+    @Test fun validationPackageAndFixtureProviderAreIsolatedFromTheUserApp() {
+        val instrumentation = InstrumentationRegistry.getInstrumentation()
+        val target = instrumentation.targetContext
+        assertEquals("io.github.haaaappyday.filmeditor.validation", target.packageName)
+        val testPackage = instrumentation.context.packageName
+        assertEquals("${target.packageName}.test", testPackage)
+        val providers = target.packageManager.getPackageInfo(testPackage,
+            android.content.pm.PackageManager.GET_PROVIDERS).providers.orEmpty()
+        assertTrue(providers.any { it.authority == "$testPackage.fixtures" })
+    }
     @Test fun actualGlesDeviceAndBuildMetadataAccompanyValidation() = runBlocking {
         val instrumentation = InstrumentationRegistry.getInstrumentation()
         val context = instrumentation.targetContext
