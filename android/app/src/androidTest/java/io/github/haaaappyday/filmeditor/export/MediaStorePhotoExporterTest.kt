@@ -61,9 +61,13 @@ class MediaStorePhotoExporterTest {
             if (fault == Fault.DELETE || refuseDelete) throw IOException("delete failed")
             real.delete(row, onlyPending)
         }
+        @Suppress("DEPRECATION")
         fun cleanTestRows() {
             fault = Fault.NONE; refuseDelete = false
-            for (row in rows().filter { it.uri in created }) real.delete(row, false)
+            for (row in rows().filter { it.uri in created }) {
+                if (PendingExport.isManagedName(row.name)) real.delete(row, false)
+                else resolver.delete(MediaStore.setIncludePending(row.uri), null, null)
+            }
         }
     }
     private inner class Harness {
@@ -238,6 +242,35 @@ class MediaStorePhotoExporterTest {
             h.gateway.fault = Fault.NONE; h.gateway.refuseDelete = false
             h.exporter.recover(); h.assertNoUnpublishedOutput()
         } finally { h.close() }
+    }
+    @Suppress("DEPRECATION")
+    @Test fun corruptJournalAndForeignIdentityCannotDeleteProtectedMedia() = runBlocking {
+        val h = Harness()
+        val otherRecord = PendingExport.create()
+        val outside = resolver.insert(MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY), ContentValues().apply {
+            put(MediaStore.Images.Media.DISPLAY_NAME, otherRecord.displayName)
+            put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+            put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/OtherExportTest/")
+            put(MediaStore.Images.Media.IS_PENDING, 1)
+        })!!
+        try {
+            h.journal.write(otherRecord.copy(uri = outside))
+            val protected = h.gateway.insert(PendingExport.create().displayName)
+            val orphan = h.gateway.insert(PendingExport.create().displayName)
+            File(h.root, "journal/${java.util.UUID.randomUUID()}.json").writeText("{corrupt")
+            val gateway = object : MediaStoreGateway by h.gateway {
+                override fun rows() = h.gateway.rows().map { if (it.uri == protected) it.copy(owner = "foreign.app") else it }
+            }
+            val exporter = MediaStorePhotoExporter(context, h.images, h.renderer, h.journal, gateway, File(h.root, "staging"))
+            exporter.recover()
+            assertTrue(h.gateway.rows().any { it.uri == protected })
+            assertFalse(h.gateway.rows().any { it.uri == orphan })
+            resolver.query(MediaStore.setIncludePending(outside), arrayOf(MediaStore.Images.Media._ID), null, null, null)!!.use { assertTrue(it.moveToFirst()) }
+            assertTrue(h.journal.read().isEmpty())
+        } finally {
+            resolver.delete(MediaStore.setIncludePending(outside), null, null)
+            h.close()
+        }
     }
     @Test fun tenRepeatedExportsReleaseTemporaryFilesAndDescriptors() = runBlocking {
         val h = Harness()
