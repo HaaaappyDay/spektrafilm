@@ -5,8 +5,10 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ColorSpace
 import android.net.Uri
+import android.os.ParcelFileDescriptor
 import android.provider.MediaStore
 import android.system.Os
+import android.util.Base64
 import androidx.exifinterface.media.ExifInterface
 import androidx.test.platform.app.InstrumentationRegistry
 import io.github.haaaappyday.filmeditor.core.*
@@ -100,6 +102,8 @@ class MediaStorePhotoExporterTest {
         }
     }
     private fun hash(file: File) = MessageDigest.getInstance("SHA-256").digest(file.readBytes()).joinToString("") { "%02x".format(it) }
+    private fun shell(command: String): String = ParcelFileDescriptor.AutoCloseInputStream(
+        instrumentation.uiAutomation.executeShellCommand(command)).bufferedReader().use { it.readText() }
     private fun metadata(result: ExportResult) {
         resolver.openInputStream(result.uri)!!.use { input ->
             val exif = ExifInterface(input)
@@ -290,5 +294,34 @@ class MediaStorePhotoExporterTest {
             assertTrue("Descriptors continuously grew: $counts", counts.last() <= counts[2] + 4)
             File(testOutputDirectory(), "export-repeat-resources.json").writeText(JSONObject().put("exports", 10).put("uniqueUris", results.size).put("openFdCounts", JSONArray(counts)).put("encodedBitmapsRecycled", true).toString(2))
         } finally { h.close() }
+    }
+    @Test fun shellOwnedPendingAndPublishedPhotosSurviveEvenWithForgedJournalUri() = runBlocking {
+        val h = Harness(); val record = PendingExport.create()
+        var foreign: Uri? = null
+        try {
+            val inserted = shell("content insert --uri content://media/external_primary/images/media --bind _display_name:s:${record.displayName} --bind mime_type:s:image/jpeg --bind relative_path:s:${PendingExport.RELATIVE_PATH} --bind is_pending:i:1")
+            foreign = Uri.parse(checkNotNull(Regex("content://media/[^\\s]+").find(inserted)) { inserted }.value)
+            val jpeg = instrumentation.context.assets.open("import-fixtures/orientation-1.jpg").use { it.readBytes() }
+            val encoded = Base64.encodeToString(jpeg, Base64.NO_WRAP)
+            shell("printf %s $encoded | base64 -d | content write --uri $foreign")
+            val query = "content query --uri $foreign --projection _id:owner_package_name:is_pending:_display_name"
+            val before = shell(query)
+            assertTrue(before, before.contains(record.displayName) && before.contains("is_pending=1"))
+            assertTrue(before, before.contains("owner_package_name=") && !before.contains("owner_package_name=${context.packageName}"))
+            h.journal.write(record.copy(uri = foreign))
+            h.exporter.recover()
+            assertEquals(before, shell(query))
+            shell("content update --uri $foreign --bind is_pending:i:0")
+            h.journal.write(record.copy(uri = foreign))
+            h.exporter.recover()
+            val published = shell(query)
+            assertTrue(published, published.contains(record.displayName) && published.contains("is_pending=0"))
+            File(testOutputDirectory(), "export-external-owner-preservation.json").writeText(JSONObject()
+                .put("pendingPreserved", true).put("publishedPreserved", true)
+                .put("ownerMetadata", published.substringAfter("owner_package_name=").substringBefore(",")).toString(2))
+        } finally {
+            foreign?.let { shell("content delete --uri $it") }
+            h.close()
+        }
     }
 }

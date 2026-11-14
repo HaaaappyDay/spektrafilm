@@ -2,6 +2,7 @@ package io.github.haaaappyday.filmeditor.export
 
 import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.ParcelFileDescriptor
 import android.provider.Settings
@@ -62,6 +63,10 @@ class ExportActivityTest {
             assertEquals(4000, result.width); assertEquals(3000, result.height)
             val added = gateway.rows().filter { it.uri !in previousRows }
             assertEquals(listOf(result.uri), added.map { it.uri }); assertFalse(added.single().pending)
+            val sample = context.contentResolver.openInputStream(result.uri)!!.use {
+                BitmapFactory.decodeStream(it, null, BitmapFactory.Options().apply { inSampleSize = 32 })!!
+            }
+            val expectedColor = try { sample.getPixel(sample.width / 2, sample.height / 2) } finally { sample.recycle() }
             compose.onNodeWithText(context.getString(R.string.open_photo)).performScrollTo().performClick()
             // The result must be displayed by another Activity, not a toast/fake in this app.
             var activities = ""
@@ -70,9 +75,28 @@ class ExportActivityTest {
                 activities.lineSequence().any { (it.contains("mResumedActivity") || it.contains("topResumedActivity")) &&
                     !it.contains(context.packageName) && (it.contains("gallery", true) || it.contains("photos", true) || it.contains("image", true)) }
             }
-            val bitmap = instrumentation.uiAutomation.takeScreenshot()
-            try { File(testOutputDirectory(), "export-system-gallery.png").outputStream().use { assertTrue(bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)) } }
-            finally { bitmap.recycle() }
+            // Resumed Activity can precede its first displayed frame. The generated
+            // 12MP fixture is uniform: a fitted gallery image covers >30% of either
+            // orientation, whereas the previous editor's preview covers <30%.
+            var frame: Bitmap? = null
+            try {
+                compose.waitUntil(15_000) {
+                    frame?.recycle()
+                    val screen = instrumentation.uiAutomation.takeScreenshot().also { frame = it }
+                    var matched = 0; var total = 0
+                    val shifts = intArrayOf(0, 8, 16)
+                    for (y in 4 until screen.height step 8) for (x in 4 until screen.width step 8) {
+                        val pixel = screen.getPixel(x, y); total++
+                        if (shifts.all { kotlin.math.abs(((pixel shr it) and 255) - ((expectedColor shr it) and 255)) <= 12 }) matched++
+                    }
+                    matched > total * .3
+                }
+            } finally {
+                frame?.let { bitmap ->
+                    try { File(testOutputDirectory(), "export-system-gallery.png").outputStream().use { assertTrue(bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)) } }
+                    finally { bitmap.recycle() }
+                }
+            }
             File(testOutputDirectory(), "export-activity-gallery.json").writeText(JSONObject()
                 .put("width", result.width).put("height", result.height).put("outputs", added.size)
                 .put("airplaneMode", true).put("paramsPreserved", true)
