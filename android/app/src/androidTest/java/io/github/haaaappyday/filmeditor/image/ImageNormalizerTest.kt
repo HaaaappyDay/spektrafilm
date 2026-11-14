@@ -17,9 +17,10 @@ import java.io.File
 class ImageNormalizerTest {
     @get:Rule val testName = TestName()
     private var maxError = 0
+    private var sampledChannels = 0
     @After fun recordSampledColorError() {
         File(testOutputDirectory(), "normalization-${testName.methodName}.json")
-            .writeText(JSONObject().put("maxSampledRgbCodeError", maxError).toString())
+            .writeText(JSONObject().put("maxSampledRgbCodeError", maxError).put("sampledRgbChannels", sampledChannels).toString())
     }
     private val instrumentation = InstrumentationRegistry.getInstrumentation()
     private val normalizer = ImageNormalizer()
@@ -33,6 +34,7 @@ class ImageNormalizerTest {
         assertFalse(bitmap.hasAlpha())
     }
     private fun assertColor(expected: IntArray, actual: Int, tolerance: Int = 2) {
+        sampledChannels += 3
         val channels = intArrayOf(Color.red(actual), Color.green(actual), Color.blue(actual))
         for (i in 0..2) maxError = maxOf(maxError, kotlin.math.abs(expected[i] - channels[i]))
         for (i in 0..2) assertTrue("RGB expected=${expected.toList()}, actual=${channels.toList()}", kotlin.math.abs(expected[i] - channels[i]) <= tolerance)

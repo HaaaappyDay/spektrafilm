@@ -11,6 +11,7 @@ import hashlib
 import io
 import json
 import struct
+import shutil
 from pathlib import Path
 from PIL import Image, ImageCms, ImageDraw, ImageOps
 
@@ -53,7 +54,7 @@ def normalize_profile(data):
     return bytes(result)
 
 
-def generate(out):
+def generate(out, native_gainmap=None):
     out.mkdir(parents=True, exist_ok=True)
     image = Image.new('RGB', (80, 60))
     draw = ImageDraw.Draw(image)
@@ -108,6 +109,10 @@ def generate(out):
     metadata = dict(orientations=orientations, p3Expected=[reference.getpixel((20+40*i, 20)) for i in range(3)],
                     srgbExpected=colors)
     (out / 'expected.json').write_text(json.dumps(metadata, indent=2)+'\n')
+    if native_gainmap is not None:
+        destination = out / 'synthetic-gainmap.jpg'
+        if native_gainmap.resolve() != destination.resolve():
+            shutil.copyfile(native_gainmap, destination)
     hashes = {p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(out.iterdir()) if p.is_file() and p.name not in ('SHA256SUMS.json','README.md')}
     (out / 'SHA256SUMS.json').write_text(json.dumps(hashes, indent=2)+'\n')
     (out / 'README.md').write_text('''# Import fixtures
@@ -126,10 +131,19 @@ Python/Pillow/LCMS are regeneration tools only, not Android build dependencies.
 SHA256SUMS.json records committed fixture bytes; timestamps inside generated ICC
 profiles are normalized. 12/24/48 MP fixtures are highly compressible solid colors
 but their encoded dimensions exercise real decoder sampling/allocation behavior.
+
+synthetic-gainmap.jpg is generated separately by GainmapFixtureTest on API36 using
+Android Gainmap + JPEG encoding: solid 32x24 RGB(100,140,170), neutral gain map,
+HDR ratio2. Source run43540056192. Pass --native-gainmap /path/to/its/output.jpg to
+regenerate the complete fixture set including this native sample. Android builds
+use committed bytes; API29 can then test the same container as newer Android.
+
 ''')
 
 
 if __name__ == '__main__':
     parser=argparse.ArgumentParser()
     parser.add_argument('--out', type=Path, default=Path('android/app/src/androidTest/assets/import-fixtures'))
-    generate(parser.parse_args().out)
+    parser.add_argument('--native-gainmap', type=Path)
+    args=parser.parse_args()
+    generate(args.out, args.native_gainmap)

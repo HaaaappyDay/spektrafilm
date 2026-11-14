@@ -3,12 +3,11 @@
     <string name="empty_title">一张照片，一种新感受。</string>
     <string name="empty_description">用胶片色彩，为照片增添温度。</string>
     <string name="import_photo">导入照片</string>
-    <string name="foundation_notice">照片编辑功能将在后续版本开放。</string>
     <string name="retry">重试</string>
     <string name="importing_photo">正在导入照片…</string>
     <string name="photo_preview">照片预览</string>
     <string name="preview_dimensions">预览：%1$d × %2$d</string>
-    <string name="unsupported_image">请选择静态 SDR JPEG 或 PNG，暂不支持动画和 HDR 照片。</string>
+    <string name="unsupported_image">请选择含 SDR 图像的静态 JPEG 或 PNG，暂不支持动画和仅含 HDR 的图片。</string>
     <string name="image_too_large">照片超出支持的大小或可用内存，请选择较小的图片。</string>
     <string name="image_read_failed">无法读取照片，请重试或选择其他照片。</string>
 </resources>

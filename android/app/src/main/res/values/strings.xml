@@ -3,12 +3,11 @@
     <string name="empty_title">A new frame, a different feeling.</string>
     <string name="empty_description">Bring your photos to life with film color.</string>
     <string name="import_photo">Import photo</string>
-    <string name="foundation_notice">Photo editing will be available in a later build.</string>
     <string name="retry">Retry</string>
     <string name="importing_photo">Importing photo…</string>
     <string name="photo_preview">Photo preview</string>
     <string name="preview_dimensions">Preview: %1$d × %2$d</string>
-    <string name="unsupported_image">Choose a static SDR JPEG or PNG. Animated and HDR photos are not supported.</string>
+    <string name="unsupported_image">Choose a static JPEG or PNG with an SDR image. Animated and HDR-only images are not supported.</string>
     <string name="image_too_large">This photo exceeds the supported size or available memory. Choose a smaller image.</string>
     <string name="image_read_failed">Could not read this photo. Try again or choose another photo.</string>
 </resources>

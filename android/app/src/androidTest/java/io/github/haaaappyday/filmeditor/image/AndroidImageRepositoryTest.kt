@@ -66,6 +66,24 @@ class AndroidImageRepositoryTest {
         } finally { directory.deleteRecursively() }
     }
 
+    @Test fun byteLimitRejectsStreamingInputWithoutBufferingTheWholeSource() = runBlocking {
+        val directory = root()
+        val repo = AndroidImageRepository(context, directory = { directory }, openInput = {
+            object : InputStream() {
+                override fun read() = 0
+                override fun read(b: ByteArray, off: Int, len: Int): Int {
+                    java.util.Arrays.fill(b, off, off + len, 0.toByte())
+                    return len
+                }
+            }
+        })
+        try {
+            try { repo.importImage(Uri.EMPTY); fail("Expected byte limit") }
+            catch (error: EditorException) { assertEquals(EditorErrorCode.IMAGE_TOO_LARGE, error.code) }
+            assertTrue(directory.listFiles()!!.isEmpty())
+        } finally { directory.deleteRecursively() }
+    }
+
     @Test fun stalePartCleanupDoesNotDeleteActiveImportsOrCompletedSources() = runBlocking {
         val directory = root()
         val stale = File(directory, "${UUID.randomUUID()}.part").apply { writeText("abandoned") }

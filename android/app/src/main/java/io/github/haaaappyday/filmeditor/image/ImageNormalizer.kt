@@ -18,7 +18,7 @@ internal class ImageNormalizer {
         ImageDecoder.decodeBitmap(ImageDecoder.createSource(file)) { decoder, info, _ ->
             metadata = header(decoder, info, 1)
         }.let { bitmap ->
-            try { rejectGainmap(bitmap) } finally { bitmap.recycle() }
+            try { useSdrBase(bitmap) } finally { bitmap.recycle() }
         }
         checkNotNull(metadata)
     }
@@ -30,7 +30,7 @@ internal class ImageNormalizer {
         }
         var output: Bitmap? = null
         try {
-            rejectGainmap(decoded)
+            useSdrBase(decoded)
             // Drawing into an explicit sRGB target performs color conversion, never relabeling.
             // An opaque white destination composites alpha in encoded sRGB.
             output = Bitmap.createBitmap(decoded.width, decoded.height, Bitmap.Config.ARGB_8888,
@@ -65,9 +65,11 @@ internal class ImageNormalizer {
         return ImageMetadata(info.size.width, info.size.height, info.mimeType)
     }
 
-    private fun rejectGainmap(bitmap: Bitmap) {
-        // v1 deliberately rejects gain-map/HDR inputs instead of making an unverified SDR promise.
-        if (Build.VERSION.SDK_INT >= 34 && bitmap.hasGainmap()) throw EditorException(EditorErrorCode.UNSUPPORTED_IMAGE)
+    private fun useSdrBase(bitmap: Bitmap) {
+        // These freshly decoded bitmaps are exclusively owned here. Keep the JPEG's
+        // SDR base and detach its HDR enhancement before drawing into our SDR target.
+        // The same native fixture verifies base pixels on API29 and API36.
+        if (Build.VERSION.SDK_INT >= 34 && bitmap.hasGainmap()) bitmap.gainmap = null
     }
 
     private fun checkContainer(file: File) {
