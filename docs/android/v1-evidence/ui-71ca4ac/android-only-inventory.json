@@ -1,0 +1,39 @@
+{
+  "sourceCommit": "71ca4acab807d0ca025f53e2ab834f868802a435",
+  "buildType": "debug",
+  "apkSha256": "edc697958e5e6d736ca40245d61e70f3c76532887af3f6fd4ff14daf1343a705",
+  "apkBytes": 30706960,
+  "sourceCommitEmbedded": true,
+  "assets": {
+    "assets/presets/CHANGELOG.txt": "fd0dcdb0f6c8a5f29bfb4f53a20d9b636b1045495151ebdc82146a544f32ad90",
+    "assets/presets/LICENSE.txt": "76d629501783ae52e8d63aee1e054c1e1a9713b9fe7d36fb306e25b1d14b24e9",
+    "assets/presets/bake-reports/kodak_ektar_100/bundle.json": "39bb5cf58366a471d6943c4fbd99e5b98beb81dc9d5c72ee2a26f571522d17e9",
+    "assets/presets/bake-reports/kodak_ektar_100/report.md": "c6061ff23f6d0212679fc9275ec29ea7215c4ba05cd73ca1524b62dbf56a3be5",
+    "assets/presets/bake-reports/kodak_gold_200/bundle.json": "e7279a67b5d21b3eb2f18f78904bb08f82453d269560fec16feb01e9ec76fa27",
+    "assets/presets/bake-reports/kodak_gold_200/report.md": "f2bcb74586d823d708167570397e2417e7e00aeb4a243894882fadced5f69809",
+    "assets/presets/bake-reports/kodak_portra_400/bundle.json": "7631e5f3d3bfeccd58b3c18db630d027c732da872fb25b27440d590e9fc17b71",
+    "assets/presets/bake-reports/kodak_portra_400/report.md": "879b3b1c512c21892149d45e8a8ff4b3250953215a6711cde3dc2f5c35360e26",
+    "assets/presets/kodak_ektar_100.cube": "e01828450e028c30f65d6bff3be8838bdc2de7ea7235a2f8d77e68c9795aa697",
+    "assets/presets/kodak_gold_200.cube": "e8729012ef0fb83f3c4c30f422da73b16af5acd99fe960dd1e0dc545fcd2ddc6",
+    "assets/presets/kodak_portra_400.cube": "c5ec5786d1ada6d9347cb6ee47c87249643bfa2eb758037fc1cd18215688ed85",
+    "assets/presets/manifest.json": "5e2e1a7821b70346e9f861828510ea893cf33095461889955c44dd3a98ef8e7b",
+    "assets/shaders/film.frag": "d3182c02626eb175aa75a7e654dcd2303a5c3b449b1a300fe5f0eefce75f940f",
+    "assets/shaders/film.vert": "78c9379d145e89d05567904bb25d7d553708af3466123e2e29189445d8ac4ca4"
+  },
+  "permissions": [
+    "io.github.haaaappyday.filmeditor.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+  ],
+  "pythonOrQtRuntimePackaged": false,
+  "unit": {
+    "tests": 13,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "lintErrors": 0,
+  "lintWarnings": 9,
+  "origin": "fresh Android-only sparse checkout; locally debug-signed",
+  "buildCommand": "./gradlew :app:assembleDebug :app:testDebugUnitTest :app:lintDebug -PsourceCommit=71ca4acab807d0ca025f53e2ab834f868802a435",
+  "finalDelivery": false,
+  "artifactLocation": "/tmp/spektrafilm-android-only-71ca4ac/android/app/build/outputs/apk/debug/app-debug.apk"
+}

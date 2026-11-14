@@ -62,6 +62,11 @@ def record(args):
     (out / "recording.json").write_text(json.dumps(metadata, indent=2) + "\n")
     run(adb + ["install", "-r", app], timeout=180)
     run(adb + ["install", "-r", test], timeout=180)
+    # Some physical-device startup policies block a freshly installed test
+    # provider when the app first requests it. Start only our generated-fixture
+    # provider through the shell before tracing; gettype does not decode pixels.
+    run(adb + ["shell", "content", "gettype", "--uri",
+               f"content://{APP}.test.fixtures/12mp.jpg"])
     run(adb + ["shell", "input", "keyevent", "KEYCODE_WAKEUP"])
     remote = f"/sdcard/Android/media/{APP}/performance-{uuid.uuid4().hex}"
     trace = out / "system.perfetto-trace"

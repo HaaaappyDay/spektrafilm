@@ -1,0 +1,1624 @@
+{
+  "device": {
+    "manufacturer": "vivo",
+    "model": "V2419A",
+    "pid": 13476,
+    "fingerprint": "vivo/PD2419/PD2419:17/CP2A.260605.016_V000L1/261109163123:user/release-keys",
+    "api": 37,
+    "abi": "arm64-v8a",
+    "gl": {
+      "vendor": "ARM",
+      "renderer": "Mali-G925-Immortalis MC12",
+      "version": "OpenGL ES 3.2 v1.r49p1-03bet0.2f07571.5584442fcb51fa40a52ea1b533fc5200.19bdafb67856aea5282428dee249ba6f63e1",
+      "fragmentHighpBits": "23",
+      "maxTextureSize": "16384",
+      "tileLimit": "2048"
+    },
+    "versionName": "0.1.0",
+    "versionCode": 1,
+    "buildType": "profileable",
+    "totalRamBytes": 16095416320,
+    "javaHeapLimitBytes": 268435456,
+    "debuggable": false,
+    "profileable": true,
+    "package": "io.github.haaaappyday.filmeditor.validation",
+    "physical": true
+  },
+  "trace": {
+    "errorCount": 0,
+    "lostEvents": 0
+  },
+  "warmupChanges": 5,
+  "warmupExports": 1,
+  "previewSamples": [
+    {
+      "inputId": 16,
+      "changeId": 17,
+      "width": 1600,
+      "height": 1200,
+      "drawNs": 245594560928373,
+      "presentNs": 245594595371065,
+      "surfaceFrameToken": 90255717,
+      "displayFrameToken": 90255731,
+      "appFrameId": 105797,
+      "displayFrameId": 106072,
+      "actionNs": 245594481212758,
+      "flowVerified": true
+    },
+    {
+      "inputId": 18,
+      "changeId": 19,
+      "width": 1600,
+      "height": 1200,
+      "drawNs": 245595231825604,
+      "presentNs": 245595259427296,
+      "surfaceFrameToken": 90255889,
+      "displayFrameToken": 90255903,
+      "appFrameId": 108336,
+      "displayFrameId": 108628,
+      "actionNs": 245595137430835,
+      "flowVerified": true
+    },
+    {
+      "inputId": 20,
+      "changeId": 21,
+      "width": 1600,
+      "height": 1200,
+      "drawNs": 245595843500450,
+      "presentNs": 245595873700066,
+      "surfaceFrameToken": 90256092,
+      "displayFrameToken": 90256106,
+      "appFrameId": 111731,
+      "displayFrameId": 111986,
+      "actionNs": 245595749913066,
+      "flowVerified": true
+    },
+    {
+      "inputId": 22,
+      "changeId": 23,
+      "width": 1600,
+      "height": 1200,
+      "drawNs": 245596440815835,
+      "presentNs": 245596471464758,
+      "surfaceFrameToken": 90256257,
+      "displayFrameToken": 90256271,
+      "appFrameId": 114291,
+      "displayFrameId": 114495,
+      "actionNs": 245596356418835,
+      "flowVerified": true
+    },
+    {
+      "inputId": 24,
+      "changeId": 25,
+      "width": 1600,
+      "height": 1200,
+      "drawNs": 245597038352373,
+      "presentNs": 245597069191758,
+      "surfaceFrameToken": 90256438,
+      "displayFrameToken": 90256452,
+      "appFrameId": 117466,
+      "displayFrameId": 117725,
+      "actionNs": 245596955009296,
+      "flowVerified": true
+    },
+    {
+      "inputId": 26,
+      "changeId": 27,
+      "width": 1600,
+      "height": 1200,
+      "drawNs": 245597698743527,
+      "presentNs": 245597733360681,
+      "surfaceFrameToken": 90256634,
+      "displayFrameToken": 90256648,
+      "appFrameId": 120679,
+      "displayFrameId": 120949,
+      "actionNs": 245597619042912,
+      "flowVerified": true
+    },
+    {
+      "inputId": 28,
+      "changeId": 29,
+      "width": 1600,
+      "height": 1200,
+      "drawNs": 245598234763450,
+      "presentNs": 245598264771143,
+      "surfaceFrameToken": 90256806,
+      "displayFrameToken": 90256820,
+      "appFrameId": 123199,
+      "displayFrameId": 123499,
+      "actionNs": 245598140976450,
+      "flowVerified": true
+    },
+    {
+      "inputId": 30,
+      "changeId": 31,
+      "width": 1600,
+      "height": 1200,
+      "drawNs": 245598849301681,
+      "presentNs": 245598879103835,
+      "surfaceFrameToken": 90257002,
+      "displayFrameToken": 90257016,
+      "appFrameId": 126518,
+      "displayFrameId": 126799,
+      "actionNs": 245598753569373,
+      "flowVerified": true
+    },
+    {
+      "inputId": 32,
+      "changeId": 33,
+      "width": 1600,
+      "height": 1200,
+      "drawNs": 245599395889989,
+      "presentNs": 245599426924373,
+      "surfaceFrameToken": 90257167,
+      "displayFrameToken": 90257181,
+      "appFrameId": 129143,
+      "displayFrameId": 129380,
+      "actionNs": 245599307291143,
+      "flowVerified": true
+    },
+    {
+      "inputId": 34,
+      "changeId": 35,
+      "width": 1600,
+      "height": 1200,
+      "drawNs": 245600010612989,
+      "presentNs": 245600041280835,
+      "surfaceFrameToken": 90257355,
+      "displayFrameToken": 90257369,
+      "appFrameId": 132175,
+      "displayFrameId": 132471,
+      "actionNs": 245599913845681,
+      "flowVerified": true
+    },
+    {
+      "inputId": 36,
+      "changeId": 37,
+      "width": 1600,
+      "height": 1200,
+      "drawNs": 245600571370220,
+      "presentNs": 245600589064373,
+      "surfaceFrameToken": 90257542,
+      "displayFrameToken": 90257549,
+      "appFrameId": 135293,
+      "displayFrameId": 135455,
+      "actionNs": 245600485887527,
+      "flowVerified": true
+    },
+    {
+      "inputId": 38,
+      "changeId": 39,
+      "width": 1600,
+      "height": 1200,
+      "drawNs": 245601085581989,
+      "presentNs": 245601103743758,
+      "surfaceFrameToken": 90257715,
+      "displayFrameToken": 90257722,
+      "appFrameId": 138107,
+      "displayFrameId": 138343,
+      "actionNs": 245601000340374,
+      "flowVerified": true
+    },
+    {
+      "inputId": 40,
+      "changeId": 41,
+      "width": 1600,
+      "height": 1200,
+      "drawNs": 245601567333681,
+      "presentNs": 245601585184374,
+      "surfaceFrameToken": 90257903,
+      "displayFrameToken": 90257910,
+      "appFrameId": 141301,
+      "displayFrameId": 141465,
+      "actionNs": 245601486427220,
+      "flowVerified": true
+    },
+    {
+      "inputId": 42,
+      "changeId": 43,
+      "width": 1600,
+      "height": 1200,
+      "drawNs": 245602116259451,
+      "presentNs": 245602149661604,
+      "surfaceFrameToken": 90258068,
+      "displayFrameToken": 90258083,
+      "appFrameId": 143632,
+      "displayFrameId": 144094,
+      "actionNs": 245602038060758,
+      "flowVerified": true
+    },
+    {
+      "inputId": 44,
+      "changeId": 45,
+      "width": 1600,
+      "height": 1200,
+      "drawNs": 245602634551528,
+      "presentNs": 245602664390913,
+      "surfaceFrameToken": 90258265,
+      "displayFrameToken": 90258279,
+      "appFrameId": 147099,
+      "displayFrameId": 147403,
+      "actionNs": 245602551185681,
+      "flowVerified": true
+    },
+    {
+      "inputId": 46,
+      "changeId": 47,
+      "width": 1600,
+      "height": 1200,
+      "drawNs": 245603232683528,
+      "presentNs": 245603262155989,
+      "surfaceFrameToken": 90258438,
+      "displayFrameToken": 90258453,
+      "appFrameId": 149931,
+      "displayFrameId": 150453,
+      "actionNs": 245603137331758,
+      "flowVerified": true
+    },
+    {
+      "inputId": 48,
+      "changeId": 49,
+      "width": 1600,
+      "height": 1200,
+      "drawNs": 245603830613066,
+      "presentNs": 245603859701681,
+      "surfaceFrameToken": 90258642,
+      "displayFrameToken": 90258656,
+      "appFrameId": 153484,
+      "displayFrameId": 153778,
+      "actionNs": 245603728625605,
+      "flowVerified": true
+    },
+    {
+      "inputId": 50,
+      "changeId": 51,
+      "width": 1600,
+      "height": 1200,
+      "drawNs": 245604328363220,
+      "presentNs": 245604357736835,
+      "surfaceFrameToken": 90258830,
+      "displayFrameToken": 90258844,
+      "appFrameId": 157003,
+      "displayFrameId": 157294,
+      "actionNs": 245604226778220,
+      "flowVerified": true
+    },
+    {
+      "inputId": 52,
+      "changeId": 53,
+      "width": 1600,
+      "height": 1200,
+      "drawNs": 245604959569989,
+      "presentNs": 245604988415297,
+      "surfaceFrameToken": 90259033,
+      "displayFrameToken": 90259047,
+      "appFrameId": 160237,
+      "displayFrameId": 160529,
+      "actionNs": 245604857740681,
+      "flowVerified": true
+    },
+    {
+      "inputId": 54,
+      "changeId": 55,
+      "width": 1600,
+      "height": 1200,
+      "drawNs": 245605655985989,
+      "presentNs": 245605685665682,
+      "surfaceFrameToken": 90259250,
+      "displayFrameToken": 90259264,
+      "appFrameId": 163767,
+      "displayFrameId": 164110,
+      "actionNs": 245605564148451,
+      "flowVerified": true
+    },
+    {
+      "inputId": 56,
+      "changeId": 57,
+      "width": 1600,
+      "height": 1200,
+      "drawNs": 245606298042528,
+      "presentNs": 245606316391144,
+      "surfaceFrameToken": 90259430,
+      "displayFrameToken": 90259437,
+      "appFrameId": 166835,
+      "displayFrameId": 167006,
+      "actionNs": 245606205976989,
+      "flowVerified": true
+    },
+    {
+      "inputId": 58,
+      "changeId": 59,
+      "width": 1600,
+      "height": 1200,
+      "drawNs": 245606881186912,
+      "presentNs": 245606914027221,
+      "surfaceFrameToken": 90259626,
+      "displayFrameToken": 90259640,
+      "appFrameId": 169980,
+      "displayFrameId": 170239,
+      "actionNs": 245606788187220,
+      "flowVerified": true
+    },
+    {
+      "inputId": 60,
+      "changeId": 61,
+      "width": 1600,
+      "height": 1200,
+      "drawNs": 245607494509297,
+      "presentNs": 245607528253682,
+      "surfaceFrameToken": 90259806,
+      "displayFrameToken": 90259820,
+      "appFrameId": 172908,
+      "displayFrameId": 173192,
+      "actionNs": 245607406363759,
+      "flowVerified": true
+    },
+    {
+      "inputId": 62,
+      "changeId": 63,
+      "width": 1600,
+      "height": 1200,
+      "drawNs": 245608146091143,
+      "presentNs": 245608175864066,
+      "surfaceFrameToken": 90260003,
+      "displayFrameToken": 90260017,
+      "appFrameId": 176407,
+      "displayFrameId": 176693,
+      "actionNs": 245608042325605,
+      "flowVerified": true
+    },
+    {
+      "inputId": 64,
+      "changeId": 65,
+      "width": 1600,
+      "height": 1200,
+      "drawNs": 245608725581605,
+      "presentNs": 245608756992066,
+      "surfaceFrameToken": 90260214,
+      "displayFrameToken": 90260228,
+      "appFrameId": 180094,
+      "displayFrameId": 180366,
+      "actionNs": 245608629370605,
+      "flowVerified": true
+    },
+    {
+      "inputId": 66,
+      "changeId": 67,
+      "width": 1600,
+      "height": 1200,
+      "drawNs": 245609386987836,
+      "presentNs": 245609418425758,
+      "surfaceFrameToken": 90260394,
+      "displayFrameToken": 90260408,
+      "appFrameId": 182939,
+      "displayFrameId": 183272,
+      "actionNs": 245609291912682,
+      "flowVerified": true
+    },
+    {
+      "inputId": 68,
+      "changeId": 69,
+      "width": 1600,
+      "height": 1200,
+      "drawNs": 245609982615220,
+      "presentNs": 245610016070528,
+      "surfaceFrameToken": 90260568,
+      "displayFrameToken": 90260582,
+      "appFrameId": 185768,
+      "displayFrameId": 186067,
+      "actionNs": 245609913332759,
+      "flowVerified": true
+    },
+    {
+      "inputId": 70,
+      "changeId": 71,
+      "width": 1600,
+      "height": 1200,
+      "drawNs": 245610650030528,
+      "presentNs": 245610680103528,
+      "surfaceFrameToken": 90260779,
+      "displayFrameToken": 90260793,
+      "appFrameId": 189402,
+      "displayFrameId": 189741,
+      "actionNs": 245610553247528,
+      "flowVerified": true
+    },
+    {
+      "inputId": 72,
+      "changeId": 73,
+      "width": 1600,
+      "height": 1200,
+      "drawNs": 245611281565374,
+      "presentNs": 245611311042759,
+      "surfaceFrameToken": 90260945,
+      "displayFrameToken": 90260959,
+      "appFrameId": 192246,
+      "displayFrameId": 192555,
+      "actionNs": 245611177020374,
+      "flowVerified": true
+    },
+    {
+      "inputId": 74,
+      "changeId": 75,
+      "width": 1600,
+      "height": 1200,
+      "drawNs": 245611776721682,
+      "presentNs": 245611809151374,
+      "surfaceFrameToken": 90261148,
+      "displayFrameToken": 90261162,
+      "appFrameId": 195914,
+      "displayFrameId": 196148,
+      "actionNs": 245611688488143,
+      "flowVerified": true
+    }
+  ],
+  "exportSamples": [
+    {
+      "inputId": 136,
+      "exportId": 137,
+      "sourceWidth": 4000,
+      "sourceHeight": 3000,
+      "outputWidth": 4000,
+      "outputHeight": 3000,
+      "success": true,
+      "sampleIntervalMs": 100,
+      "memorySamples": [
+        {
+          "elapsedNs": 245631997761914,
+          "javaBytes": 8285200,
+          "nativeBytes": 52043968,
+          "graphicsPssBytes": 101144576
+        },
+        {
+          "elapsedNs": 245632056583222,
+          "javaBytes": 8399888,
+          "nativeBytes": 104916928,
+          "graphicsPssBytes": 99534848
+        },
+        {
+          "elapsedNs": 245632094176683,
+          "javaBytes": 15667264,
+          "nativeBytes": 147985040,
+          "graphicsPssBytes": 99342336
+        },
+        {
+          "elapsedNs": 245632182609683,
+          "javaBytes": 15683648,
+          "nativeBytes": 148015456,
+          "graphicsPssBytes": 120064000
+        },
+        {
+          "elapsedNs": 245632279855837,
+          "javaBytes": 15716416,
+          "nativeBytes": 148016272,
+          "graphicsPssBytes": 120330240
+        },
+        {
+          "elapsedNs": 245632377499222,
+          "javaBytes": 15749184,
+          "nativeBytes": 148016048,
+          "graphicsPssBytes": 120330240
+        },
+        {
+          "elapsedNs": 245632474428452,
+          "javaBytes": 16003136,
+          "nativeBytes": 148010704,
+          "graphicsPssBytes": 115853312
+        },
+        {
+          "elapsedNs": 245632532850529,
+          "javaBytes": 16101440,
+          "nativeBytes": 100024608,
+          "graphicsPssBytes": 111642624
+        }
+      ],
+      "actionNs": 245631997910529,
+      "completedNs": 245632501073606,
+      "publishedNs": 245632497139145,
+      "published": true,
+      "stages": {
+        "decode": {
+          "startNs": 245632036871452,
+          "endNs": 245632081649068
+        },
+        "render": {
+          "startNs": 245632081669068,
+          "endNs": 245632383403760
+        },
+        "encode": {
+          "startNs": 245632384497683,
+          "endNs": 245632446413991
+        },
+        "io": {
+          "startNs": 245632446442914,
+          "endNs": 245632497146299
+        }
+      },
+      "peakMemory": {
+        "sampleCount": 8,
+        "intervalMs": 100,
+        "javaBytes": 16101440,
+        "nativeBytes": 148016272,
+        "graphicsPssBytes": 120330240
+      }
+    },
+    {
+      "inputId": 138,
+      "exportId": 139,
+      "sourceWidth": 4000,
+      "sourceHeight": 3000,
+      "outputWidth": 4000,
+      "outputHeight": 3000,
+      "success": true,
+      "sampleIntervalMs": 100,
+      "memorySamples": [
+        {
+          "elapsedNs": 245633063660991,
+          "javaBytes": 8150488,
+          "nativeBytes": 51894912,
+          "graphicsPssBytes": 94930944
+        },
+        {
+          "elapsedNs": 245633108533606,
+          "javaBytes": 8281560,
+          "nativeBytes": 147910944,
+          "graphicsPssBytes": 95172608
+        },
+        {
+          "elapsedNs": 245633193700760,
+          "javaBytes": 15707080,
+          "nativeBytes": 148025488,
+          "graphicsPssBytes": 116250624
+        },
+        {
+          "elapsedNs": 245633291264375,
+          "javaBytes": 15739848,
+          "nativeBytes": 148025984,
+          "graphicsPssBytes": 120330240
+        },
+        {
+          "elapsedNs": 245633391866837,
+          "javaBytes": 15756232,
+          "nativeBytes": 148026480,
+          "graphicsPssBytes": 120330240
+        },
+        {
+          "elapsedNs": 245633474185376,
+          "javaBytes": 15993800,
+          "nativeBytes": 148021904,
+          "graphicsPssBytes": 115853312
+        },
+        {
+          "elapsedNs": 245633518678837,
+          "javaBytes": 16092104,
+          "nativeBytes": 100036384,
+          "graphicsPssBytes": 115853312
+        }
+      ],
+      "actionNs": 245633063757606,
+      "completedNs": 245633485927837,
+      "publishedNs": 245633481950529,
+      "published": true,
+      "stages": {
+        "decode": {
+          "startNs": 245633076975145,
+          "endNs": 245633115339760
+        },
+        "render": {
+          "startNs": 245633115361914,
+          "endNs": 245633397958837
+        },
+        "encode": {
+          "startNs": 245633398157299,
+          "endNs": 245633438852760
+        },
+        "io": {
+          "startNs": 245633438876376,
+          "endNs": 245633481965991
+        }
+      },
+      "peakMemory": {
+        "sampleCount": 7,
+        "intervalMs": 100,
+        "javaBytes": 16092104,
+        "nativeBytes": 148026480,
+        "graphicsPssBytes": 120330240
+      }
+    },
+    {
+      "inputId": 140,
+      "exportId": 141,
+      "sourceWidth": 4000,
+      "sourceHeight": 3000,
+      "outputWidth": 4000,
+      "outputHeight": 3000,
+      "success": true,
+      "sampleIntervalMs": 100,
+      "memorySamples": [
+        {
+          "elapsedNs": 245633935526529,
+          "javaBytes": 8023544,
+          "nativeBytes": 52005456,
+          "graphicsPssBytes": 103024640
+        },
+        {
+          "elapsedNs": 245633979838914,
+          "javaBytes": 8121848,
+          "nativeBytes": 147999376,
+          "graphicsPssBytes": 98744320
+        },
+        {
+          "elapsedNs": 245634075476145,
+          "javaBytes": 15713600,
+          "nativeBytes": 148026992,
+          "graphicsPssBytes": 120064000
+        },
+        {
+          "elapsedNs": 245634175357299,
+          "javaBytes": 15746368,
+          "nativeBytes": 148027296,
+          "graphicsPssBytes": 120330240
+        },
+        {
+          "elapsedNs": 245634284900145,
+          "javaBytes": 15779136,
+          "nativeBytes": 148027680,
+          "graphicsPssBytes": 120330240
+        },
+        {
+          "elapsedNs": 245634387910222,
+          "javaBytes": 16033088,
+          "nativeBytes": 100021488,
+          "graphicsPssBytes": 115853312
+        },
+        {
+          "elapsedNs": 245634422188683,
+          "javaBytes": 16131392,
+          "nativeBytes": 100036912,
+          "graphicsPssBytes": 115853312
+        }
+      ],
+      "actionNs": 245633935596068,
+      "completedNs": 245634388195760,
+      "publishedNs": 245634383371145,
+      "published": true,
+      "stages": {
+        "decode": {
+          "startNs": 245633960422837,
+          "endNs": 245633999705376
+        },
+        "render": {
+          "startNs": 245633999720145,
+          "endNs": 245634293520068
+        },
+        "encode": {
+          "startNs": 245634293805068,
+          "endNs": 245634339529068
+        },
+        "io": {
+          "startNs": 245634339552145,
+          "endNs": 245634383411222
+        }
+      },
+      "peakMemory": {
+        "sampleCount": 7,
+        "intervalMs": 100,
+        "javaBytes": 16131392,
+        "nativeBytes": 148027680,
+        "graphicsPssBytes": 120330240
+      }
+    },
+    {
+      "inputId": 142,
+      "exportId": 143,
+      "sourceWidth": 4000,
+      "sourceHeight": 3000,
+      "outputWidth": 4000,
+      "outputHeight": 3000,
+      "success": true,
+      "sampleIntervalMs": 100,
+      "memorySamples": [
+        {
+          "elapsedNs": 245634860746914,
+          "javaBytes": 8065024,
+          "nativeBytes": 51983984,
+          "graphicsPssBytes": 98744320
+        },
+        {
+          "elapsedNs": 245634904855222,
+          "javaBytes": 8163328,
+          "nativeBytes": 147999824,
+          "graphicsPssBytes": 98985984
+        },
+        {
+          "elapsedNs": 245634989791529,
+          "javaBytes": 15716888,
+          "nativeBytes": 148029136,
+          "graphicsPssBytes": 120064000
+        },
+        {
+          "elapsedNs": 245635078625606,
+          "javaBytes": 15733272,
+          "nativeBytes": 148028048,
+          "graphicsPssBytes": 120330240
+        },
+        {
+          "elapsedNs": 245635177193991,
+          "javaBytes": 15766040,
+          "nativeBytes": 148030896,
+          "graphicsPssBytes": 120330240
+        },
+        {
+          "elapsedNs": 245635278485068,
+          "javaBytes": 15815192,
+          "nativeBytes": 184280592,
+          "graphicsPssBytes": 115853312
+        },
+        {
+          "elapsedNs": 245635367734222,
+          "javaBytes": 16134680,
+          "nativeBytes": 100037952,
+          "graphicsPssBytes": 111642624
+        }
+      ],
+      "actionNs": 245634860857914,
+      "completedNs": 245635335472453,
+      "publishedNs": 245635329485683,
+      "published": true,
+      "stages": {
+        "decode": {
+          "startNs": 245634878058914,
+          "endNs": 245634923824683
+        },
+        "render": {
+          "startNs": 245634923842529,
+          "endNs": 245635230979145
+        },
+        "encode": {
+          "startNs": 245635231364991,
+          "endNs": 245635283705606
+        },
+        "io": {
+          "startNs": 245635283729376,
+          "endNs": 245635329496376
+        }
+      },
+      "peakMemory": {
+        "sampleCount": 7,
+        "intervalMs": 100,
+        "javaBytes": 16134680,
+        "nativeBytes": 184280592,
+        "graphicsPssBytes": 120330240
+      }
+    },
+    {
+      "inputId": 144,
+      "exportId": 145,
+      "sourceWidth": 4000,
+      "sourceHeight": 3000,
+      "outputWidth": 4000,
+      "outputHeight": 3000,
+      "success": true,
+      "sampleIntervalMs": 100,
+      "memorySamples": [
+        {
+          "elapsedNs": 245635798684376,
+          "javaBytes": 8096512,
+          "nativeBytes": 51986288,
+          "graphicsPssBytes": 98744320
+        },
+        {
+          "elapsedNs": 245635876846299,
+          "javaBytes": 15716656,
+          "nativeBytes": 147977408,
+          "graphicsPssBytes": 95062016
+        },
+        {
+          "elapsedNs": 245635976410530,
+          "javaBytes": 15749424,
+          "nativeBytes": 148030496,
+          "graphicsPssBytes": 120064000
+        },
+        {
+          "elapsedNs": 245636075616376,
+          "javaBytes": 15782192,
+          "nativeBytes": 148030800,
+          "graphicsPssBytes": 120330240
+        },
+        {
+          "elapsedNs": 245636190743222,
+          "javaBytes": 15831344,
+          "nativeBytes": 148013744,
+          "graphicsPssBytes": 115853312
+        },
+        {
+          "elapsedNs": 245636273130222,
+          "javaBytes": 16150832,
+          "nativeBytes": 100038608,
+          "graphicsPssBytes": 111642624
+        }
+      ],
+      "actionNs": 245635798772376,
+      "completedNs": 245636237091453,
+      "publishedNs": 245636232314606,
+      "published": true,
+      "stages": {
+        "decode": {
+          "startNs": 245635816375529,
+          "endNs": 245635856435453
+        },
+        "render": {
+          "startNs": 245635856451760,
+          "endNs": 245636148476453
+        },
+        "encode": {
+          "startNs": 245636148774914,
+          "endNs": 245636191919222
+        },
+        "io": {
+          "startNs": 245636191940760,
+          "endNs": 245636232326606
+        }
+      },
+      "peakMemory": {
+        "sampleCount": 6,
+        "intervalMs": 100,
+        "javaBytes": 16150832,
+        "nativeBytes": 148030800,
+        "graphicsPssBytes": 120330240
+      }
+    },
+    {
+      "inputId": 146,
+      "exportId": 147,
+      "sourceWidth": 4000,
+      "sourceHeight": 3000,
+      "outputWidth": 4000,
+      "outputHeight": 3000,
+      "success": true,
+      "sampleIntervalMs": 100,
+      "memorySamples": [
+        {
+          "elapsedNs": 245636686954222,
+          "javaBytes": 8018184,
+          "nativeBytes": 51986368,
+          "graphicsPssBytes": 98744320
+        },
+        {
+          "elapsedNs": 245636795059453,
+          "javaBytes": 15720168,
+          "nativeBytes": 148030992,
+          "graphicsPssBytes": 116250624
+        },
+        {
+          "elapsedNs": 245636879411145,
+          "javaBytes": 15752936,
+          "nativeBytes": 148031936,
+          "graphicsPssBytes": 120330240
+        },
+        {
+          "elapsedNs": 245636977491837,
+          "javaBytes": 15769320,
+          "nativeBytes": 148031936,
+          "graphicsPssBytes": 120330240
+        },
+        {
+          "elapsedNs": 245637078453683,
+          "javaBytes": 15818472,
+          "nativeBytes": 184289216,
+          "graphicsPssBytes": 120330240
+        },
+        {
+          "elapsedNs": 245637174064683,
+          "javaBytes": 16154344,
+          "nativeBytes": 100040064,
+          "graphicsPssBytes": 115853312
+        }
+      ],
+      "actionNs": 245636687033606,
+      "completedNs": 245637144680145,
+      "publishedNs": 245637140057683,
+      "published": true,
+      "stages": {
+        "decode": {
+          "startNs": 245636716328683,
+          "endNs": 245636762176991
+        },
+        "render": {
+          "startNs": 245636762203837,
+          "endNs": 245637056141376
+        },
+        "encode": {
+          "startNs": 245637056346299,
+          "endNs": 245637100233068
+        },
+        "io": {
+          "startNs": 245637100266530,
+          "endNs": 245637140067453
+        }
+      },
+      "peakMemory": {
+        "sampleCount": 6,
+        "intervalMs": 100,
+        "javaBytes": 16154344,
+        "nativeBytes": 184289216,
+        "graphicsPssBytes": 120330240
+      }
+    },
+    {
+      "inputId": 148,
+      "exportId": 149,
+      "sourceWidth": 4000,
+      "sourceHeight": 3000,
+      "outputWidth": 4000,
+      "outputHeight": 3000,
+      "success": true,
+      "sampleIntervalMs": 100,
+      "memorySamples": [
+        {
+          "elapsedNs": 245637603589683,
+          "javaBytes": 7923040,
+          "nativeBytes": 51984800,
+          "graphicsPssBytes": 98744320
+        },
+        {
+          "elapsedNs": 245637681006607,
+          "javaBytes": 15710528,
+          "nativeBytes": 148031728,
+          "graphicsPssBytes": 116250624
+        },
+        {
+          "elapsedNs": 245637777661607,
+          "javaBytes": 15743296,
+          "nativeBytes": 148032832,
+          "graphicsPssBytes": 120330240
+        },
+        {
+          "elapsedNs": 245637876747453,
+          "javaBytes": 15759680,
+          "nativeBytes": 148032416,
+          "graphicsPssBytes": 120330240
+        },
+        {
+          "elapsedNs": 245637991450530,
+          "javaBytes": 15874368,
+          "nativeBytes": 148017904,
+          "graphicsPssBytes": 115853312
+        },
+        {
+          "elapsedNs": 245638081771530,
+          "javaBytes": 16144704,
+          "nativeBytes": 100040224,
+          "graphicsPssBytes": 111642624
+        }
+      ],
+      "actionNs": 245637603654914,
+      "completedNs": 245638039597376,
+      "publishedNs": 245638034232683,
+      "published": true,
+      "stages": {
+        "decode": {
+          "startNs": 245637624168453,
+          "endNs": 245637663799837
+        },
+        "render": {
+          "startNs": 245637663821991,
+          "endNs": 245637948091760
+        },
+        "encode": {
+          "startNs": 245637948299145,
+          "endNs": 245637989448683
+        },
+        "io": {
+          "startNs": 245637989471453,
+          "endNs": 245638034242530
+        }
+      },
+      "peakMemory": {
+        "sampleCount": 6,
+        "intervalMs": 100,
+        "javaBytes": 16144704,
+        "nativeBytes": 148032832,
+        "graphicsPssBytes": 120330240
+      }
+    },
+    {
+      "inputId": 150,
+      "exportId": 151,
+      "sourceWidth": 4000,
+      "sourceHeight": 3000,
+      "outputWidth": 4000,
+      "outputHeight": 3000,
+      "success": true,
+      "sampleIntervalMs": 100,
+      "memorySamples": [
+        {
+          "elapsedNs": 245638516349683,
+          "javaBytes": 8063184,
+          "nativeBytes": 51908736,
+          "graphicsPssBytes": 98744320
+        },
+        {
+          "elapsedNs": 245638597924991,
+          "javaBytes": 15715904,
+          "nativeBytes": 147981504,
+          "graphicsPssBytes": 94930944
+        },
+        {
+          "elapsedNs": 245638680006914,
+          "javaBytes": 15748672,
+          "nativeBytes": 148034640,
+          "graphicsPssBytes": 120055808
+        },
+        {
+          "elapsedNs": 245638778167530,
+          "javaBytes": 15765056,
+          "nativeBytes": 148034720,
+          "graphicsPssBytes": 120330240
+        },
+        {
+          "elapsedNs": 245638876539530,
+          "javaBytes": 15797824,
+          "nativeBytes": 148033616,
+          "graphicsPssBytes": 120330240
+        },
+        {
+          "elapsedNs": 245638974750607,
+          "javaBytes": 16051776,
+          "nativeBytes": 100027232,
+          "graphicsPssBytes": 115853312
+        },
+        {
+          "elapsedNs": 245639001242530,
+          "javaBytes": 16133696,
+          "nativeBytes": 100042512,
+          "graphicsPssBytes": 115853312
+        }
+      ],
+      "actionNs": 245638516438530,
+      "completedNs": 245638969378607,
+      "publishedNs": 245638963784376,
+      "published": true,
+      "stages": {
+        "decode": {
+          "startNs": 245638541278530,
+          "endNs": 245638583417684
+        },
+        "render": {
+          "startNs": 245638583440068,
+          "endNs": 245638879673991
+        },
+        "encode": {
+          "startNs": 245638879869684,
+          "endNs": 245638920029068
+        },
+        "io": {
+          "startNs": 245638920050914,
+          "endNs": 245638963794837
+        }
+      },
+      "peakMemory": {
+        "sampleCount": 7,
+        "intervalMs": 100,
+        "javaBytes": 16133696,
+        "nativeBytes": 148034720,
+        "graphicsPssBytes": 120330240
+      }
+    },
+    {
+      "inputId": 152,
+      "exportId": 153,
+      "sourceWidth": 4000,
+      "sourceHeight": 3000,
+      "outputWidth": 4000,
+      "outputHeight": 3000,
+      "success": true,
+      "sampleIntervalMs": 100,
+      "memorySamples": [
+        {
+          "elapsedNs": 245639441229299,
+          "javaBytes": 7962920,
+          "nativeBytes": 51908816,
+          "graphicsPssBytes": 98744320
+        },
+        {
+          "elapsedNs": 245639494932145,
+          "javaBytes": 8077608,
+          "nativeBytes": 147934080,
+          "graphicsPssBytes": 95172608
+        },
+        {
+          "elapsedNs": 245639588413684,
+          "javaBytes": 15740192,
+          "nativeBytes": 148034224,
+          "graphicsPssBytes": 116250624
+        },
+        {
+          "elapsedNs": 245639674638299,
+          "javaBytes": 15772960,
+          "nativeBytes": 148036032,
+          "graphicsPssBytes": 120330240
+        },
+        {
+          "elapsedNs": 245639786948068,
+          "javaBytes": 15789344,
+          "nativeBytes": 148035024,
+          "graphicsPssBytes": 120330240
+        },
+        {
+          "elapsedNs": 245639888561991,
+          "javaBytes": 16043296,
+          "nativeBytes": 148029584,
+          "graphicsPssBytes": 120330240
+        },
+        {
+          "elapsedNs": 245639923960145,
+          "javaBytes": 16157984,
+          "nativeBytes": 100044192,
+          "graphicsPssBytes": 115853312
+        }
+      ],
+      "actionNs": 245639441316760,
+      "completedNs": 245639893433299,
+      "publishedNs": 245639885514607,
+      "published": true,
+      "stages": {
+        "decode": {
+          "startNs": 245639465596068,
+          "endNs": 245639508027222
+        },
+        "render": {
+          "startNs": 245639508045376,
+          "endNs": 245639792812068
+        },
+        "encode": {
+          "startNs": 245639793020684,
+          "endNs": 245639841860684
+        },
+        "io": {
+          "startNs": 245639841886222,
+          "endNs": 245639885525914
+        }
+      },
+      "peakMemory": {
+        "sampleCount": 7,
+        "intervalMs": 100,
+        "javaBytes": 16157984,
+        "nativeBytes": 148036032,
+        "graphicsPssBytes": 120330240
+      }
+    },
+    {
+      "inputId": 154,
+      "exportId": 155,
+      "sourceWidth": 4000,
+      "sourceHeight": 3000,
+      "outputWidth": 4000,
+      "outputHeight": 3000,
+      "success": true,
+      "sampleIntervalMs": 100,
+      "memorySamples": [
+        {
+          "elapsedNs": 245640334069376,
+          "javaBytes": 8027888,
+          "nativeBytes": 52011248,
+          "graphicsPssBytes": 103024640
+        },
+        {
+          "elapsedNs": 245640384066530,
+          "javaBytes": 8126192,
+          "nativeBytes": 148013792,
+          "graphicsPssBytes": 98744320
+        },
+        {
+          "elapsedNs": 245640489689607,
+          "javaBytes": 15752976,
+          "nativeBytes": 148035904,
+          "graphicsPssBytes": 120064000
+        },
+        {
+          "elapsedNs": 245640573350837,
+          "javaBytes": 15785744,
+          "nativeBytes": 148035136,
+          "graphicsPssBytes": 120330240
+        },
+        {
+          "elapsedNs": 245640676323761,
+          "javaBytes": 15818512,
+          "nativeBytes": 148036000,
+          "graphicsPssBytes": 120330240
+        },
+        {
+          "elapsedNs": 245640777366607,
+          "javaBytes": 16056080,
+          "nativeBytes": 148043504,
+          "graphicsPssBytes": 120330240
+        },
+        {
+          "elapsedNs": 245640822903222,
+          "javaBytes": 16170768,
+          "nativeBytes": 100043552,
+          "graphicsPssBytes": 115853312
+        }
+      ],
+      "actionNs": 245640334157376,
+      "completedNs": 245640789982299,
+      "publishedNs": 245640783379453,
+      "published": true,
+      "stages": {
+        "decode": {
+          "startNs": 245640350845299,
+          "endNs": 245640401751453
+        },
+        "render": {
+          "startNs": 245640401769991,
+          "endNs": 245640703764376
+        },
+        "encode": {
+          "startNs": 245640703953684,
+          "endNs": 245640750900991
+        },
+        "io": {
+          "startNs": 245640750928376,
+          "endNs": 245640783390530
+        }
+      },
+      "peakMemory": {
+        "sampleCount": 7,
+        "intervalMs": 100,
+        "javaBytes": 16170768,
+        "nativeBytes": 148043504,
+        "graphicsPssBytes": 120330240
+      }
+    }
+  ],
+  "resourceSamples": [
+    {
+      "elapsedNs": 245612007899528,
+      "javaBytes": 7193000,
+      "nativeBytes": 51955696,
+      "graphicsPssBytes": 138442752,
+      "index": 0,
+      "phase": "baseline",
+      "filmIconMode": "static-cartridge",
+      "threads": 45,
+      "fileDescriptors": 214
+    },
+    {
+      "elapsedNs": 245612905001297,
+      "javaBytes": 7222304,
+      "nativeBytes": 52036784,
+      "graphicsPssBytes": 138512384,
+      "index": 1,
+      "phase": "import",
+      "filmIconMode": "static-cartridge",
+      "threads": 45,
+      "fileDescriptors": 214
+    },
+    {
+      "elapsedNs": 245613880024759,
+      "javaBytes": 7221672,
+      "nativeBytes": 52034496,
+      "graphicsPssBytes": 138377216,
+      "index": 2,
+      "phase": "import",
+      "filmIconMode": "static-cartridge",
+      "threads": 45,
+      "fileDescriptors": 214
+    },
+    {
+      "elapsedNs": 245614783718528,
+      "javaBytes": 7222032,
+      "nativeBytes": 52032704,
+      "graphicsPssBytes": 138377216,
+      "index": 3,
+      "phase": "import",
+      "filmIconMode": "static-cartridge",
+      "threads": 45,
+      "fileDescriptors": 214
+    },
+    {
+      "elapsedNs": 245615756747221,
+      "javaBytes": 7226024,
+      "nativeBytes": 52034288,
+      "graphicsPssBytes": 138110976,
+      "index": 4,
+      "phase": "import",
+      "filmIconMode": "static-cartridge",
+      "threads": 45,
+      "fileDescriptors": 214
+    },
+    {
+      "elapsedNs": 245616693953990,
+      "javaBytes": 7226200,
+      "nativeBytes": 52036720,
+      "graphicsPssBytes": 138110976,
+      "index": 5,
+      "phase": "import",
+      "filmIconMode": "static-cartridge",
+      "threads": 45,
+      "fileDescriptors": 214
+    },
+    {
+      "elapsedNs": 245617632802913,
+      "javaBytes": 7226568,
+      "nativeBytes": 52038720,
+      "graphicsPssBytes": 138110976,
+      "index": 6,
+      "phase": "import",
+      "filmIconMode": "static-cartridge",
+      "threads": 45,
+      "fileDescriptors": 214
+    },
+    {
+      "elapsedNs": 245618717173375,
+      "javaBytes": 7227424,
+      "nativeBytes": 52044672,
+      "graphicsPssBytes": 138110976,
+      "index": 7,
+      "phase": "import",
+      "filmIconMode": "static-cartridge",
+      "threads": 45,
+      "fileDescriptors": 214
+    },
+    {
+      "elapsedNs": 245619764449375,
+      "javaBytes": 7228072,
+      "nativeBytes": 52055120,
+      "graphicsPssBytes": 129431552,
+      "index": 8,
+      "phase": "import",
+      "filmIconMode": "static-cartridge",
+      "threads": 45,
+      "fileDescriptors": 214
+    },
+    {
+      "elapsedNs": 245620729411529,
+      "javaBytes": 7228328,
+      "nativeBytes": 52044080,
+      "graphicsPssBytes": 129431552,
+      "index": 9,
+      "phase": "import",
+      "filmIconMode": "static-cartridge",
+      "threads": 45,
+      "fileDescriptors": 214
+    },
+    {
+      "elapsedNs": 245621747452682,
+      "javaBytes": 7229448,
+      "nativeBytes": 52045536,
+      "graphicsPssBytes": 129431552,
+      "index": 10,
+      "phase": "import",
+      "filmIconMode": "static-cartridge",
+      "threads": 45,
+      "fileDescriptors": 214
+    },
+    {
+      "elapsedNs": 245622736929067,
+      "javaBytes": 7227896,
+      "nativeBytes": 52036256,
+      "graphicsPssBytes": 112072704,
+      "index": 11,
+      "phase": "import",
+      "filmIconMode": "static-cartridge",
+      "threads": 45,
+      "fileDescriptors": 214
+    },
+    {
+      "elapsedNs": 245623735384452,
+      "javaBytes": 7230712,
+      "nativeBytes": 52050496,
+      "graphicsPssBytes": 112003072,
+      "index": 12,
+      "phase": "import",
+      "filmIconMode": "static-cartridge",
+      "threads": 45,
+      "fileDescriptors": 214
+    },
+    {
+      "elapsedNs": 245624704778298,
+      "javaBytes": 7231344,
+      "nativeBytes": 52051328,
+      "graphicsPssBytes": 112003072,
+      "index": 13,
+      "phase": "import",
+      "filmIconMode": "static-cartridge",
+      "threads": 45,
+      "fileDescriptors": 214
+    },
+    {
+      "elapsedNs": 245625762643837,
+      "javaBytes": 7232520,
+      "nativeBytes": 52041888,
+      "graphicsPssBytes": 112003072,
+      "index": 14,
+      "phase": "import",
+      "filmIconMode": "static-cartridge",
+      "threads": 45,
+      "fileDescriptors": 214
+    },
+    {
+      "elapsedNs": 245626713126606,
+      "javaBytes": 7257376,
+      "nativeBytes": 52043328,
+      "graphicsPssBytes": 112003072,
+      "index": 15,
+      "phase": "import",
+      "filmIconMode": "static-cartridge",
+      "threads": 45,
+      "fileDescriptors": 214
+    },
+    {
+      "elapsedNs": 245627809745067,
+      "javaBytes": 7235384,
+      "nativeBytes": 52044880,
+      "graphicsPssBytes": 112003072,
+      "index": 16,
+      "phase": "import",
+      "filmIconMode": "static-cartridge",
+      "threads": 45,
+      "fileDescriptors": 214
+    },
+    {
+      "elapsedNs": 245628805753991,
+      "javaBytes": 7233704,
+      "nativeBytes": 52046912,
+      "graphicsPssBytes": 112003072,
+      "index": 17,
+      "phase": "import",
+      "filmIconMode": "static-cartridge",
+      "threads": 45,
+      "fileDescriptors": 214
+    },
+    {
+      "elapsedNs": 245629773081683,
+      "javaBytes": 7235248,
+      "nativeBytes": 52052112,
+      "graphicsPssBytes": 112003072,
+      "index": 18,
+      "phase": "import",
+      "filmIconMode": "static-cartridge",
+      "threads": 45,
+      "fileDescriptors": 214
+    },
+    {
+      "elapsedNs": 245630631511837,
+      "javaBytes": 7251928,
+      "nativeBytes": 52150880,
+      "graphicsPssBytes": 112003072,
+      "index": 19,
+      "phase": "import",
+      "filmIconMode": "static-cartridge",
+      "threads": 45,
+      "fileDescriptors": 214
+    },
+    {
+      "elapsedNs": 245631654212068,
+      "javaBytes": 7236624,
+      "nativeBytes": 52060032,
+      "graphicsPssBytes": 112003072,
+      "index": 20,
+      "phase": "import",
+      "filmIconMode": "static-cartridge",
+      "threads": 45,
+      "fileDescriptors": 214
+    },
+    {
+      "elapsedNs": 245632768193914,
+      "javaBytes": 7167448,
+      "nativeBytes": 51982816,
+      "graphicsPssBytes": 107431936,
+      "index": 21,
+      "phase": "export",
+      "filmIconMode": "static-cartridge",
+      "threads": 45,
+      "fileDescriptors": 214
+    },
+    {
+      "elapsedNs": 245633722758299,
+      "javaBytes": 7187960,
+      "nativeBytes": 52007072,
+      "graphicsPssBytes": 111642624,
+      "index": 22,
+      "phase": "export",
+      "filmIconMode": "static-cartridge",
+      "threads": 45,
+      "fileDescriptors": 214
+    },
+    {
+      "elapsedNs": 245634615438606,
+      "javaBytes": 7180288,
+      "nativeBytes": 52008544,
+      "graphicsPssBytes": 111642624,
+      "index": 23,
+      "phase": "export",
+      "filmIconMode": "static-cartridge",
+      "threads": 45,
+      "fileDescriptors": 214
+    },
+    {
+      "elapsedNs": 245635582416683,
+      "javaBytes": 7195392,
+      "nativeBytes": 51996000,
+      "graphicsPssBytes": 107431936,
+      "index": 24,
+      "phase": "export",
+      "filmIconMode": "static-cartridge",
+      "threads": 45,
+      "fileDescriptors": 214
+    },
+    {
+      "elapsedNs": 245636476363530,
+      "javaBytes": 7198984,
+      "nativeBytes": 51997216,
+      "graphicsPssBytes": 107431936,
+      "index": 25,
+      "phase": "export",
+      "filmIconMode": "static-cartridge",
+      "threads": 45,
+      "fileDescriptors": 214
+    },
+    {
+      "elapsedNs": 245637388822222,
+      "javaBytes": 7202144,
+      "nativeBytes": 51997840,
+      "graphicsPssBytes": 107431936,
+      "index": 26,
+      "phase": "export",
+      "filmIconMode": "static-cartridge",
+      "threads": 45,
+      "fileDescriptors": 214
+    },
+    {
+      "elapsedNs": 245638284338530,
+      "javaBytes": 7194832,
+      "nativeBytes": 51998960,
+      "graphicsPssBytes": 107431936,
+      "index": 27,
+      "phase": "export",
+      "filmIconMode": "static-cartridge",
+      "threads": 45,
+      "fileDescriptors": 214
+    },
+    {
+      "elapsedNs": 245639221386837,
+      "javaBytes": 7209256,
+      "nativeBytes": 52000256,
+      "graphicsPssBytes": 107431936,
+      "index": 28,
+      "phase": "export",
+      "filmIconMode": "static-cartridge",
+      "threads": 45,
+      "fileDescriptors": 214
+    },
+    {
+      "elapsedNs": 245640126125684,
+      "javaBytes": 7208688,
+      "nativeBytes": 52015040,
+      "graphicsPssBytes": 111642624,
+      "index": 29,
+      "phase": "export",
+      "filmIconMode": "static-cartridge",
+      "threads": 45,
+      "fileDescriptors": 214
+    },
+    {
+      "elapsedNs": 245641032048068,
+      "javaBytes": 7225688,
+      "nativeBytes": 52015088,
+      "graphicsPssBytes": 111642624,
+      "index": 30,
+      "phase": "export",
+      "filmIconMode": "static-cartridge",
+      "threads": 45,
+      "fileDescriptors": 214
+    }
+  ],
+  "warmedPresets": [
+    "kodak_portra_400",
+    "kodak_gold_200",
+    "kodak_ektar_100"
+  ],
+  "validationErrors": []
+}

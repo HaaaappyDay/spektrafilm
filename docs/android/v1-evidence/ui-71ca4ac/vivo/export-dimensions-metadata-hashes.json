@@ -1,0 +1,30 @@
+[
+  {
+    "fixture": "12mp.jpg",
+    "width": 4000,
+    "height": 3000,
+    "sourceSha256": "49a04f9e7f9eb0d46fc7cc5e0e4a2d44212978c88516cab8dc49b0f5e0a58064",
+    "sourceUnchanged": true
+  },
+  {
+    "fixture": "24mp.jpg",
+    "width": 4096,
+    "height": 2731,
+    "sourceSha256": "313ef9a2ce5d7fbbd3451b5bbc29d79cd9a2c37cea7023c2848ea3cf0fd03d3f",
+    "sourceUnchanged": true
+  },
+  {
+    "fixture": "tiny.png",
+    "width": 1,
+    "height": 1,
+    "sourceSha256": "76d729a2ca8e3c39cdc1f1be2a06f218ad904badec3f7dff71a17736d0a33bf5",
+    "sourceUnchanged": true
+  },
+  {
+    "fixture": "gps.jpg",
+    "width": 60,
+    "height": 80,
+    "sourceSha256": "73b8ab3cc4e60e8e608828caedb6bb2a827003016d38c581973b5515a0ac9840",
+    "sourceUnchanged": true
+  }
+]

@@ -1,0 +1,26 @@
+{
+  "manufacturer": "vivo",
+  "model": "V2419A",
+  "api": 37,
+  "release": "17",
+  "fingerprint": "vivo\/PD2419\/PD2419:17\/CP2A.260605.016_V000L1\/261109163123:user\/release-keys",
+  "abi": "arm64-v8a",
+  "totalRamBytes": 16095416320,
+  "javaHeapLimitBytes": 268435456,
+  "memoryClassMiB": 256,
+  "gl": {
+    "vendor": "ARM",
+    "renderer": "Mali-G925-Immortalis MC12",
+    "version": "OpenGL ES 3.2 v1.r49p1-03bet0.2f07571.5584442fcb51fa40a52ea1b533fc5200.19bdafb67856aea5282428dee249ba6f63e1",
+    "fragmentHighpBits": "23",
+    "maxTextureSize": "16384",
+    "tileLimit": "2048"
+  },
+  "package": "io.github.haaaappyday.filmeditor.validation",
+  "versionName": "0.1.0",
+  "versionCode": 1,
+  "debuggable": true,
+  "sourceCommit": "71ca4acab807d0ca025f53e2ab834f868802a435",
+  "testedCommit": "71ca4acab807d0ca025f53e2ab834f868802a435",
+  "physicalAcceptance": false
+}

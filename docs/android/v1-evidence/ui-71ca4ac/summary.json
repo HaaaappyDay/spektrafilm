@@ -1,0 +1,55 @@
+{
+  "sourceCommit": "71ca4acab807d0ca025f53e2ab834f868802a435",
+  "testedMergeCommit": "1af0cd7cb3dd88f318b825214917f3e2aeb0e9ea",
+  "ciRun": "https://github.com/HaaaappyDay/spektrafilm/actions/runs/43605020612",
+  "runtimes": {
+    "29": {
+      "tests": 88,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "testXmlSha256": "ec56690c1d0a2765685c27b90328fb4b1bc0189448aa5875f795e85e04961642"
+    },
+    "36": {
+      "tests": 88,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "testXmlSha256": "8e3e67dbca03d9e70d7d15099eb85444df6136be304a3d97b918680bcb38b213"
+    },
+    "37": {
+      "tests": 88,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "testXmlSha256": "708613a0258c237dbf875214b73011e18dd8a521540261ac8e26d4b904f6d908"
+    }
+  },
+  "physicalFunctional": {
+    "sourceCommit": "71ca4acab807d0ca025f53e2ab834f868802a435",
+    "tests": 88,
+    "failures": 0,
+    "appSha256": "ceef5bab6aa567c439f0ba08450d2de7639c715300a5513d88ad77807fbdecea",
+    "testApkSha256": "59acd70038c9966268dd86e38527d3dc5cfb8ce2f94e974d0677b7bca10f1d08",
+    "instrumentationLogSha256": "9833427c35b1018d3702d85f410fd34e826146bd6eb6330feb042666f441fffb",
+    "hostProcessRestoration": true,
+    "performanceAcceptance": true
+  },
+  "physicalPerformance": {
+    "previewP50Ms": 121.943192,
+    "previewP95Ms": 133.538461,
+    "previewSamples": 30,
+    "exportMaxMs": 499.228616,
+    "exports": 10,
+    "resourceCheckpoints": 31,
+    "resourceReview": "pass-for-recorded-workload",
+    "traceSha256": "6e122701464bc1ad45678d0e32e242d99944f59899e9b5c4285e629319ff7d27"
+  },
+  "ciDebugArtifact": {
+    "url": "https://github.com/HaaaappyDay/spektrafilm/actions/runs/43605020612/artifacts/14117647762",
+    "testedMergeCommit": "1af0cd7cb3dd88f318b825214917f3e2aeb0e9ea",
+    "apkSha256": "f0801fb944aa2d8a9d72ca56d30afbc076c2430bc8397cc171c06dca37a19fe1",
+    "embeddedSourceCommit": "unrecorded",
+    "note": "CI artifact identity is established by its immutable run and tested merge, distinct from the local APK with embedded source commit."
+  }
+}

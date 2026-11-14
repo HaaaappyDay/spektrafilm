@@ -2,8 +2,85 @@
 
 Tracking: [#15](https://github.com/HaaaappyDay/spektrafilm/issues/15),
 [parent #9](https://github.com/HaaaappyDay/spektrafilm/issues/9).
-The integrated emulator flow passes. Physical color/performance acceptance,
-final delivery and prerequisite merges remain incomplete.
+The integrated emulator and physical functional flows pass. Physical preview,
+export, and bounded resource checks pass. Final review and prerequisite merges
+remain incomplete.
+
+## Current editor feedback candidate
+
+Source `71ca4acab807d0ca025f53e2ab834f868802a435` contains the photo-first editor,
+stock-specific cartridge icons (#23), stable preview bounds during loading (#24),
+and temporary long-press original comparison with the toolbar toggle retained (#25).
+[CI run 43605020612](https://github.com/HaaaappyDay/spektrafilm/actions/runs/43605020612)
+passed all five jobs at tested merge `1af0cd7cb3dd88f318b825214917f3e2aeb0e9ea`:
+88 instrumented tests on each of API 29, 36, and 37 (37.2 SDK image), 13 JVM tests,
+lint, 178 Python regression tests, and byte-for-byte reference reproduction.
+Each runtime also passed host-verified process death/restoration with a different
+PID and generated-fixture cleanup. [Compact evidence](v1-evidence/ui-71ca4ac/summary.json)
+records exact source/merge identities, test counts, and XML hashes.
+
+The same source passed all 88 local API 36 tests. Generated-fixture light/dark,
+portrait/landscape, and large-text editor captures were inspected. The separate
+dark-mode Activity run passed both tests and restored the emulator's night mode.
+The API 36 CI profileable workload completed 30 presented-frame samples and
+10 exports; it remains emulator evidence, not physical acceptance.
+
+A fresh Android-only sparse checkout built without Python or Qt, passed all
+13 JVM tests, and reported zero lint errors and nine warnings. The
+[APK inventory](v1-evidence/ui-71ca4ac/android-only-inventory.json) verifies all
+packaged assets against committed bytes, three real 33³ LUTs, attribution,
+the embedded source commit, and absence of Internet/broad media permissions.
+Its debug APK SHA256 is
+`edc697958e5e6d736ca40245d61e70f3c76532887af3f6fd4ff14daf1343a705`.
+The same candidate passed all 88 instrumented tests on the vivo in 96.248 seconds.
+[Physical functional evidence](v1-evidence/ui-71ca4ac/vivo/instrumentation.log)
+uses validation APK `ceef5bab6aa567c439f0ba08450d2de7639c715300a5513d88ad77807fbdecea`
+and test APK `59acd70038c9966268dd86e38527d3dc5cfb8ce2f94e974d0677b7bca10f1d08`.
+The physical GPU compared 512001 channels against independent Python references:
+maximum error 1 code, p95 0, mean 0.00000195312. The 48MP fixture decoded to
+1600×1200 for preview and 4096×3072 for export. Host-verified process restoration
+passed with PID 9793→10047, all recovery invariants, and cleanup.
+The [device report](v1-evidence/ui-71ca4ac/vivo/device-build.json) records
+16095416320 bytes of RAM and a 268435456-byte Java heap limit. Its
+`physicalAcceptance: false` field does not waive the separate performance gate.
+The [CI debug APK bundle](https://github.com/HaaaappyDay/spektrafilm/actions/runs/43605020612/artifacts/14117647762)
+contains an independently CI-signed debug APK with SHA256
+`f0801fb944aa2d8a9d72ca56d30afbc076c2430bc8397cc171c06dca37a19fe1`.
+Its provenance is the tested merge/run above; its embedded source field is
+`unrecorded`, unlike the locally built APK. Do not interchange those identities.
+Review and merges are still pending.
+
+### Physical performance result
+
+The non-debuggable profileable APK from source `71ca4ac` passed the physical
+workload. [Recording metadata](v1-evidence/ui-71ca4ac/vivo/performance/recording.json)
+records both APK hashes, actual PID/device, host-script hashes and raw-trace hash.
+The host's fixture-provider readiness step was added after an initial run failed
+before warmup; that incomplete run is retained at `/tmp/v1-vivo-icons-performance`.
+The accepted run is `/tmp/v1-vivo-icons-performance-provider`; its unchanged app
+APK is `c69987a298af5fe6bbb2a938a7d628e14fe7ec50beb5242abae977e4bc09f0e3`.
+
+| Measurement | Physical result |
+| --- | --- |
+| Input → linked SurfaceFlinger presentation | 30 samples; p50 121.943ms, p95 133.538ms, max 134.022ms; passes 200ms p95 target |
+| 4000×3000 export → MediaStore publication | 10 samples; slowest 499.229ms; passes 10s target |
+| Export stage ranges | Decode 38.365–50.906ms; render 282.597–307.137ms; encode 40.159–61.916ms; I/O 32.462–50.703ms |
+| Largest sampled export memory values | Java 16170768 bytes; native 184289216 bytes; graphics PSS 120330240 bytes |
+| Warm sustained workload | 20 import/edit cycles, 10 exports, 31 post-GC checkpoints; threads 45→45, FDs 214→214 |
+| Trace and cleanup | Zero reported trace errors/lost events; completed workload and generated-output cleanup |
+
+The [full report](v1-evidence/ui-71ca4ac/vivo/performance/performance-report.json)
+retains every sample. Export stages complete on worker threads; GLES work is
+dispatched to the dedicated `film-gl` thread. Post-GC Java/native end deltas are
++32688/+59392 bytes with nonpositive fitted slopes; graphics PSS declines by
+26800128 bytes. The [resource review](v1-evidence/ui-71ca4ac/vivo/performance/resource-review.json)
+accepts this bounded workload without claiming universal leak freedom. Memory
+sampling every 100ms provides lower bounds on peaks, and graphics PSS is not a
+complete GPU allocation inventory. The raw trace remains locally retained with
+SHA256 `6e122701464bc1ad45678d0e32e242d99944f59899e9b5c4285e629319ff7d27`.
+
+The earlier candidate sections below retain their original identities and
+measurements; they are not measurements of this UI candidate.
 
 ## Initial integrated candidate
 
@@ -82,11 +159,14 @@ Stable Espresso 3.7.0 is pinned for API 37: Compose's transitive 3.5.0 called a
 removed hidden InputManager API. The 15 previously failing UI tests now pass.
 No alpha dependency or app target-SDK change was needed.
 
-## Physical performance and sustained resources
+## Earlier physical acceptance checklist
 
-Reference phone: maintainer-provided vivo X200 Pro mini. Only the local emulator
-is currently visible to ADB. The phone's actual API/RAM/GPU/driver must be measured
-on connection.
+Reference phone: maintainer-provided vivo X200 Pro mini, connected through the
+Windows native USB ADB server from WSL. The measured device is V2419A running
+Android 17/API 37 with an ARM Mali-G925-Immortalis MC12 GPU and OpenGL ES 3.2.
+Current-candidate physical functional and performance evidence is recorded above.
+The table below records the earlier candidate's pending gates; those earlier
+measurements are not relabeled as current-candidate results.
 
 | Measurement | Required evidence | Status |
 | --- | --- | --- |
@@ -162,6 +242,6 @@ Color-model/LUT limits and cube-wide QA flags remain documented in the
 Fixtures are generated, not personal photos. The shown blue gallery image is the
 known synthetic fixture exported by the actual app.
 
-Physical traces, measured performance, final delivery and whole-branch review
-remain required. PRs 19/20/21 and the eventual validation PR must merge in dependency
-order before issues 12–15 or the parent can be considered complete.
+The current candidate now has physical functional/trace evidence and identifiable
+debug APKs. Whole-branch review and dependency-order merges remain required before
+issues 12–15, the feedback issues, or the parent can be considered complete.
