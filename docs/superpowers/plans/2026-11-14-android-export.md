@@ -44,7 +44,7 @@
 - [x] Inject insert/open/ENOSPC-write/close/encode/publish failures, cancellation during writing and after publication, URI-journal failure, and failed rollback followed by recovery. Assert no false success, correct row/file cleanup, preserved source and recycled export bitmaps.
 - [x] Exercise journaled pending rows, insert-before-URI-journal window, corrupted journal, owner mismatch, actual other-directory media and published/unrelated media preservation. Repeat ten exports and record unique URIs, descriptor counts and bitmap/temporary-file cleanup.
 - [x] Observe missing implementation RED in CI43549157776. Implement staged encoding → intent journal → pending insert → URI journal → write/sync/close → hash read-back → publish → cleanup → real result. CI43550072332 passes 60 device tests per API and all other jobs.
-- [ ] Verify the additional shell-owned pending/published media case with a forged journal URI. Retain actual ownership metadata and clean only test-created rows afterward.
+- [x] Verify the additional shell-created unowned pending/published media case with a forged journal URI. Retain actual ownership metadata and clean only test-created rows afterward.
 
 ### Task 3: Editor integration, evidence and review
 
@@ -54,5 +54,6 @@
 - [x] Write real Activity tests for airplane-mode saving, duplicate requests, rotation/backgrounding, immutable parameters, system-gallery opening and startup cleanup without replaying a published export. Write startup recovery failure/retry tests before wiring.
 - [x] Observe missing `prepareExport` RED in CI43550545933. Wire real services, initialization and localized errors. Both Activity tests pass at `5a42c1d`; inspect their artifacts rather than equating Activity resume with a displayed image.
 - [x] Reproduce failed-initialization import and empty-catalog defects in CI43551508419. Implement service-readiness gating while preserving missing-source replacement. Strengthen gallery capture to wait for actual photo pixels instead of a transition frame.
-- [ ] Full API 29/36 build/unit/instrument/lint/Python checks pass on the final implementation. Inspect gallery screenshots and actual foreign-owner evidence. Record commands, device/build details, dimensions, metadata/hash/color/resource/failure results and remaining physical limitations.
-- [ ] One fresh whole-branch review; fix Important/Critical findings with regressions and a green suite. Record deferred minor findings. Create a dependent PR closing #14, linked to #9, based on the editor branch; merge only after prerequisites are accepted. Continue physical acceptance and performance in #15.
+- [x] Full API 29/36 build/unit/instrument/lint/Python checks pass on the final implementation. Inspect gallery screenshots and actual foreign-owner evidence. Record commands, device/build details, dimensions, metadata/hash/color/resource/failure results and remaining physical limitations.
+- [x] One fresh whole-branch review; both Important findings fixed with regressions, no Critical/Minor findings. Final CI43554098196 passes68 tests/API29+API36,9unit,109Python; lint0errors/16warnings. Dependent draft PR21 created, Closes#14,parent#9,baseeditorPR20.
+- [ ] Merge PR21 only after prerequisite acceptance; rendererPR19 still needs physical GPU. Continue physical acceptance and performance in #15.
