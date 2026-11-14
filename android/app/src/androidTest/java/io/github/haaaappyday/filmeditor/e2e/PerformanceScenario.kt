@@ -175,7 +175,6 @@ class PerformanceScenario {
             check(state.error == null) { "Import failed: ${state.error}" }
             state.previewValid && state.source?.id != previous && !state.importing
         }
-        await("three current-source film thumbnails") { editor.state.value.presetThumbnails.size == 3 }
         settled()
     }
     private fun snapshot(index: Int, phase: String): JSONObject {
@@ -185,7 +184,7 @@ class PerformanceScenario {
         SystemClock.sleep(100)
         PerformanceTrace.app.mark("FilmResourceSnapshot", index + 1)
         return memory().put("index", index).put("phase", phase)
-            .put("filmThumbnails", editor.state.value.presetThumbnails.size)
+            .put("filmIconMode", "static-cartridge")
             .put("threads", File("/proc/self/task").list()?.size ?: JSONObject.NULL)
             .put("fileDescriptors", File("/proc/self/fd").list()?.size ?: JSONObject.NULL)
     }

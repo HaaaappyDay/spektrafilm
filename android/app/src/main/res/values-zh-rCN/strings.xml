@@ -44,5 +44,5 @@
     <string name="tab_export">导出</string>
     <string name="open_image">打开</string>
     <string name="compare_short">对比</string>
-    <string name="film_preview_hint">缩略图展示各胶片的默认效果。</string>
+    <string name="film_selection_hint">选择胶片后，可在“调整”中微调效果。</string>
 </resources>

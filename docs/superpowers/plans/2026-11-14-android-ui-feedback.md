@@ -43,7 +43,7 @@ Interfaces: keep persistent EditorUiState.showOriginal controlled only by toolba
 
 Files: ui/editor/PresetSelector.kt and a small cartridge drawing component; EditorUiState.kt, EditorViewModel.kt, MainActivity.kt; remove unused PresetThumbnailRenderer.kt and its tests; update thumbnail-only VM/activity/performance expectations; localized hint; validation docs.
 Interfaces: PresetSelector consumes film metadata/selection only. All remaining render and export interfaces stay unchanged. Performance workload still exercises visible controls and records final resource state.
-- [ ] Add a selector test ensuring all3 stock icons and selected names exist without photo-derived state; preserve parameter-selection assertions. Observe RED on thumbnail cards.
-- [ ] Add native stock-specific cartridge illustrations and remove obsolete thumbnail production/state/tests. Replace thumbnail hint with selection guidance. Update performance checkpoints to report the actual final UI resources.
+- [x] Add a selector test ensuring all3 stock icons and selected names exist without photo-derived state; preserve parameter-selection assertions. Observe RED on thumbnail cards.
+- [x] Add native stock-specific cartridge illustrations and remove obsolete thumbnail production/state/tests. Replace thumbnail hint with selection guidance. Update performance checkpoints to report the actual final UI resources.
 - [ ] Run complete emulator+vivo functional suites, unit/lint/Python, live process restoration, and final-source profileable performance. Expected all functional checks pass and unchanged physical gates met. Inspect dark/light/large-text/landscape and generated-fixture phone images.
 - [ ] Commit/open dependent PR with Closes #23, reconcile final evidence and source/APK identities, perform one fresh whole-candidate review with tested Important/Critical fixes. Finish the existing v1/initialUI delivery and merge dependencies only after gates pass.
