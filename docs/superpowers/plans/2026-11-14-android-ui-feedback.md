@@ -35,9 +35,9 @@ Interfaces: keep BeforeAfterPreview(state, modifier); actual image remains expos
 
 Files: ui/editor/BeforeAfterPreview.kt, EditorScreen.kt if lifecycle propagation is necessary; ui/editor/EditorScreenTest.kt and EditorActivityTest.kt.
 Interfaces: keep persistent EditorUiState.showOriginal controlled only by toolbar callback; gesture-local original uses input without modifying it. The edited frame marker is valid only when neither comparison mechanism is showing input.
-- [ ] Add touch tests with distinct solid input/output colors: long press shows input; release/cancel returns edited; preselected original remains original; short tap does not compare; source replacement/export lock cancel gesture. Observe RED before implementation.
-- [ ] Implement bounded pointer handling, transient state reset by source/enabled/lifecycle, and a finalizer on cancellation. Keep explicit toolbar behavior and restore correct display after background/rotation.
-- [ ] Run UI/activity tests with real image checks and lifecycle interruption. Expected PASS; commit and open dependent PR with Closes #25.
+- [x] Add touch tests with distinct solid input/output colors: long press shows input; release/cancel returns edited; preselected original remains original; short tap does not compare; source replacement/export lock cancel gesture. Observe RED before implementation.
+- [x] Implement bounded pointer handling, transient state reset by source/enabled/lifecycle, and a finalizer on cancellation. Keep explicit toolbar behavior and restore correct display after background/rotation.
+- [x] Run UI/activity tests with real image checks and lifecycle interruption. Expected PASS; commit and open dependent PR with Closes #25.
 
 ### Task 3: Cartridge icons and integrated delivery (#23)
 
