@@ -53,7 +53,7 @@
 - [x] Run assembleDebug/testDebugUnitTest/lintDebug/connectedDebugAndroidTest; retain XML reports and screenshots.
 - [x] Record device/API/build, fixture provenance, normalization measurements and unverified hardware cases.
 - [x] Independent review, resolve important defects and verify implementation head.
-- [ ] PR with Closes #11; merge to main and update #9.
+- [x] PR #18 merged as `216471d`; #11 closed and #9 updated.
 
 ## Builder decisions
 
