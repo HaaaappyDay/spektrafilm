@@ -272,6 +272,9 @@ class EditorViewModelTest {
             main { vm.importPhoto(Uri.parse("content://fixture/ignored")) }
             gate.complete(Unit); await { !vm.state.value.initializing }
             assertEquals(EditorErrorCode.EXPORT_FAILED, vm.state.value.error)
+            assertFalse("Failed startup must not expose an uninitialized editor", vm.state.value.canImport)
+            main { vm.importPhoto(Uri.parse("content://fixture/ignored-after-failure")) }
+            assertNull(vm.state.value.source)
             assertEquals(saved, sessions.saved)
             rejectRecovery = false; main { vm.retry() }
             await { vm.state.value.previewValid }
@@ -279,6 +282,26 @@ class EditorViewModelTest {
             assertEquals(saved.params, vm.state.value.params)
             assertNull(vm.state.value.exportResult)
         } finally { gate.complete(Unit); main { store.clear() } }
+    }
+
+    @Test fun emptyPresetCatalogBlocksImportUntilInitializationCanRetry() = runBlocking {
+        var available = false
+        val catalog = object : PresetRepository {
+            override suspend fun listPresets() = if (available) presets.listPresets() else emptyList()
+        }
+        lateinit var vm: EditorViewModel
+        val store = withContext(Dispatchers.Main) {
+            vm = EditorViewModel(Images(), catalog, Renderer(), Sessions())
+            ViewModelStore().apply { put("editor", vm) }
+        }
+        try {
+            await { !vm.state.value.initializing }
+            assertEquals(EditorErrorCode.PRESET_UNAVAILABLE, vm.state.value.error)
+            assertFalse(vm.state.value.canImport)
+            available = true; main { vm.retry() }
+            await { !vm.state.value.initializing }
+            assertNull(vm.state.value.error); assertTrue(vm.state.value.canImport)
+        } finally { main { store.clear() } }
     }
 
 }

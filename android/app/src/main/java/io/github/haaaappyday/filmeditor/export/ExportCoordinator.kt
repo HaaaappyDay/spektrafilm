@@ -11,7 +11,12 @@ class ExportCoordinator(
 ) : PhotoExporter {
     override suspend fun export(request: ExportRequest): ExportResult {
         if (!gate.tryLock()) throw EditorException(EditorErrorCode.EXPORT_FAILED)
-        try { return delegate.export(request) } finally { gate.unlock() }
+        try {
+            // Retry must first recover a previous operation whose cleanup failed.
+            // Startup recovery alone is insufficient while this process stays alive.
+            recoverAction()
+            return delegate.export(request)
+        } finally { gate.unlock() }
     }
     suspend fun recover() = gate.withLock { recoverAction() }
     private companion object { val gate = Mutex() }

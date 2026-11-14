@@ -26,10 +26,10 @@ class ExportCoordinatorTest {
             try { other.export(request.copy(params = EditParams("kodak_portra_400"))); fail("Queued duplicate save") }
             catch (error: EditorException) { assertEquals(EditorErrorCode.EXPORT_FAILED, error.code) }
             val recovering = async { other.recover() }
-            yield(); assertEquals(0, recoveries)
+            yield(); assertEquals(1, recoveries) // Initial recovery precedes the active export.
             finish.complete(Unit)
             assertEquals(4, running.await().width); recovering.await()
-            assertEquals(1, recoveries); assertEquals(listOf(request), calls)
+            assertEquals(2, recoveries); assertEquals(listOf(request), calls)
         } finally { finish.complete(Unit); running.cancelAndJoin() }
     }
     @Test fun cancellationAndFailureReleaseGateForRetry() = runBlocking {
