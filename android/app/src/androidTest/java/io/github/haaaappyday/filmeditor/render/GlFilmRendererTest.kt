@@ -121,4 +121,50 @@ class GlFilmRendererTest {
             assertFalse(source.isRecycled)
         } finally { renderer.release(); source.recycle() }
     }
+    @Test fun releaseWaitsForActiveRendering() = runBlocking {
+        val entered = CompletableDeferred<Unit>(); val continueLoad = CompletableDeferred<Unit>()
+        val renderer = GlFilmRenderer(context, 17, cubeProvider = { entered.complete(Unit); continueLoad.await(); identity() })
+        val source = input()
+        try {
+            val rendering = async { renderer.render(source, EditParams("identity")) }
+            entered.await()
+            val releasing = async(start = CoroutineStart.UNDISPATCHED) { renderer.release() }
+            assertFalse(releasing.isCompleted)
+            continueLoad.complete(Unit)
+            val output = rendering.await()
+            releasing.await()
+            try { assertArrayEquals(pixels(source), pixels(output)); assertFalse(output.isRecycled) }
+            finally { output.recycle() }
+        } finally { continueLoad.complete(Unit); renderer.release(); source.recycle() }
+    }
+
+    @Test fun cancellationAtDispatcherReturnRecyclesOnlyUnpublishedOutput() = runBlocking {
+        val gate = java.util.concurrent.CountDownLatch(1)
+        val queue = java.util.concurrent.LinkedBlockingQueue<Runnable>()
+        val caller = object : CoroutineDispatcher() {
+            override fun dispatch(context: kotlin.coroutines.CoroutineContext, block: Runnable) { queue.put(block) }
+        }
+        fun next() = checkNotNull(queue.poll(15, java.util.concurrent.TimeUnit.SECONDS)) { "No GL continuation" }
+        var produced: Bitmap? = null
+        val renderer = GlFilmRenderer(context, 17, cubeProvider = {
+            check(gate.await(15, java.util.concurrent.TimeUnit.SECONDS)); identity()
+        }, onOutput = { produced = it })
+        val source = input()
+        val scope = CoroutineScope(SupervisorJob() + caller)
+        val result = scope.async { renderer.render(source, EditParams("identity")) }
+        try {
+            next().run(); gate.countDown()
+            val delivery = next()
+            assertNotNull(produced); assertFalse(produced!!.isRecycled)
+            result.cancel(); delivery.run()
+            while (!result.isCompleted) next().run()
+            assertTrue(produced!!.isRecycled)
+            assertFalse(source.isRecycled)
+        } finally {
+            gate.countDown(); scope.cancel()
+            while (!result.isCompleted) next().run()
+            renderer.release(); source.recycle()
+        }
+    }
+
 }
