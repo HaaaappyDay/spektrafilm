@@ -6,6 +6,8 @@ import android.graphics.ColorSpace
 import android.net.Uri
 import androidx.exifinterface.media.ExifInterface
 import io.github.haaaappyday.filmeditor.core.*
+import io.github.haaaappyday.filmeditor.diagnostics.ExportTraceContext
+import io.github.haaaappyday.filmeditor.diagnostics.TraceSpan
 import kotlinx.coroutines.*
 import java.io.*
 import java.security.MessageDigest
@@ -34,9 +36,10 @@ class MediaStorePhotoExporter(
         try {
             return withContext(Dispatchers.IO) {
                 currentCoroutineContext().ensureActive()
-                val input = images.decode(request.source, 4096)
+                val trace = currentCoroutineContext()[ExportTraceContext]?.span
+                val input = tracePhase(trace, "FilmExportDecode") { images.decode(request.source, 4096) }
                 try {
-                    val rendered = renderer.render(input, request.params)
+                    val rendered = tracePhase(trace, "FilmExportRender") { renderer.render(input, request.params) }
                     try {
                         currentCoroutineContext().ensureActive()
                         check(rendered !== input && rendered.width == input.width && rendered.height == input.height)
@@ -44,34 +47,38 @@ class MediaStorePhotoExporter(
                         val file = File(stagingDirectory.canonicalFile, "${intent.id}.jpg")
                         if (!file.createNewFile()) throw IOException("Export staging collision")
                         staged = file
-                        encode(rendered, file)
+                        tracePhase(trace, "FilmExportEncode") { encode(rendered, file) }
                         currentCoroutineContext().ensureActive()
-                        // Record intent before insertion; fallback scanning covers an insert
-                        // that creates a row but dies before its URI can be journaled.
-                        journal.write(intent)
-                        val target = gateway.insert(intent.displayName)
-                        uri = target
-                        journal.write(intent.copy(uri = target))
-                        currentCoroutineContext().ensureActive()
-                        val written = MessageDigest.getInstance("SHA-256")
-                        gateway.open(target).use { output ->
-                            file.inputStream().use { source ->
-                                val buffer = ByteArray(64 * 1024)
-                                while (true) {
-                                    currentCoroutineContext().ensureActive()
-                                    val count = source.read(buffer)
-                                    if (count < 0) break
-                                    output.write(buffer, 0, count); written.update(buffer, 0, count)
+                        val target = tracePhase(trace, "FilmExportIo") {
+                            // Record intent before insertion; fallback scanning covers an insert
+                            // that creates a row but dies before its URI can be journaled.
+                            journal.write(intent)
+                            val target = gateway.insert(intent.displayName)
+                            uri = target
+                            journal.write(intent.copy(uri = target))
+                            currentCoroutineContext().ensureActive()
+                            val written = MessageDigest.getInstance("SHA-256")
+                            gateway.open(target).use { output ->
+                                file.inputStream().use { source ->
+                                    val buffer = ByteArray(64 * 1024)
+                                    while (true) {
+                                        currentCoroutineContext().ensureActive()
+                                        val count = source.read(buffer)
+                                        if (count < 0) break
+                                        output.write(buffer, 0, count); written.update(buffer, 0, count)
+                                    }
                                 }
-                            }
-                            output.flush()
-                            if (output is FileOutputStream) output.fd.sync()
-                        } // Closing must succeed before publication.
-                        currentCoroutineContext().ensureActive()
-                        val readBack = resolver.openInputStream(target)?.use { digest(it) }
-                            ?: throw IOException("Saved output is unreadable")
-                        if (!written.digest().contentEquals(readBack)) throw IOException("Saved output differs from encoded JPEG")
-                        gateway.publish(target, intent.displayName)
+                                output.flush()
+                                if (output is FileOutputStream) output.fd.sync()
+                            } // Closing must succeed before publication.
+                            currentCoroutineContext().ensureActive()
+                            val readBack = resolver.openInputStream(target)?.use { digest(it) }
+                                ?: throw IOException("Saved output is unreadable")
+                            if (!written.digest().contentEquals(readBack)) throw IOException("Saved output differs from encoded JPEG")
+                            gateway.publish(target, intent.displayName)
+                            trace?.mark("FilmExportPublished")
+                            target
+                        }
                         currentCoroutineContext().ensureActive()
                         journal.remove(intent.id)
                         checkedDelete(file)
@@ -141,6 +148,9 @@ class MediaStorePhotoExporter(
     }
     private companion object { val stagingName = Regex("${PendingExport.idPattern.pattern}\\.jpg(?:\\.tmp)?") }
 }
+
+private suspend fun <T> tracePhase(trace: TraceSpan?, kind: String, block: suspend () -> T): T =
+    if (trace == null) block() else trace.phase(kind, block)
 
 internal fun encodeSrgbJpeg(bitmap: Bitmap, file: File) {
     require(bitmap.config == Bitmap.Config.ARGB_8888 && !bitmap.hasAlpha() && bitmap.colorSpace == ColorSpace.get(ColorSpace.Named.SRGB))
