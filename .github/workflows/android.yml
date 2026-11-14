@@ -85,10 +85,21 @@ jobs:
           target: ${{ matrix.target }}
           arch: x86_64
           ram-size: 2048M
-          heap-size: 128M
+          pre-emulator-launch-script: |
+            python3 - <<'PY'
+            import os
+            from pathlib import Path
+            config = Path(os.environ['ANDROID_AVD_HOME']) / 'test.avd/config.ini'
+            keys = {'hw.ramSize', 'hw.heapSize', 'vm.heapSize'}
+            lines = [line for line in config.read_text().splitlines() if line.partition('=')[0] not in keys]
+            # AVD hardware properties use integer MiB and vm.heapSize, not hw.heapSize.
+            config.write_text('\n'.join(lines + ['hw.ramSize=2048', 'vm.heapSize=128']) + '\n')
+            Path(os.environ['RUNNER_TEMP'], 'android-avd-config.ini').write_text(config.read_text())
+            PY
           disable-animations: true
           working-directory: android
           script: |
+            adb -s emulator-5554 shell getprop > "$RUNNER_TEMP/android-device-properties.txt"
             ./gradlew :app:connectedValidationAndroidTest -Pandroid.testInstrumentationRunnerArguments.sourceCommit=${{ github.event.pull_request.head.sha || github.sha }} -Pandroid.testInstrumentationRunnerArguments.testedCommit=${{ github.sha }}
             adb -s emulator-5554 install -r app/build/outputs/apk/validation/app-validation.apk
             adb -s emulator-5554 install -r app/build/outputs/apk/androidTest/validation/app-validation-androidTest.apk
@@ -102,6 +113,8 @@ jobs:
             android/app/build/reports/androidTests/
             android/app/build/outputs/androidTest-results/
             android/app/build/reports/process-restoration/
+            ${{ runner.temp }}/android-avd-config.ini
+            ${{ runner.temp }}/android-device-properties.txt
       - uses: actions/upload-artifact@v4
         if: always() && matrix.api == '37.2'
         with:
