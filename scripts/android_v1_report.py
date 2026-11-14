@@ -13,6 +13,8 @@ def resource_report(evidence):
     if type(device.get("physical")) is not bool:
         reasons.append("Device type is unknown")
     warmed = evidence.get("warmedPresets", [])
+    if type(evidence.get("warmupExports")) is not int or evidence["warmupExports"] < 1:
+        reasons.append("A completed 12MP export must warm export caches before baseline")
     if len(warmed) != 3 or set(warmed) != {"kodak_portra_400", "kodak_gold_200", "kodak_ektar_100"}:
         reasons.append("All three preset caches must be warm before baseline")
     samples = evidence.get("resourceSamples", [])

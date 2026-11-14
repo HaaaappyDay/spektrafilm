@@ -8,7 +8,7 @@ from android_v1_report import resource_report
 
 
 def evidence():
-    return dict(device=dict(physical=True, profileable=True, debuggable=False),
+    return dict(device=dict(physical=True, profileable=True, debuggable=False), warmupExports=1,
                 warmedPresets=["kodak_portra_400", "kodak_gold_200", "kodak_ektar_100"],
                 resourceSamples=[dict(index=i, phase="baseline" if i == 0 else "import" if i <= 20 else "export",
                     javaBytes=1_000_000 + i * 1024, nativeBytes=2_000_000, graphicsPssBytes=3_000_000,
@@ -33,6 +33,7 @@ def test_preserves_all_trends_and_requires_retention_review_instead_of_inventing
     lambda d: d["resourceSamples"][12].update(index=11),
     lambda d: d["resourceSamples"][12].update(phase="export"),
     lambda d: d["warmedPresets"].pop(),
+    lambda d: d.pop("warmupExports"),
 ])
 def test_missing_cycles_warm_caches_or_resource_counters_remain_incomplete(mutation):
     data = evidence(); mutation(data)

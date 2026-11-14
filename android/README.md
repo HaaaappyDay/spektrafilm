@@ -120,15 +120,46 @@ in [v1 validation](../docs/android/v1-validation.md). To build the isolated,
 non-debuggable, shell-profileable measurement app and its instrumentation APK:
 
 ```sh
-./gradlew :app:assembleProfileable :app:assembleProfileableAndroidTest -PvalidationBuildType=profileable
+source_commit="$(git rev-parse HEAD)"
+./gradlew :app:assembleProfileable :app:assembleProfileableAndroidTest -PvalidationBuildType=profileable -PsourceCommit="$source_commit"
 ```
 
 It is signed with the local debug key and uses the validation app ID, so it
 replaces a previous validation installation. Its manifest enables shell profiling
-without making the app debuggable. The trace/workload harness is still being
-implemented; building this APK is not performance acceptance. The host process
+without making the app debuggable. Building this APK is not performance acceptance. The host process
 restoration driver above requires the debuggable `validation` variant, because
 it reads private ready markers with `run-as`.
+
+For the performance workload, use Android 12+ with FrameTimeline and an unlocked
+screen. The host requires Python 3.11+, ADB, the pinned build-tools `aapt2`, and
+the official Perfetto helpers (v59.1). Install the helpers once:
+
+```sh
+mkdir -p "$HOME/.cache/perfetto-tools"
+curl -fL https://raw.githubusercontent.com/google/perfetto/v59.1/tools/record_android_trace -o "$HOME/.cache/perfetto-tools/record_android_trace"
+curl -fL https://raw.githubusercontent.com/google/perfetto/v59.1/tools/trace_processor -o "$HOME/.cache/perfetto-tools/trace_processor"
+chmod +x "$HOME/.cache/perfetto-tools/trace_processor"
+python3 ../scripts/record_android_v1.py --serial SERIAL --source-commit "$source_commit" --out app/build/reports/performance-RUN
+```
+
+Use a new output directory for each run. The driver installs only the isolated
+profileable APKs, verifies the APK's embedded commit, records SHA256 identities,
+and retains the workload JSON, raw trace, query rows and report. It warms all
+three LUTs and one 12MP export, then measures 30 real accessibility slider
+actions after five warmups, followed by 20 import/edit cycles and 10 exports.
+Only generated fixtures and new validation-app outputs are cleaned up.
+
+Preview latency starts before accessibility dispatch and ends at the linked
+SurfaceFlinger display frame; a draw or application GPU completion alone cannot
+pass. Export timing ends at successful MediaStore publication and includes
+decode/render/encode/IO stage details. Memory is sampled every 100ms, so reported
+peaks are sampled lower bounds; Java used heap, native allocated bytes and
+graphics PSS describe different memory categories. Unknown counters stay unknown.
+Resource checkpoints use a consistent post-GC policy outside timed operations;
+all 31 checkpoints and trends are retained. They require trace/retention review
+and never automatically certify the absence of a leak. Emulator reports remain
+`emulator-only`, regardless of timings. The first full harness dry run is still
+pending; physical v1 acceptance also requires the reference phone checks.
 
 ## Boundaries and ownership
 

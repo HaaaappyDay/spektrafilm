@@ -34,7 +34,7 @@ jobs:
         run: ./gradlew :app:assembleDebug :app:testDebugUnitTest :app:lintDebug
       - name: Build isolated profileable measurement APKs
         working-directory: android
-        run: ./gradlew :app:assembleProfileable :app:assembleProfileableAndroidTest -PvalidationBuildType=profileable
+        run: ./gradlew :app:assembleProfileable :app:assembleProfileableAndroidTest -PvalidationBuildType=profileable -PsourceCommit=${{ github.sha }}
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -85,17 +85,7 @@ jobs:
           target: ${{ matrix.target }}
           arch: x86_64
           ram-size: 2048M
-          pre-emulator-launch-script: |
-            python3 - <<'PY'
-            import os
-            from pathlib import Path
-            config = Path(os.environ['ANDROID_AVD_HOME']) / 'test.avd/config.ini'
-            keys = {'hw.ramSize', 'hw.heapSize', 'vm.heapSize'}
-            lines = [line for line in config.read_text().splitlines() if line.partition('=')[0] not in keys]
-            # AVD hardware properties use integer MiB and vm.heapSize, not hw.heapSize.
-            config.write_text('\n'.join(lines + ['hw.ramSize=2048', 'vm.heapSize=128']) + '\n')
-            Path(os.environ['RUNNER_TEMP'], 'android-avd-config.ini').write_text(config.read_text())
-            PY
+          pre-emulator-launch-script: python3 ${{ github.workspace }}/scripts/configure_android_ci_avd.py
           disable-animations: true
           working-directory: android
           script: |
@@ -104,6 +94,7 @@ jobs:
             adb -s emulator-5554 install -r app/build/outputs/apk/validation/app-validation.apk
             adb -s emulator-5554 install -r app/build/outputs/apk/androidTest/validation/app-validation-androidTest.apk
             python3 ../scripts/verify_android_process_restore.py --serial emulator-5554 --out app/build/reports/process-restoration
+            if [ '${{ matrix.api }}' = '36' ]; then bash ../scripts/run_android_performance_ci.sh '${{ github.sha }}'; fi
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -113,6 +104,7 @@ jobs:
             android/app/build/reports/androidTests/
             android/app/build/outputs/androidTest-results/
             android/app/build/reports/process-restoration/
+            android/app/build/reports/performance/
             ${{ runner.temp }}/android-avd-config.ini
             ${{ runner.temp }}/android-device-properties.txt
       - uses: actions/upload-artifact@v4

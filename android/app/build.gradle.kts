@@ -14,8 +14,11 @@ android {
         targetSdk = 36
         versionCode = 1
         versionName = "0.1.0"
+        val sourceCommit = providers.gradleProperty("sourceCommit").getOrElse("unrecorded")
+        require(sourceCommit == "unrecorded" || sourceCommit.matches(Regex("[0-9a-f]{40}")))
+        buildConfigField("String", "SOURCE_COMMIT", "\"$sourceCommit\"")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        testInstrumentationRunnerArguments["notClass"] = "io.github.haaaappyday.filmeditor.e2e.ProcessRestorePhases"
+        testInstrumentationRunnerArguments["notClass"] = "io.github.haaaappyday.filmeditor.e2e.ProcessRestorePhases,io.github.haaaappyday.filmeditor.e2e.PerformanceScenario"
         manifestPlaceholders["fixtureAuthority"] = "$applicationId.test.fixtures"
     }
     // Instrumented tests own their generated sources and recovery state. Never
@@ -43,7 +46,7 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    buildFeatures { compose = true }
+    buildFeatures { compose = true; buildConfig = true }
     lint { abortOnError = true }
 }
 kotlin { jvmToolchain(17) }
