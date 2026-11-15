@@ -160,8 +160,9 @@ def _compute(
     # Deferred runtime import — matches the builder's pattern, keeps the
     # `import spektrafilm_lut_creator.qa` cost low for callers that only
     # need the result/viz layer.
-    from spektrafilm.runtime.params_builder import digest_params, init_params
+    from spektrafilm.runtime.params_builder import init_params
     from spektrafilm.runtime.pipeline import SimulationPipeline
+    from spektrafilm_lut_creator.builders import finalize_lut_params
 
     rng = np.random.default_rng(rng_seed)
     rng_samples_encoded = rng.uniform(0.0, 1.0, size=(n_samples, 3)).astype(np.float32)
@@ -189,7 +190,7 @@ def _compute(
     params.io.output_cctf_encoding = False
     params.io.input_gamut_compress = spec.input_gamut_compress
     params.io.output_gamut_compress = spec.output_gamut_compress
-    params = digest_params(params)
+    params = finalize_lut_params(params)
     pipeline = SimulationPipeline(params)
 
     # Pipeline expects (H, W, 3); reshape into a long strip. lut_mode
@@ -230,8 +231,9 @@ def run_pipeline_at(
     Both input and output are in encoded ``[0, 1]`` form to match the
     LUT-application convention.
     """
-    from spektrafilm.runtime.params_builder import digest_params, init_params
+    from spektrafilm.runtime.params_builder import init_params
     from spektrafilm.runtime.pipeline import SimulationPipeline
+    from spektrafilm_lut_creator.builders import finalize_lut_params
 
     samples_encoded = np.asarray(samples_encoded, dtype=np.float32).reshape(-1, 3)
     frame = spec.bake_frame()
@@ -251,7 +253,7 @@ def run_pipeline_at(
     params.io.output_cctf_encoding = False
     params.io.input_gamut_compress = spec.input_gamut_compress
     params.io.output_gamut_compress = spec.output_gamut_compress
-    params = digest_params(params)
+    params = finalize_lut_params(params)
     pipeline = SimulationPipeline(params)
 
     image_in = samples_linear.reshape(1, samples_linear.shape[0], 3)

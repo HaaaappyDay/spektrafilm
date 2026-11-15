@@ -424,7 +424,8 @@ def _run_unbounded_pipeline_for_rim(
     re-run the same pipeline once with compression disabled. Per-call
     cost is small (cube-rim sample count, hundreds of samples).
     """
-    from spektrafilm.runtime.params_builder import digest_params, init_params
+    from spektrafilm.runtime.params_builder import init_params
+    from spektrafilm_lut_creator.builders import finalize_lut_params
     from spektrafilm.runtime.pipeline import SimulationPipeline
     from spektrafilm.utils.gamut_compression import OutputGamutCompressSpec
     from spektrafilm_lut_creator.color_spaces import (
@@ -450,7 +451,7 @@ def _run_unbounded_pipeline_for_rim(
     # engaged; this is QA-only.
     params.io.input_gamut_compress = spec.input_gamut_compress
     params.io.output_gamut_compress = OutputGamutCompressSpec(algorithm="off")
-    params = digest_params(params)
+    params = finalize_lut_params(params)
     pipeline = SimulationPipeline(params)
 
     samples_linear = decode_cctf(samples_encoded, spec.input_color_space)

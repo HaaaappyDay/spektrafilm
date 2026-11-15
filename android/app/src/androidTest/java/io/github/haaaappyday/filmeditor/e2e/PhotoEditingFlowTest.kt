@@ -15,6 +15,7 @@ import io.github.haaaappyday.filmeditor.MainActivity
 import io.github.haaaappyday.filmeditor.R
 import io.github.haaaappyday.filmeditor.core.EditParams
 import io.github.haaaappyday.filmeditor.export.AndroidMediaStoreGateway
+import io.github.haaaappyday.filmeditor.render.ShippedFilmCatalog
 import io.github.haaaappyday.filmeditor.testsupport.*
 import io.github.haaaappyday.filmeditor.ui.editor.EditorViewModel
 import org.json.JSONArray
@@ -58,7 +59,7 @@ class PhotoEditingFlowTest {
             val source = checkNotNull(editor.state.value.source)
             val original = hash(File(source.localPath))
             val results = JSONArray()
-            assertEquals(3, editor.state.value.presets.size)
+            assertEquals(ShippedFilmCatalog.printById.size, editor.state.value.presets.size)
             for (preset in editor.state.value.presets) {
                 compose.onNodeWithTag("tab-adjust").performClick()
                 slider("strength", .43f); slider("exposure", .6f); slider("temperature", -35f)
@@ -88,7 +89,7 @@ class PhotoEditingFlowTest {
                 results.put(JSONObject().put("preset", preset.id).put("manualValuesPreservedOnPresetChange", true)
                     .put("originalToggle", true).put("resetKeptPreset", true).put("width", saved.width).put("height", saved.height))
             }
-            assertEquals(3, outputs.toSet().size)
+            assertEquals(ShippedFilmCatalog.printById.size, outputs.toSet().size)
             val saved = editor.state.value.exportResult!!
             val bitmap = context.contentResolver.openInputStream(saved.uri)!!.use {
                 BitmapFactory.decodeStream(it, null, BitmapFactory.Options().apply { inSampleSize = 32 })!!

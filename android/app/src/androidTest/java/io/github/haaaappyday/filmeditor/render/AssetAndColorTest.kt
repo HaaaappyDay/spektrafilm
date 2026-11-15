@@ -17,7 +17,7 @@ class AssetAndColorTest {
     private val context = instrumentation.targetContext
     @Test fun everyShippedPresetAndAllParameterCombinationsMatchIndependentPython() = runBlocking {
         val repository = AssetPresetRepository(context)
-        assertEquals(setOf("kodak_portra_400", "kodak_gold_200", "kodak_ektar_100"), repository.listPresets().map { it.id }.toSet())
+        assertEquals(ShippedFilmCatalog.printById.keys.toList(), repository.listPresets().map { it.id })
         val fixture = instrumentation.context.assets
         val metadata = JSONObject(fixture.open("render-fixtures/reference.json").bufferedReader().use { it.readText() })
         val input = fixture.open("render-fixtures/input.rgba").use { it.readBytes() }

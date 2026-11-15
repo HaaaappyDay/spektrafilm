@@ -611,7 +611,8 @@ def output_gamut_edge_stress(ctx: "QAContext") -> Result:
       https://mononodes.com/lut-inspector/.
     - Mononodes Cube Slice DCTL — RGB cube face gradients.
     """
-    from spektrafilm.runtime.params_builder import digest_params, init_params
+    from spektrafilm.runtime.params_builder import init_params
+    from spektrafilm_lut_creator.builders import finalize_lut_params
     from spektrafilm.runtime.pipeline import SimulationPipeline
     from spektrafilm_lut_creator.color_spaces import get as get_color_space
 
@@ -638,7 +639,7 @@ def output_gamut_edge_stress(ctx: "QAContext") -> Result:
     params.io.output_cctf_encoding = False
     params.io.input_gamut_compress = spec.input_gamut_compress
     params.io.output_gamut_compress = spec.output_gamut_compress
-    params = digest_params(params)
+    params = finalize_lut_params(params)
     pipeline = SimulationPipeline(params)
 
     target_spaces = ["Rec.709", "DCI-P3", "Rec.2020"]
