@@ -91,7 +91,7 @@ fun EditorScreen(state: EditorUiState, onImport: () -> Unit, onPreset: (String) 
                         tools(Modifier.width(panelWidth).fillMaxHeight())
                     }
                 } else {
-                    val panelHeight = (maxHeight * .34f).coerceIn(176.dp, 240.dp).coerceAtMost(maxHeight * .42f)
+                    val panelHeight = (maxHeight * .34f).coerceIn(192.dp, 240.dp).coerceAtMost(maxHeight * .42f)
                     Column(Modifier.fillMaxSize()) {
                         Box(photoModifier.weight(1f).fillMaxWidth().testTag("photo-workspace")) {
                             BeforeAfterPreview(state, Modifier.fillMaxSize())
@@ -147,14 +147,12 @@ private fun EditorTools(state: EditorUiState, adjustment: String, onAdjustment: 
     Surface(modifier, color = MaterialTheme.colorScheme.surface) {
         Column(Modifier.fillMaxSize()) {
             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-            PresetSelector(state.presets, state.params.presetId, state.editingEnabled, onPreset,
-                Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp))
-            AdjustmentControls(state.params, state.editingEnabled,
-                onStrength, onExposure, onTemperature, adjustment, onAdjustment, onReset,
-                onContrast, onHighlights, onShadows, onSaturation, onTint,
-                Modifier.padding(horizontal = 16.dp))
             Column(Modifier.weight(1f).fillMaxWidth().verticalScroll(scroll).padding(horizontal = 16.dp, vertical = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                PresetSelector(state.presets, state.params.presetId, state.editingEnabled, onPreset)
+                AdjustmentControls(state.params, state.editingEnabled,
+                    onStrength, onExposure, onTemperature, adjustment, onAdjustment, onReset,
+                    onContrast, onHighlights, onShadows, onSaturation, onTint)
                 state.source?.let { source ->
                     val (width, height) = ImageSizing.fit(source.width, source.height, 4096)
                     Text(stringResource(R.string.export_dimensions, width, height), style = MaterialTheme.typography.bodyMedium)
