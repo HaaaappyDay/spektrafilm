@@ -105,12 +105,17 @@ class EditorSessionStore(
         .put("source", JSONObject().put("id", edit.source.id).put("localPath", edit.source.localPath)
             .put("width", edit.source.width).put("height", edit.source.height).put("mimeType", edit.source.mimeType))
         .put("params", JSONObject().put("presetId", edit.params.presetId).put("strength", edit.params.strength.toDouble())
-            .put("exposureEv", edit.params.exposureEv.toDouble()).put("temperature", edit.params.temperature.toDouble()))
+            .put("exposureEv", edit.params.exposureEv.toDouble()).put("temperature", edit.params.temperature.toDouble())
+            .put("contrast", edit.params.contrast.toDouble()).put("highlights", edit.params.highlights.toDouble())
+            .put("shadows", edit.params.shadows.toDouble()).put("saturation", edit.params.saturation.toDouble())
+            .put("tint", edit.params.tint.toDouble()))
     private fun decode(json: JSONObject): StoredEdit {
         require(json.getInt("schemaVersion") == 1)
         val source = json.getJSONObject("source"); val params = json.getJSONObject("params")
         return StoredEdit(ImageSource(source.getString("id"), source.getString("localPath"), source.getInt("width"), source.getInt("height"), source.getString("mimeType")),
-            EditParams(params.getString("presetId"), params.getDouble("strength").toFloat(), params.getDouble("exposureEv").toFloat(), params.getDouble("temperature").toFloat()))
+            EditParams(params.getString("presetId"), params.getDouble("strength").toFloat(), params.getDouble("exposureEv").toFloat(), params.getDouble("temperature").toFloat(),
+                params.optDouble("contrast", 0.0).toFloat(), params.optDouble("highlights", 0.0).toFloat(), params.optDouble("shadows", 0.0).toFloat(),
+                params.optDouble("saturation", 0.0).toFloat(), params.optDouble("tint", 0.0).toFloat()))
     }
     private companion object {
         val storageMutex = Mutex()

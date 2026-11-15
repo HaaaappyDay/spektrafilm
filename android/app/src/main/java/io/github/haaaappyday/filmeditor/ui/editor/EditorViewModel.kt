@@ -148,8 +148,14 @@ class EditorViewModel(
     fun setExposure(value: Float) {
         if (value.isFinite()) updateParams(state.value.params.copy(exposureEv = (value.coerceIn(-2f, 2f) * 10).roundToInt() / 10f))
     }
-    fun setTemperature(value: Float) {
-        if (value.isFinite()) updateParams(state.value.params.copy(temperature = value.coerceIn(-100f, 100f).roundToInt().toFloat()))
+    fun setTemperature(value: Float) = setSigned(value) { copy(temperature = it) }
+    fun setContrast(value: Float) = setSigned(value) { copy(contrast = it) }
+    fun setHighlights(value: Float) = setSigned(value) { copy(highlights = it) }
+    fun setShadows(value: Float) = setSigned(value) { copy(shadows = it) }
+    fun setSaturation(value: Float) = setSigned(value) { copy(saturation = it) }
+    fun setTint(value: Float) = setSigned(value) { copy(tint = it) }
+    private fun setSigned(value: Float, apply: EditParams.(Float) -> EditParams) {
+        if (value.isFinite()) updateParams(state.value.params.apply(value.coerceIn(-100f, 100f).roundToInt().toFloat()))
     }
     fun reset() { updateParams(EditParams(state.value.params.presetId)) }
     fun toggleOriginal() {

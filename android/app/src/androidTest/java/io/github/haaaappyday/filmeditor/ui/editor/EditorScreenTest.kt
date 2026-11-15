@@ -115,6 +115,23 @@ class EditorScreenTest {
         compose.onNodeWithTag("tab-films").assertIsSelected()
         compose.runOnIdle { assertEquals(.4f, state.params.exposureEv); assertEquals(0, exports) }
     }
+    @Test fun contrastAndTintUseTheSameSliderWithoutChangingTheFilm() {
+        var state by mutableStateOf(ready())
+        compose.setContent { FilmEditorTheme {
+            EditorScreen(state, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
+                onContrast = { state = state.copy(params = state.params.copy(contrast = it)) },
+                onTint = { state = state.copy(params = state.params.copy(tint = it)) })
+        } }
+        tab("adjust")
+        adjust("contrast", 25f)
+        adjust("tint", -10f)
+        compose.runOnIdle {
+            assertEquals("kodak_portra_400", state.params.presetId)
+            assertEquals(25f, state.params.contrast)
+            assertEquals(-10f, state.params.tint)
+            assertEquals(1f, state.params.strength)
+        }
+    }
     @Test fun normalPhoneLayoutGivesMostOfTheWorkspaceToThePhoto() {
         compose.setContent { FilmEditorTheme { EditorScreen(ready(), {}, {}, {}, {}, {}, {}, {}, {}, {}, {}) } }
         val root = compose.onRoot().fetchSemanticsNode().boundsInRoot

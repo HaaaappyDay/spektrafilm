@@ -18,6 +18,14 @@
     <string name="strength_value">%1$d%%</string>
     <string name="exposure_value">%1$+.1f EV</string>
     <string name="temperature_value">%1$+d</string>
+    <string name="signed_value">%1$+d</string>
+    <string name="tint">色调</string>
+    <string name="contrast">对比度</string>
+    <string name="highlights">高光</string>
+    <string name="shadows">阴影</string>
+    <string name="saturation">饱和度</string>
+    <string name="green">偏绿</string>
+    <string name="magenta">偏品红</string>
     <string name="cool">偏冷</string>
     <string name="warm">偏暖</string>
     <string name="compare_original">查看原图</string>

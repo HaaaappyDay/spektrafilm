@@ -1,7 +1,9 @@
 package io.github.haaaappyday.filmeditor.ui.editor
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -24,17 +26,30 @@ import kotlin.math.roundToInt
 @Composable
 fun AdjustmentControls(params: EditParams, enabled: Boolean, onStrength: (Float) -> Unit,
     onExposure: (Float) -> Unit, onTemperature: (Float) -> Unit,
-    selectedAdjustment: String = "strength", onAdjustment: (String) -> Unit = {}, onReset: () -> Unit = {}) {
-    val choices = listOf("strength" to R.string.film_strength, "exposure" to R.string.exposure, "temperature" to R.string.temperature)
+    selectedAdjustment: String = "strength", onAdjustment: (String) -> Unit = {}, onReset: () -> Unit = {},
+    onContrast: (Float) -> Unit = {}, onHighlights: (Float) -> Unit = {}, onShadows: (Float) -> Unit = {},
+    onSaturation: (Float) -> Unit = {}, onTint: (Float) -> Unit = {}) {
+    val choices = listOf("strength" to R.string.film_strength, "exposure" to R.string.exposure, "temperature" to R.string.temperature,
+        "tint" to R.string.tint, "contrast" to R.string.contrast, "highlights" to R.string.highlights,
+        "shadows" to R.string.shadows, "saturation" to R.string.saturation)
     val chosen = choices.firstOrNull { it.first == selectedAdjustment } ?: choices.first()
-    val value = when (chosen.first) { "exposure" -> params.exposureEv; "temperature" -> params.temperature; else -> params.strength }
-    val range = when (chosen.first) { "exposure" -> -2f..2f; "temperature" -> -100f..100f; else -> 0f..1f }
-    val steps = when (chosen.first) { "exposure" -> 39; "temperature" -> 199; else -> 99 }
+    val value = when (chosen.first) {
+        "exposure" -> params.exposureEv
+        "temperature" -> params.temperature
+        "tint" -> params.tint
+        "contrast" -> params.contrast
+        "highlights" -> params.highlights
+        "shadows" -> params.shadows
+        "saturation" -> params.saturation
+        else -> params.strength
+    }
+    val range = when (chosen.first) { "exposure" -> -2f..2f; "strength" -> 0f..1f; else -> -100f..100f }
+    val steps = when (chosen.first) { "exposure" -> 39; "strength" -> 99; else -> 199 }
     val label = stringResource(chosen.second)
     val valueText = when (chosen.first) {
         "exposure" -> stringResource(R.string.exposure_value, params.exposureEv)
-        "temperature" -> stringResource(R.string.temperature_value, params.temperature.roundToInt())
-        else -> stringResource(R.string.strength_value, (params.strength * 100).roundToInt())
+        "strength" -> stringResource(R.string.strength_value, (params.strength * 100).roundToInt())
+        else -> stringResource(R.string.signed_value, value.roundToInt())
     }
     val active = MaterialTheme.colorScheme.primary
     val inactive = MaterialTheme.colorScheme.surfaceContainerHighest
@@ -42,18 +57,17 @@ fun AdjustmentControls(params: EditParams, enabled: Boolean, onStrength: (Float)
     val sliderColors = SliderDefaults.colors(activeTrackColor = active, inactiveTrackColor = inactive,
         activeTickColor = active, inactiveTickColor = inactive)
     Column {
-        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+        Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()), verticalAlignment = Alignment.CenterVertically) {
             for ((tag, name) in choices) {
                 val selected = tag == chosen.first
                 TextButton(onClick = { onAdjustment(tag) }, enabled = enabled,
                     colors = ButtonDefaults.textButtonColors(containerColor = if (selected)
                         MaterialTheme.colorScheme.secondaryContainer else Color.Transparent),
-                    contentPadding = PaddingValues(horizontal = 6.dp, vertical = 8.dp),
-                    modifier = Modifier.weight(1f).heightIn(min = 48.dp).testTag("adjust-$tag").semantics { this.selected = selected }) {
-                    Text(stringResource(name), style = MaterialTheme.typography.labelMedium)
+                    contentPadding = PaddingValues(horizontal = 10.dp, vertical = 8.dp),
+                    modifier = Modifier.heightIn(min = 48.dp).testTag("adjust-$tag").semantics { this.selected = selected }) {
+                    Text(stringResource(name), style = MaterialTheme.typography.labelMedium, maxLines = 1)
                 }
             }
-
         }
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -63,9 +77,15 @@ fun AdjustmentControls(params: EditParams, enabled: Boolean, onStrength: (Float)
                 Text("↺", fontSize = 24.sp)
             }
             Slider(value = value, onValueChange = {
+                val signed = it.roundToInt().toFloat()
                 when (chosen.first) {
                     "exposure" -> onExposure((it * 10).roundToInt() / 10f)
-                    "temperature" -> onTemperature(it.roundToInt().toFloat())
+                    "temperature" -> onTemperature(signed)
+                    "tint" -> onTint(signed)
+                    "contrast" -> onContrast(signed)
+                    "highlights" -> onHighlights(signed)
+                    "shadows" -> onShadows(signed)
+                    "saturation" -> onSaturation(signed)
                     else -> onStrength((it * 100).roundToInt() / 100f)
                 }
             }, valueRange = range, steps = steps, enabled = enabled,
@@ -86,9 +106,14 @@ fun AdjustmentControls(params: EditParams, enabled: Boolean, onStrength: (Float)
                 })
             Text(valueText, style = MaterialTheme.typography.labelLarge)
         }
-        if (chosen.first == "temperature") Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            Text(stringResource(R.string.cool), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            Text(stringResource(R.string.warm), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        val ends = when (chosen.first) {
+            "temperature" -> R.string.cool to R.string.warm
+            "tint" -> R.string.green to R.string.magenta
+            else -> null
+        }
+        if (ends != null) Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            Text(stringResource(ends.first), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(stringResource(ends.second), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
 }

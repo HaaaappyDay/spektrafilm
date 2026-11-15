@@ -68,6 +68,23 @@ class EditorSessionStoreTest {
             }
         } finally { root.deleteRecursively() }
     }
+    @Test fun toneControlsRoundTripAndLegacySessionsDefaultThemToZero() = runBlocking {
+        val root = root(); val files = File(root, "sources"); val state = File(root, "state")
+        try {
+            val store = EditorSessionStore(context, state, files)
+            val edit = StoredEdit(source(files), EditParams("kodak_gold_200", .37f, -.7f, 31f, 12f, -20f, 15f, -40f, 8f))
+            store.save(edit)
+            assertEquals(edit, store.load())
+            val json = JSONObject(File(state, "editor.json").readText())
+            val params = json.getJSONObject("params")
+            listOf("contrast", "highlights", "shadows", "saturation", "tint").forEach { params.remove(it) }
+            File(state, "editor.json").writeText(json.toString())
+            val legacy = store.load()!!.params
+            assertEquals(0f, legacy.contrast); assertEquals(0f, legacy.highlights); assertEquals(0f, legacy.shadows)
+            assertEquals(0f, legacy.saturation); assertEquals(0f, legacy.tint)
+            assertEquals(31f, legacy.temperature)
+        } finally { root.deleteRecursively() }
+    }
     @Test fun silentlyFailedCommitMustNotReportSuccessOrLosePreviousSnapshot() = runBlocking {
         val root = root(); val files = File(root, "sources"); val state = File(root, "state")
         try {
