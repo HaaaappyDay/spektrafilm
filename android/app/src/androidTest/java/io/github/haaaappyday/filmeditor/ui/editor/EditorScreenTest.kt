@@ -30,7 +30,6 @@ class EditorScreenTest {
             input = bitmap, preview = bitmap, initializing = false, servicesReady = true, previewValid = true, exportAvailable = true,
             presets = listOf(FilmPreset("kodak_portra_400", "Portra 400", "p", "0".repeat(64)), FilmPreset("kodak_gold_200", "Gold 200", "g", "1".repeat(64))))
     }
-    private fun tab(name: String) = compose.onNodeWithTag("tab-$name").performClick()
     private fun adjust(name: String, value: Float) {
         compose.onNodeWithTag("adjust-$name").performScrollTo().performClick()
         compose.onNodeWithTag(name).performScrollTo().performSemanticsAction(SemanticsActions.SetProgress) { it(value) }
@@ -42,7 +41,7 @@ class EditorScreenTest {
         } }
         compose.onNodeWithTag("import").assertIsEnabled().assertIsDisplayed().performClick()
         compose.runOnIdle { assertEquals(1, imports) }
-        for (tag in listOf("strength", "exposure", "temperature", "reset", "original", "export", "tab-films")) {
+        for (tag in listOf("strength", "exposure", "temperature", "reset", "original", "export")) {
             compose.onNodeWithTag(tag).assertDoesNotExist()
         }
     }
@@ -58,20 +57,16 @@ class EditorScreenTest {
                 { state = state.copy(showOriginal = !state.showOriginal) }, {},
                 { exports++; state = state.copy(exporting = true) }, {})
         } }
-        tab("adjust")
         adjust("strength", .37f); adjust("exposure", .34f); adjust("temperature", 24f)
-        tab("films")
         compose.onNodeWithTag("preset-kodak_gold_200").performScrollTo().performClick().assertIsSelected()
         compose.runOnIdle { assertEquals(EditParams("kodak_gold_200", .37f, .3f, 24f), state.params) }
         compose.onNodeWithTag("original").performClick().assertIsSelected()
         compose.runOnIdle { assertTrue(state.showOriginal) }
-        tab("adjust")
         compose.onNodeWithTag("reset").performScrollTo().performClick()
         compose.runOnIdle { assertEquals(EditParams("kodak_gold_200"), state.params) }
-        tab("export")
         compose.onNodeWithTag("export").performScrollTo().performClick()
         compose.runOnIdle { assertEquals(1, exports) }
-        for (tag in listOf("import", "original", "tab-films", "tab-adjust", "tab-export", "export")) {
+        for (tag in listOf("import", "original", "preset-kodak_gold_200", "export")) {
             compose.onNodeWithTag(tag).assertIsNotEnabled()
         }
     }
@@ -86,7 +81,6 @@ class EditorScreenTest {
         }
         compose.onNodeWithTag("retry").assertIsDisplayed().performClick()
         compose.runOnIdle { assertEquals(1, retries) }
-        tab("export")
         compose.onNodeWithTag("export").performScrollTo().assertIsNotEnabled()
         compose.onNodeWithText(context.getString(R.string.export_dimensions, 4096, 2731)).performScrollTo().assertIsDisplayed()
         compose.onNodeWithContentDescription(context.getString(R.string.photo_preview)).assertIsDisplayed()
@@ -100,19 +94,18 @@ class EditorScreenTest {
             EditorScreen(state, {}, {}, {}, { state = state.copy(params = state.params.copy(exposureEv = it)) },
                 {}, {}, {}, {}, { exports++ }, {})
         } }
-        tab("export")
         compose.runOnIdle { assertEquals(0, exports); assertEquals(EditParams("kodak_portra_400"), state.params) }
-        tab("adjust")
         compose.onNodeWithTag("strength").assertExists()
         compose.onNodeWithTag("exposure").assertDoesNotExist()
         adjust("exposure", .4f)
         compose.onNodeWithTag("strength").assertDoesNotExist()
         restoration.emulateSavedInstanceStateRestore()
-        compose.onNodeWithTag("tab-adjust").assertIsSelected()
+        compose.onNodeWithTag("adjust-exposure").assertIsSelected()
         compose.onNodeWithTag("exposure").assertExists()
         compose.runOnIdle { assertEquals(.4f, state.params.exposureEv); assertEquals(0, exports) }
         Espresso.pressBack()
-        compose.onNodeWithTag("tab-films").assertIsSelected()
+        compose.onNodeWithTag("adjust-strength").assertIsSelected()
+        compose.onNodeWithTag("strength").assertExists()
         compose.runOnIdle { assertEquals(.4f, state.params.exposureEv); assertEquals(0, exports) }
     }
     @Test fun contrastAndTintUseTheSameSliderWithoutChangingTheFilm() {
@@ -122,7 +115,6 @@ class EditorScreenTest {
                 onContrast = { state = state.copy(params = state.params.copy(contrast = it)) },
                 onTint = { state = state.copy(params = state.params.copy(tint = it)) })
         } }
-        tab("adjust")
         adjust("contrast", 25f)
         adjust("tint", -10f)
         compose.runOnIdle {
@@ -137,7 +129,6 @@ class EditorScreenTest {
         val root = compose.onRoot().fetchSemanticsNode().boundsInRoot
         val preview = compose.onNodeWithTag("photo-workspace").fetchSemanticsNode().boundsInRoot
         assertTrue("Photo workspace $preview in $root", preview.height >= root.height * .55f)
-        compose.onNodeWithTag("tab-films").assertIsDisplayed()
         compose.onNodeWithTag("preset-kodak_portra_400").assertIsDisplayed().assertIsSelected()
         screenshot("editor-workspace")
     }

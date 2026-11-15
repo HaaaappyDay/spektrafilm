@@ -3,11 +3,10 @@ package io.github.haaaappyday.filmeditor.ui.editor
 import android.net.Uri
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -16,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.testTag
@@ -29,26 +27,22 @@ import io.github.haaaappyday.filmeditor.R
 import io.github.haaaappyday.filmeditor.core.EditorErrorCode
 import io.github.haaaappyday.filmeditor.image.ImageSizing
 
-private enum class EditorDestination(val tag: String, val label: Int) {
-    FILMS("films", R.string.tab_films), ADJUST("adjust", R.string.tab_adjust), EXPORT("export", R.string.tab_export)
-}
-
 @Composable
 fun EditorScreen(state: EditorUiState, onImport: () -> Unit, onPreset: (String) -> Unit,
     onStrength: (Float) -> Unit, onExposure: (Float) -> Unit, onTemperature: (Float) -> Unit,
     onReset: () -> Unit, onToggleOriginal: () -> Unit, onRetry: () -> Unit, onExport: () -> Unit, onOpenExport: (Uri) -> Unit,
     onContrast: (Float) -> Unit = {}, onHighlights: (Float) -> Unit = {}, onShadows: (Float) -> Unit = {},
     onSaturation: (Float) -> Unit = {}, onTint: (Float) -> Unit = {}) {
-    var destination by rememberSaveable { mutableStateOf(EditorDestination.FILMS) }
     var adjustment by rememberSaveable { mutableStateOf("strength") }
-    BackHandler(state.source != null && destination != EditorDestination.FILMS && !state.exporting) {
-        destination = EditorDestination.FILMS
+    BackHandler(state.source != null && adjustment != "strength" && !state.exporting) {
+        adjustment = "strength"
     }
     Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
         Column(Modifier.fillMaxSize().safeDrawingPadding()) {
             Row(Modifier.fillMaxWidth().heightIn(min = 56.dp).padding(horizontal = 16.dp),
                 verticalAlignment = Alignment.CenterVertically) {
-                Text(stringResource(R.string.app_name), Modifier.weight(1f), style = MaterialTheme.typography.titleLarge,
+                val film = state.presets.firstOrNull { it.id == state.params.presetId }
+                Text(film?.displayName ?: stringResource(R.string.app_name), Modifier.weight(1f), style = MaterialTheme.typography.titleLarge,
                     maxLines = 1, overflow = TextOverflow.Ellipsis)
                 if (state.source != null) {
                     val importDescription = stringResource(R.string.import_photo)
@@ -78,14 +72,19 @@ fun EditorScreen(state: EditorUiState, onImport: () -> Unit, onPreset: (String) 
                 EmptyEditor(state, onImport, Modifier.weight(1f).fillMaxWidth())
             } else BoxWithConstraints(Modifier.weight(1f).fillMaxWidth()) {
                 val tools: @Composable (Modifier) -> Unit = { modifier ->
-                    EditorTools(state, destination, { destination = it }, adjustment, { adjustment = it }, modifier,
+                    EditorTools(state, adjustment, { adjustment = it }, modifier,
                         onPreset, onStrength, onExposure, onTemperature, onReset, onExport, onOpenExport,
                         onContrast, onHighlights, onShadows, onSaturation, onTint)
+                }
+                val frame = MaterialTheme.colorScheme.primary
+                val photoModifier = Modifier.drawWithContent {
+                    drawContent()
+                    drawRect(frame, style = Stroke(1.dp.toPx()))
                 }
                 if (maxWidth >= 600.dp || maxWidth > maxHeight) {
                     val panelWidth = (maxWidth * .42f).coerceIn(280.dp, 360.dp)
                     Row(Modifier.fillMaxSize()) {
-                        Box(Modifier.weight(1f).fillMaxHeight().testTag("photo-workspace")) {
+                        Box(photoModifier.weight(1f).fillMaxHeight().testTag("photo-workspace")) {
                             BeforeAfterPreview(state, Modifier.fillMaxSize())
                         }
                         tools(Modifier.width(panelWidth).fillMaxHeight())
@@ -93,7 +92,7 @@ fun EditorScreen(state: EditorUiState, onImport: () -> Unit, onPreset: (String) 
                 } else {
                     val panelHeight = (maxHeight * .28f).coerceIn(160.dp, 224.dp).coerceAtMost(maxHeight * .5f)
                     Column(Modifier.fillMaxSize()) {
-                        Box(Modifier.weight(1f).fillMaxWidth().testTag("photo-workspace")) {
+                        Box(photoModifier.weight(1f).fillMaxWidth().testTag("photo-workspace")) {
                             BeforeAfterPreview(state, Modifier.fillMaxSize())
                         }
                         tools(Modifier.fillMaxWidth().height(panelHeight))
@@ -139,61 +138,33 @@ private fun EmptyEditor(state: EditorUiState, onImport: () -> Unit, modifier: Mo
 }
 
 @Composable
-private fun EditorTools(state: EditorUiState, destination: EditorDestination, onDestination: (EditorDestination) -> Unit,
-    adjustment: String, onAdjustment: (String) -> Unit, modifier: Modifier, onPreset: (String) -> Unit,
-    onStrength: (Float) -> Unit, onExposure: (Float) -> Unit, onTemperature: (Float) -> Unit, onReset: () -> Unit,
-    onExport: () -> Unit, onOpenExport: (Uri) -> Unit, onContrast: (Float) -> Unit, onHighlights: (Float) -> Unit,
-    onShadows: (Float) -> Unit, onSaturation: (Float) -> Unit, onTint: (Float) -> Unit) {
-    val filmScroll = rememberScrollState()
-    val adjustmentScroll = rememberScrollState()
-    val exportScroll = rememberScrollState()
-    val scroll = when (destination) {
-        EditorDestination.FILMS -> filmScroll
-        EditorDestination.ADJUST -> adjustmentScroll
-        EditorDestination.EXPORT -> exportScroll
-    }
+private fun EditorTools(state: EditorUiState, adjustment: String, onAdjustment: (String) -> Unit, modifier: Modifier,
+    onPreset: (String) -> Unit, onStrength: (Float) -> Unit, onExposure: (Float) -> Unit, onTemperature: (Float) -> Unit,
+    onReset: () -> Unit, onExport: () -> Unit, onOpenExport: (Uri) -> Unit, onContrast: (Float) -> Unit,
+    onHighlights: (Float) -> Unit, onShadows: (Float) -> Unit, onSaturation: (Float) -> Unit, onTint: (Float) -> Unit) {
+    val scroll = rememberScrollState()
     Surface(modifier, color = MaterialTheme.colorScheme.surface) {
         Column(Modifier.fillMaxSize()) {
             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
             Column(Modifier.weight(1f).fillMaxWidth().verticalScroll(scroll).padding(horizontal = 16.dp, vertical = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                when (destination) {
-                    EditorDestination.FILMS -> PresetSelector(state.presets, state.params.presetId, state.editingEnabled,
-                        onPreset)
-                    EditorDestination.ADJUST -> AdjustmentControls(state.params, state.editingEnabled,
-                        onStrength, onExposure, onTemperature, adjustment, onAdjustment, onReset,
-                        onContrast, onHighlights, onShadows, onSaturation, onTint)
-                    EditorDestination.EXPORT -> {
-                        state.source?.let { source ->
-                            val (width, height) = ImageSizing.fit(source.width, source.height, 4096)
-                            Text(stringResource(R.string.export_dimensions, width, height), style = MaterialTheme.typography.bodyMedium)
-                        }
-                        Button(onClick = onExport, enabled = state.canExport,
-                            modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("export")) {
-                            Text(stringResource(if (state.exporting) R.string.saving_photo else R.string.export_photo))
-                        }
-                        state.exportResult?.let { saved ->
-                            Text(stringResource(R.string.photo_saved), Modifier.semantics { liveRegion = LiveRegionMode.Polite },
-                                style = MaterialTheme.typography.bodyMedium)
-                            OutlinedButton(onClick = { onOpenExport(saved.uri) }, modifier = Modifier.heightIn(min = 48.dp)) {
-                                Text(stringResource(R.string.open_photo))
-                            }
-                        }
-                    }
+                PresetSelector(state.presets, state.params.presetId, state.editingEnabled, onPreset)
+                AdjustmentControls(state.params, state.editingEnabled,
+                    onStrength, onExposure, onTemperature, adjustment, onAdjustment, onReset,
+                    onContrast, onHighlights, onShadows, onSaturation, onTint)
+                state.source?.let { source ->
+                    val (width, height) = ImageSizing.fit(source.width, source.height, 4096)
+                    Text(stringResource(R.string.export_dimensions, width, height), style = MaterialTheme.typography.bodyMedium)
                 }
-            }
-            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-            Row(Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
-                for (item in EditorDestination.entries) {
-                    val chosen = destination == item
-                    Column(Modifier.weight(1f).heightIn(min = 56.dp).selectable(chosen, enabled = !state.exporting,
-                        role = Role.Tab, onClick = { onDestination(item) }).testTag("tab-${item.tag}").padding(vertical = 8.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-                        Text(stringResource(item.label), style = MaterialTheme.typography.labelLarge,
-                            color = if (chosen) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant,
-                            textAlign = TextAlign.Center)
-                        Spacer(Modifier.height(6.dp))
-                        Box(Modifier.width(24.dp).height(2.dp).background(if (chosen) MaterialTheme.colorScheme.primary else Color.Transparent))
+                Button(onClick = onExport, enabled = state.canExport,
+                    modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("export")) {
+                    Text(stringResource(if (state.exporting) R.string.saving_photo else R.string.export_photo))
+                }
+                state.exportResult?.let { saved ->
+                    Text(stringResource(R.string.photo_saved), Modifier.semantics { liveRegion = LiveRegionMode.Polite },
+                        style = MaterialTheme.typography.bodyMedium)
+                    OutlinedButton(onClick = { onOpenExport(saved.uri) }, modifier = Modifier.heightIn(min = 48.dp)) {
+                        Text(stringResource(R.string.open_photo))
                     }
                 }
             }
