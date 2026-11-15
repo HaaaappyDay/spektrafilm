@@ -106,6 +106,11 @@ internal class GlSession(shaderReader: (String) -> String) {
             GL.glUniform1f(uniform("strength"), params.strength)
             GL.glUniform1f(uniform("exposureEv"), params.exposureEv)
             GL.glUniform1f(uniform("temperature"), params.temperature)
+            GL.glUniform1f(uniform("contrast"), params.contrast)
+            GL.glUniform1f(uniform("highlights"), params.highlights)
+            GL.glUniform1f(uniform("shadows"), params.shadows)
+            GL.glUniform1f(uniform("saturation"), params.saturation)
+            GL.glUniform1f(uniform("tint"), params.tint)
             GL.glActiveTexture(GL.GL_TEXTURE1); GL.glBindTexture(GL.GL_TEXTURE_3D, lut)
             for (y in 0 until input.height step edge) for (x in 0 until input.width step edge) {
                 checkCancelled()

@@ -37,11 +37,23 @@ class CubeAndMathTest {
         for (c in 0..2) assertEquals(ColorMath.decode(rgb[c])*2, ColorMath.decode(ev[c]), 1e-6f)
         val warm = ColorMath.transform(rgb, black, EditParams("black", 0f, 0f, 100f))
         assertTrue(warm[0] > rgb[0]); assertEquals(rgb[1], warm[1], 1e-6f); assertTrue(warm[2] < rgb[2])
+        val magenta = ColorMath.transform(rgb, black, EditParams("black", 0f, tint = 100f))
+        assertTrue(magenta[1] < rgb[1]); assertTrue(magenta[0] > rgb[0]); assertTrue(magenta[2] > rgb[2])
+        val flat = ColorMath.transform(floatArrayOf(.05f, .5f, .9f), black, EditParams("black", saturation = -100f))
+        assertEquals(flat[0], flat[1], 1e-5f); assertEquals(flat[1], flat[2], 1e-5f)
+        val lifted = ColorMath.transform(floatArrayOf(.02f, .02f, .02f), black, EditParams("black", shadows = 100f))
+        assertTrue(lifted[0] > .02f)
+        val opened = ColorMath.transform(floatArrayOf(.6f, .6f, .6f), black, EditParams("black", highlights = 100f))
+        assertTrue(opened[0] > .6f)
+        val contrasted = ColorMath.transform(floatArrayOf(.6f, .6f, .6f), black, EditParams("black", contrast = 100f))
+        assertTrue(contrasted[0] > .6f)
     }
     @Test fun invalidParametersAreRejected() {
         val cases = listOf(EditParams("p", Float.NaN), EditParams("p", 1.01f), EditParams("p", -.1f),
             EditParams("p", exposureEv = Float.POSITIVE_INFINITY), EditParams("p", exposureEv = -2.1f),
-            EditParams("p", temperature = 101f), EditParams("p", temperature = Float.NaN))
+            EditParams("p", temperature = 101f), EditParams("p", temperature = Float.NaN),
+            EditParams("p", contrast = 101f), EditParams("p", highlights = Float.NaN), EditParams("p", shadows = -101f),
+            EditParams("p", saturation = Float.NEGATIVE_INFINITY), EditParams("p", tint = 100.1f))
         for (params in cases) {
             try { ColorMath.validate(params); fail("Accepted $params") }
             catch (expected: EditorException) { assertEquals(EditorErrorCode.INVALID_PARAMS, expected.code) }

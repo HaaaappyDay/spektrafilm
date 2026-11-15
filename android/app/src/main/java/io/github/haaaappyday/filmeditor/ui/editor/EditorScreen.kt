@@ -36,7 +36,9 @@ private enum class EditorDestination(val tag: String, val label: Int) {
 @Composable
 fun EditorScreen(state: EditorUiState, onImport: () -> Unit, onPreset: (String) -> Unit,
     onStrength: (Float) -> Unit, onExposure: (Float) -> Unit, onTemperature: (Float) -> Unit,
-    onReset: () -> Unit, onToggleOriginal: () -> Unit, onRetry: () -> Unit, onExport: () -> Unit, onOpenExport: (Uri) -> Unit) {
+    onReset: () -> Unit, onToggleOriginal: () -> Unit, onRetry: () -> Unit, onExport: () -> Unit, onOpenExport: (Uri) -> Unit,
+    onContrast: (Float) -> Unit = {}, onHighlights: (Float) -> Unit = {}, onShadows: (Float) -> Unit = {},
+    onSaturation: (Float) -> Unit = {}, onTint: (Float) -> Unit = {}) {
     var destination by rememberSaveable { mutableStateOf(EditorDestination.FILMS) }
     var adjustment by rememberSaveable { mutableStateOf("strength") }
     BackHandler(state.source != null && destination != EditorDestination.FILMS && !state.exporting) {
@@ -77,7 +79,8 @@ fun EditorScreen(state: EditorUiState, onImport: () -> Unit, onPreset: (String) 
             } else BoxWithConstraints(Modifier.weight(1f).fillMaxWidth()) {
                 val tools: @Composable (Modifier) -> Unit = { modifier ->
                     EditorTools(state, destination, { destination = it }, adjustment, { adjustment = it }, modifier,
-                        onPreset, onStrength, onExposure, onTemperature, onReset, onExport, onOpenExport)
+                        onPreset, onStrength, onExposure, onTemperature, onReset, onExport, onOpenExport,
+                        onContrast, onHighlights, onShadows, onSaturation, onTint)
                 }
                 if (maxWidth >= 600.dp || maxWidth > maxHeight) {
                     val panelWidth = (maxWidth * .42f).coerceIn(280.dp, 360.dp)
@@ -139,7 +142,8 @@ private fun EmptyEditor(state: EditorUiState, onImport: () -> Unit, modifier: Mo
 private fun EditorTools(state: EditorUiState, destination: EditorDestination, onDestination: (EditorDestination) -> Unit,
     adjustment: String, onAdjustment: (String) -> Unit, modifier: Modifier, onPreset: (String) -> Unit,
     onStrength: (Float) -> Unit, onExposure: (Float) -> Unit, onTemperature: (Float) -> Unit, onReset: () -> Unit,
-    onExport: () -> Unit, onOpenExport: (Uri) -> Unit) {
+    onExport: () -> Unit, onOpenExport: (Uri) -> Unit, onContrast: (Float) -> Unit, onHighlights: (Float) -> Unit,
+    onShadows: (Float) -> Unit, onSaturation: (Float) -> Unit, onTint: (Float) -> Unit) {
     val filmScroll = rememberScrollState()
     val adjustmentScroll = rememberScrollState()
     val exportScroll = rememberScrollState()
@@ -157,7 +161,8 @@ private fun EditorTools(state: EditorUiState, destination: EditorDestination, on
                     EditorDestination.FILMS -> PresetSelector(state.presets, state.params.presetId, state.editingEnabled,
                         onPreset)
                     EditorDestination.ADJUST -> AdjustmentControls(state.params, state.editingEnabled,
-                        onStrength, onExposure, onTemperature, adjustment, onAdjustment, onReset)
+                        onStrength, onExposure, onTemperature, adjustment, onAdjustment, onReset,
+                        onContrast, onHighlights, onShadows, onSaturation, onTint)
                     EditorDestination.EXPORT -> {
                         state.source?.let { source ->
                             val (width, height) = ImageSizing.fit(source.width, source.height, 4096)

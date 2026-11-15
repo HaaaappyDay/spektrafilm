@@ -41,12 +41,15 @@ class MainActivity : ComponentActivity() {
                 val state = editor.state.collectAsStateWithLifecycle().value
                 val pick = rememberPhotoPicker(editor::importPhoto)
                 EditorScreen(state, pick, editor::setPreset, editor::setStrength, editor::setExposure,
-                    editor::setTemperature, editor::reset, editor::toggleOriginal, editor::retry, editor::export) { uri ->
-                    try {
-                        startActivity(Intent(Intent.ACTION_VIEW).setDataAndType(uri, "image/jpeg")
-                            .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION))
-                    } catch (_: ActivityNotFoundException) { Toast.makeText(this, R.string.open_photo_failed, Toast.LENGTH_LONG).show() }
-                }
+                    editor::setTemperature, editor::reset, editor::toggleOriginal, editor::retry, editor::export,
+                    onOpenExport = { uri ->
+                        try {
+                            startActivity(Intent(Intent.ACTION_VIEW).setDataAndType(uri, "image/jpeg")
+                                .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION))
+                        } catch (_: ActivityNotFoundException) { Toast.makeText(this, R.string.open_photo_failed, Toast.LENGTH_LONG).show() }
+                    },
+                    onContrast = editor::setContrast, onHighlights = editor::setHighlights, onShadows = editor::setShadows,
+                    onSaturation = editor::setSaturation, onTint = editor::setTint)
             }
         }
     }

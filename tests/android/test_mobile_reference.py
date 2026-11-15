@@ -35,6 +35,13 @@ def test_zero_strength_keeps_exposure_and_temperature():
     warm = transform(rgb, black, 0, 0, 100)
     assert np.all(warm[:, 0] > rgb[:, 0]); assert np.all(warm[:, 2] < rgb[:, 2])
     np.testing.assert_allclose(decode_srgb(warm) / decode_srgb(rgb), np.tile([2**.25, 1, 2**-.25], (2, 1)))
+    magenta = transform(rgb, black, 0, 0, 0, tint=100)
+    assert np.all(magenta[:, 1] < rgb[:, 1]) and np.all(magenta[:, 0] > rgb[:, 0])
+    gray = transform(np.array([[.05, .5, .9]]), black, 0, 0, 0, saturation=-100)
+    assert np.allclose(gray, gray[:, :1])
+    assert np.all(transform(np.array([[.02]*3]), black, 0, 0, 0, shadows=100) > .02)
+    assert np.all(transform(np.array([[.6]*3]), black, 0, 0, 0, highlights=100) > .6)
+    assert np.all(transform(np.array([[.6]*3]), black, 0, 0, 0, contrast=100) > .6)
 
 
 @pytest.mark.parametrize('params', [(float('nan'), 0, 0), (1, float('inf'), 0), (-.1, 0, 0), (1.1, 0, 0), (1, 2.1, 0), (1, 0, 101)])

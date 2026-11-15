@@ -18,6 +18,14 @@
     <string name="strength_value">%1$d%%</string>
     <string name="exposure_value">%1$+.1f EV</string>
     <string name="temperature_value">%1$+d</string>
+    <string name="signed_value">%1$+d</string>
+    <string name="tint">Tint</string>
+    <string name="contrast">Contrast</string>
+    <string name="highlights">Highlights</string>
+    <string name="shadows">Shadows</string>
+    <string name="saturation">Saturation</string>
+    <string name="green">Green</string>
+    <string name="magenta">Magenta</string>
     <string name="cool">Cool</string>
     <string name="warm">Warm</string>
     <string name="compare_original">View original</string>

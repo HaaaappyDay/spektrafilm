@@ -42,12 +42,45 @@ def sample_cube(table, rgb, domain_min=(0, 0, 0), domain_max=(1, 1, 1)):
     return result
 
 
-def transform(rgb, table, strength, exposure_ev, temperature):
-    params = np.array([strength, exposure_ev, temperature])
-    if not np.all(np.isfinite(params)) or not 0 <= strength <= 1 or not -2 <= exposure_ev <= 2 or not -100 <= temperature <= 100:
+def _smooth(edge0, edge1, value):
+    t = np.clip((value - edge0) / (edge1 - edge0), 0, 1)
+    return t * t * (3 - 2 * t)
+
+
+def _grade(linear, contrast, shadows, highlights, saturation):
+    pivot = .18
+    graded = linear
+    if contrast != 0:
+        factor = 1 + contrast / 100
+        safe = np.maximum(graded, 1e-8)
+        curved = 2 ** (np.log2(pivot) + (np.log2(safe) - np.log2(pivot)) * factor)
+        graded = np.where(graded <= 0, 0, curved)
+    if shadows != 0:
+        scale = shadows / 100
+        weight = 1 - _smooth(0, pivot, graded)
+        delta = (1 - graded) * .45 if scale >= 0 else graded
+        graded = graded + scale * weight * delta
+    if highlights != 0:
+        scale = highlights / 100
+        weight = _smooth(pivot, 1, graded)
+        delta = (1 - graded) * .55 if scale >= 0 else graded - pivot
+        graded = graded + scale * weight * delta
+    if saturation != 0:
+        scale = 1 + saturation / 100
+        luma = graded @ np.array([.2126, .7152, .0722])
+        graded = luma[..., None] + (graded - luma[..., None]) * scale
+    return np.clip(graded, 0, 1)
+
+
+def transform(rgb, table, strength, exposure_ev, temperature, contrast=0, highlights=0, shadows=0, saturation=0, tint=0):
+    params = np.array([strength, exposure_ev, temperature, contrast, highlights, shadows, saturation, tint], dtype=np.float64)
+    signed = params[3:]
+    if not np.all(np.isfinite(params)) or not 0 <= strength <= 1 or not -2 <= exposure_ev <= 2 or not -100 <= temperature <= 100 or np.any(np.abs(signed) > 100):
         raise ValueError('Invalid edit parameters')
     t = temperature / 100
-    corrected = np.clip(decode_srgb(rgb) * np.array([2**(.25*t), 1, 2**(-.25*t)]) * 2**exposure_ev, 0, 1)
+    m = tint / 100
+    gains = np.array([2**(.25*t + .125*m), 2**(-.25*m), 2**(-.25*t + .125*m)])
+    corrected = _grade(decode_srgb(rgb) * gains * 2**exposure_ev, contrast, shadows, highlights, saturation)
     film = np.clip(sample_cube(table, encode_srgb(corrected)), 0, 1)
     return encode_srgb((1 - strength) * corrected + strength * decode_srgb(film))
 
