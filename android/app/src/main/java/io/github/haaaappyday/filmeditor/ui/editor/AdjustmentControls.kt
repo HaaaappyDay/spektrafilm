@@ -28,7 +28,7 @@ fun AdjustmentControls(params: EditParams, enabled: Boolean, onStrength: (Float)
     onExposure: (Float) -> Unit, onTemperature: (Float) -> Unit,
     selectedAdjustment: String = "strength", onAdjustment: (String) -> Unit = {}, onReset: () -> Unit = {},
     onContrast: (Float) -> Unit = {}, onHighlights: (Float) -> Unit = {}, onShadows: (Float) -> Unit = {},
-    onSaturation: (Float) -> Unit = {}, onTint: (Float) -> Unit = {}) {
+    onSaturation: (Float) -> Unit = {}, onTint: (Float) -> Unit = {}, modifier: Modifier = Modifier) {
     val choices = listOf("strength" to R.string.film_strength, "exposure" to R.string.exposure, "temperature" to R.string.temperature,
         "tint" to R.string.tint, "contrast" to R.string.contrast, "highlights" to R.string.highlights,
         "shadows" to R.string.shadows, "saturation" to R.string.saturation)
@@ -56,7 +56,7 @@ fun AdjustmentControls(params: EditParams, enabled: Boolean, onStrength: (Float)
     val marker = MaterialTheme.colorScheme.outline
     val sliderColors = SliderDefaults.colors(activeTrackColor = active, inactiveTrackColor = inactive,
         activeTickColor = active, inactiveTickColor = inactive)
-    Column {
+    Column(modifier) {
         Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()), verticalAlignment = Alignment.CenterVertically) {
             for ((tag, name) in choices) {
                 val selected = tag == chosen.first

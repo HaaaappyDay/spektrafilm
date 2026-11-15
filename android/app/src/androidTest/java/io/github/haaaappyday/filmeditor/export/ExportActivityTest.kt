@@ -45,7 +45,6 @@ class ExportActivityTest {
             compose.runOnUiThread { editor.setExposure(.7f); editor.setTemperature(30f) }
             compose.waitUntil(30_000) { editor.state.value.previewValid }
             val expected = editor.state.value.params
-            compose.onNodeWithTag("tab-export").performClick()
             compose.onNodeWithTag("export").performScrollTo().assertIsEnabled()
             // Both actions execute in the same Main turn, before IO can publish a result.
             compose.runOnUiThread {
@@ -119,7 +118,6 @@ class ExportActivityTest {
             compose.waitUntil(20_000) { !editor.state.value.initializing }
             compose.runOnUiThread { editor.importPhoto(fixtureUri("orientation-1.jpg")) }
             compose.waitUntil(20_000) { editor.state.value.previewValid }
-            compose.onNodeWithTag("tab-export").performClick()
             compose.onNodeWithTag("export").performScrollTo().assertIsEnabled().performClick()
             compose.waitUntil(20_000) { editor.state.value.exportResult != null }
             published = editor.state.value.exportResult!!.uri

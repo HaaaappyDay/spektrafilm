@@ -41,13 +41,11 @@ class EditorActivityTest {
         val path = "/sdcard/Download/FilmEditor-test-${UUID.randomUUID()}.mp4"
         val recording = automation.executeShellCommand("screenrecord --bit-rate 1000000 --time-limit 12 $path")
         try {
-            compose.onNodeWithTag("tab-adjust").performClick()
             compose.onNodeWithTag("strength").performScrollTo().performSemanticsAction(SemanticsActions.SetProgress) { it(.4f) }
             compose.onNodeWithTag("adjust-exposure").performScrollTo().performClick()
             compose.onNodeWithTag("exposure").performScrollTo().performSemanticsAction(SemanticsActions.SetProgress) { it(.7f) }
             compose.onNodeWithTag("adjust-temperature").performScrollTo().performClick()
             compose.onNodeWithTag("temperature").performScrollTo().performSemanticsAction(SemanticsActions.SetProgress) { it(30f) }
-            compose.onNodeWithTag("tab-films").performClick()
             compose.onNodeWithTag("preset-kodak_gold_200").performScrollTo().performClick()
             compose.waitUntil(15_000) { editor.state.value.previewValid }
             compose.onNodeWithTag("original").performClick()
@@ -57,13 +55,11 @@ class EditorActivityTest {
             val input = editor.state.value.input
             compose.onNodeWithContentDescription(compose.activity.getString(R.string.photo_preview)).assertIsDisplayed()
             screenshot("editor-portrait")
-            compose.onNodeWithTag("tab-adjust").performClick()
             compose.onNodeWithTag("adjust-exposure").performScrollTo().performClick()
             compose.runOnUiThread { compose.activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE }
             compose.waitUntil(10_000) { compose.activity.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE }
             compose.onNodeWithContentDescription(compose.activity.getString(R.string.photo_preview)).assertIsDisplayed()
             assertSame(input, editor.state.value.input); assertEquals(params, editor.state.value.params)
-            compose.onNodeWithTag("tab-adjust").assertIsSelected()
             compose.onNodeWithTag("adjust-exposure").assertIsSelected()
             compose.onNodeWithTag("exposure").performScrollTo().assertIsDisplayed()
             screenshot("editor-landscape")
