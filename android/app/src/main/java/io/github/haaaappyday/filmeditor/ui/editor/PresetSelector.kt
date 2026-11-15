@@ -20,9 +20,10 @@ import androidx.compose.ui.unit.dp
 import io.github.haaaappyday.filmeditor.core.FilmPreset
 
 @Composable
-fun PresetSelector(presets: List<FilmPreset>, selected: String, enabled: Boolean, onSelect: (String) -> Unit) {
+fun PresetSelector(presets: List<FilmPreset>, selected: String, enabled: Boolean, onSelect: (String) -> Unit,
+    modifier: Modifier = Modifier) {
     val shape = RoundedCornerShape(6.dp)
-    Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+    Row(modifier.fillMaxWidth().horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         for (preset in presets) {
             val chosen = preset.id == selected
             Column(Modifier.width(84.dp).selectable(chosen, enabled = enabled, role = Role.RadioButton,

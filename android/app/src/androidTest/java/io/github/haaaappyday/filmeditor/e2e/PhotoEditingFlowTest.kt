@@ -64,8 +64,9 @@ class PhotoEditingFlowTest {
             val lastId = editor.state.value.presets.last().id
             for (preset in editor.state.value.presets) {
                 slider("strength", .43f); slider("exposure", .6f); slider("temperature", -35f)
-                compose.onNodeWithTag("preset-${preset.id}").performScrollTo().performClick()
-                compose.waitUntil(30_000) { editor.state.value.previewValid }
+                compose.waitUntil(30_000) { editor.state.value.previewValid && !editor.state.value.rendering }
+                compose.onNodeWithTag("preset-${preset.id}").performScrollTo().performSemanticsAction(SemanticsActions.OnClick)
+                compose.waitUntil(30_000) { editor.state.value.params.presetId == preset.id && editor.state.value.previewValid }
                 assertEquals(EditParams(preset.id, .43f, .6f, -35f), editor.state.value.params)
                 compose.onNodeWithTag("original").performClick().assertIsSelected()
                 assertSame(editor.state.value.input, editor.state.value.displayedBitmap)

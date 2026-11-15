@@ -147,9 +147,10 @@ private fun EditorTools(state: EditorUiState, adjustment: String, onAdjustment: 
     Surface(modifier, color = MaterialTheme.colorScheme.surface) {
         Column(Modifier.fillMaxSize()) {
             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+            PresetSelector(state.presets, state.params.presetId, state.editingEnabled, onPreset,
+                Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp))
             Column(Modifier.weight(1f).fillMaxWidth().verticalScroll(scroll).padding(horizontal = 16.dp, vertical = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                PresetSelector(state.presets, state.params.presetId, state.editingEnabled, onPreset)
                 AdjustmentControls(state.params, state.editingEnabled,
                     onStrength, onExposure, onTemperature, adjustment, onAdjustment, onReset,
                     onContrast, onHighlights, onShadows, onSaturation, onTint)
