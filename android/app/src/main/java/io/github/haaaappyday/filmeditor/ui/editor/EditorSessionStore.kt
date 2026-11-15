@@ -114,8 +114,8 @@ class EditorSessionStore(
         val source = json.getJSONObject("source"); val params = json.getJSONObject("params")
         return StoredEdit(ImageSource(source.getString("id"), source.getString("localPath"), source.getInt("width"), source.getInt("height"), source.getString("mimeType")),
             EditParams(params.getString("presetId"), params.getDouble("strength").toFloat(), params.getDouble("exposureEv").toFloat(), params.getDouble("temperature").toFloat(),
-                params.optDouble("contrast").toFloat(), params.optDouble("highlights").toFloat(), params.optDouble("shadows").toFloat(),
-                params.optDouble("saturation").toFloat(), params.optDouble("tint").toFloat()))
+                params.optDouble("contrast", 0.0).toFloat(), params.optDouble("highlights", 0.0).toFloat(), params.optDouble("shadows", 0.0).toFloat(),
+                params.optDouble("saturation", 0.0).toFloat(), params.optDouble("tint", 0.0).toFloat()))
     }
     private companion object {
         val storageMutex = Mutex()
