@@ -1,10 +1,16 @@
 {
   "schemaVersion": 1,
-  "engineCommit": "f37a1604c24abe60d14731754fc0d36abcb2e238",
+  "engineCommit": "9f3656a4de7373b4f316456a37f00a3ea4fc1f09",
+  "preservedCubeCommit": "f37a1604c24abe60d14731754fc0d36abcb2e238",
+  "preservedCubeIds": [
+    "kodak_portra_400",
+    "kodak_gold_200",
+    "kodak_ektar_100"
+  ],
   "generator": {
     "name": "build_android_presets.py",
-    "version": 1,
-    "sha256": "fc6d378d1762e2c3ce17244e6abe173e14e70b631605d5ad848e1aeec099d44b",
+    "version": 2,
+    "sha256": "e1670d19aa5c0c92e923435616c574aa3a2ca2ae17e9bf30c5f469719a45ac7e",
     "python": "3.13.18",
     "dependencies": {
       "spektrafilm": "0.3.4",
@@ -135,6 +141,686 @@
       },
       "ocio_config": false,
       "include_combinations": false
+    },
+    "kodak_portra_160": {
+      "film_profile": "kodak_portra_160",
+      "print_profiles": [
+        "kodak_portra_endura"
+      ],
+      "input_color_space": "sRGB",
+      "output_color_space": "sRGB",
+      "name": "spektrafilm_v034_portra160_portraendura_1lut_srgb_srgb",
+      "topology": "1lut",
+      "resolution": 33,
+      "target": null,
+      "container": "directory",
+      "qa": true,
+      "qa_print_index": null,
+      "input_gamut_compress": {
+        "active": true,
+        "algorithm": "xy",
+        "knee": [
+          0.0,
+          1.0,
+          6.0
+        ]
+      },
+      "stops_above_midgray": null,
+      "output_gamut_compress": {
+        "algorithm": "cam16ucs",
+        "knee": [
+          0.0,
+          1.0,
+          6.0
+        ],
+        "lightness_compression": [
+          0.7,
+          1.0,
+          2.2
+        ]
+      },
+      "ocio_config": false,
+      "include_combinations": false
+    },
+    "kodak_portra_800": {
+      "film_profile": "kodak_portra_800",
+      "print_profiles": [
+        "kodak_portra_endura"
+      ],
+      "input_color_space": "sRGB",
+      "output_color_space": "sRGB",
+      "name": "spektrafilm_v034_portra800_portraendura_1lut_srgb_srgb",
+      "topology": "1lut",
+      "resolution": 33,
+      "target": null,
+      "container": "directory",
+      "qa": true,
+      "qa_print_index": null,
+      "input_gamut_compress": {
+        "active": true,
+        "algorithm": "xy",
+        "knee": [
+          0.0,
+          1.0,
+          6.0
+        ]
+      },
+      "stops_above_midgray": null,
+      "output_gamut_compress": {
+        "algorithm": "cam16ucs",
+        "knee": [
+          0.0,
+          1.0,
+          6.0
+        ],
+        "lightness_compression": [
+          0.7,
+          1.0,
+          2.2
+        ]
+      },
+      "ocio_config": false,
+      "include_combinations": false
+    },
+    "kodak_portra_800_push1": {
+      "film_profile": "kodak_portra_800_push1",
+      "print_profiles": [
+        "kodak_portra_endura"
+      ],
+      "input_color_space": "sRGB",
+      "output_color_space": "sRGB",
+      "name": "spektrafilm_v034_portra800_portraendura_1lut_srgb_srgb",
+      "topology": "1lut",
+      "resolution": 33,
+      "target": null,
+      "container": "directory",
+      "qa": true,
+      "qa_print_index": null,
+      "input_gamut_compress": {
+        "active": true,
+        "algorithm": "xy",
+        "knee": [
+          0.0,
+          1.0,
+          6.0
+        ]
+      },
+      "stops_above_midgray": null,
+      "output_gamut_compress": {
+        "algorithm": "cam16ucs",
+        "knee": [
+          0.0,
+          1.0,
+          6.0
+        ],
+        "lightness_compression": [
+          0.7,
+          1.0,
+          2.2
+        ]
+      },
+      "ocio_config": false,
+      "include_combinations": false
+    },
+    "kodak_portra_800_push2": {
+      "film_profile": "kodak_portra_800_push2",
+      "print_profiles": [
+        "kodak_portra_endura"
+      ],
+      "input_color_space": "sRGB",
+      "output_color_space": "sRGB",
+      "name": "spektrafilm_v034_portra800_portraendura_1lut_srgb_srgb",
+      "topology": "1lut",
+      "resolution": 33,
+      "target": null,
+      "container": "directory",
+      "qa": true,
+      "qa_print_index": null,
+      "input_gamut_compress": {
+        "active": true,
+        "algorithm": "xy",
+        "knee": [
+          0.0,
+          1.0,
+          6.0
+        ]
+      },
+      "stops_above_midgray": null,
+      "output_gamut_compress": {
+        "algorithm": "cam16ucs",
+        "knee": [
+          0.0,
+          1.0,
+          6.0
+        ],
+        "lightness_compression": [
+          0.7,
+          1.0,
+          2.2
+        ]
+      },
+      "ocio_config": false,
+      "include_combinations": false
+    },
+    "kodak_ultramax_400": {
+      "film_profile": "kodak_ultramax_400",
+      "print_profiles": [
+        "kodak_portra_endura"
+      ],
+      "input_color_space": "sRGB",
+      "output_color_space": "sRGB",
+      "name": "spektrafilm_v034_ultramax400_portraendura_1lut_srgb_srgb",
+      "topology": "1lut",
+      "resolution": 33,
+      "target": null,
+      "container": "directory",
+      "qa": true,
+      "qa_print_index": null,
+      "input_gamut_compress": {
+        "active": true,
+        "algorithm": "xy",
+        "knee": [
+          0.0,
+          1.0,
+          6.0
+        ]
+      },
+      "stops_above_midgray": null,
+      "output_gamut_compress": {
+        "algorithm": "cam16ucs",
+        "knee": [
+          0.0,
+          1.0,
+          6.0
+        ],
+        "lightness_compression": [
+          0.7,
+          1.0,
+          2.2
+        ]
+      },
+      "ocio_config": false,
+      "include_combinations": false
+    },
+    "kodak_vision3_50d": {
+      "film_profile": "kodak_vision3_50d",
+      "print_profiles": [
+        "kodak_2383"
+      ],
+      "input_color_space": "sRGB",
+      "output_color_space": "sRGB",
+      "name": "spektrafilm_v034_vision350d_2383_1lut_srgb_srgb",
+      "topology": "1lut",
+      "resolution": 33,
+      "target": null,
+      "container": "directory",
+      "qa": true,
+      "qa_print_index": null,
+      "input_gamut_compress": {
+        "active": true,
+        "algorithm": "xy",
+        "knee": [
+          0.0,
+          1.0,
+          6.0
+        ]
+      },
+      "stops_above_midgray": null,
+      "output_gamut_compress": {
+        "algorithm": "cam16ucs",
+        "knee": [
+          0.0,
+          1.0,
+          6.0
+        ],
+        "lightness_compression": [
+          0.7,
+          1.0,
+          2.2
+        ]
+      },
+      "ocio_config": false,
+      "include_combinations": false
+    },
+    "kodak_vision3_250d": {
+      "film_profile": "kodak_vision3_250d",
+      "print_profiles": [
+        "kodak_2383"
+      ],
+      "input_color_space": "sRGB",
+      "output_color_space": "sRGB",
+      "name": "spektrafilm_v034_vision3250d_2383_1lut_srgb_srgb",
+      "topology": "1lut",
+      "resolution": 33,
+      "target": null,
+      "container": "directory",
+      "qa": true,
+      "qa_print_index": null,
+      "input_gamut_compress": {
+        "active": true,
+        "algorithm": "xy",
+        "knee": [
+          0.0,
+          1.0,
+          6.0
+        ]
+      },
+      "stops_above_midgray": null,
+      "output_gamut_compress": {
+        "algorithm": "cam16ucs",
+        "knee": [
+          0.0,
+          1.0,
+          6.0
+        ],
+        "lightness_compression": [
+          0.7,
+          1.0,
+          2.2
+        ]
+      },
+      "ocio_config": false,
+      "include_combinations": false
+    },
+    "kodak_verita_200d": {
+      "film_profile": "kodak_verita_200d",
+      "print_profiles": [
+        "kodak_2383"
+      ],
+      "input_color_space": "sRGB",
+      "output_color_space": "sRGB",
+      "name": "spektrafilm_v034_verita200d_2383_1lut_srgb_srgb",
+      "topology": "1lut",
+      "resolution": 33,
+      "target": null,
+      "container": "directory",
+      "qa": true,
+      "qa_print_index": null,
+      "input_gamut_compress": {
+        "active": true,
+        "algorithm": "xy",
+        "knee": [
+          0.0,
+          1.0,
+          6.0
+        ]
+      },
+      "stops_above_midgray": null,
+      "output_gamut_compress": {
+        "algorithm": "cam16ucs",
+        "knee": [
+          0.0,
+          1.0,
+          6.0
+        ],
+        "lightness_compression": [
+          0.7,
+          1.0,
+          2.2
+        ]
+      },
+      "ocio_config": false,
+      "include_combinations": false
+    },
+    "kodak_vision3_200t": {
+      "film_profile": "kodak_vision3_200t",
+      "print_profiles": [
+        "kodak_2383"
+      ],
+      "input_color_space": "sRGB",
+      "output_color_space": "sRGB",
+      "name": "spektrafilm_v034_vision3200t_2383_1lut_srgb_srgb",
+      "topology": "1lut",
+      "resolution": 33,
+      "target": null,
+      "container": "directory",
+      "qa": true,
+      "qa_print_index": null,
+      "input_gamut_compress": {
+        "active": true,
+        "algorithm": "xy",
+        "knee": [
+          0.0,
+          1.0,
+          6.0
+        ]
+      },
+      "stops_above_midgray": null,
+      "output_gamut_compress": {
+        "algorithm": "cam16ucs",
+        "knee": [
+          0.0,
+          1.0,
+          6.0
+        ],
+        "lightness_compression": [
+          0.7,
+          1.0,
+          2.2
+        ]
+      },
+      "ocio_config": false,
+      "include_combinations": false
+    },
+    "kodak_vision3_500t": {
+      "film_profile": "kodak_vision3_500t",
+      "print_profiles": [
+        "kodak_2383"
+      ],
+      "input_color_space": "sRGB",
+      "output_color_space": "sRGB",
+      "name": "spektrafilm_v034_vision3500t_2383_1lut_srgb_srgb",
+      "topology": "1lut",
+      "resolution": 33,
+      "target": null,
+      "container": "directory",
+      "qa": true,
+      "qa_print_index": null,
+      "input_gamut_compress": {
+        "active": true,
+        "algorithm": "xy",
+        "knee": [
+          0.0,
+          1.0,
+          6.0
+        ]
+      },
+      "stops_above_midgray": null,
+      "output_gamut_compress": {
+        "algorithm": "cam16ucs",
+        "knee": [
+          0.0,
+          1.0,
+          6.0
+        ],
+        "lightness_compression": [
+          0.7,
+          1.0,
+          2.2
+        ]
+      },
+      "ocio_config": false,
+      "include_combinations": false
+    },
+    "fujifilm_pro_400h": {
+      "film_profile": "fujifilm_pro_400h",
+      "print_profiles": [
+        "fujifilm_crystal_archive_typeii"
+      ],
+      "input_color_space": "sRGB",
+      "output_color_space": "sRGB",
+      "name": "spektrafilm_v034_pro400h_crystalarchive_1lut_srgb_srgb",
+      "topology": "1lut",
+      "resolution": 33,
+      "target": null,
+      "container": "directory",
+      "qa": true,
+      "qa_print_index": null,
+      "input_gamut_compress": {
+        "active": true,
+        "algorithm": "xy",
+        "knee": [
+          0.0,
+          1.0,
+          6.0
+        ]
+      },
+      "stops_above_midgray": null,
+      "output_gamut_compress": {
+        "algorithm": "cam16ucs",
+        "knee": [
+          0.0,
+          1.0,
+          6.0
+        ],
+        "lightness_compression": [
+          0.7,
+          1.0,
+          2.2
+        ]
+      },
+      "ocio_config": false,
+      "include_combinations": false
+    },
+    "fujifilm_c200": {
+      "film_profile": "fujifilm_c200",
+      "print_profiles": [
+        "fujifilm_crystal_archive_typeii"
+      ],
+      "input_color_space": "sRGB",
+      "output_color_space": "sRGB",
+      "name": "spektrafilm_v034_c200_crystalarchive_1lut_srgb_srgb",
+      "topology": "1lut",
+      "resolution": 33,
+      "target": null,
+      "container": "directory",
+      "qa": true,
+      "qa_print_index": null,
+      "input_gamut_compress": {
+        "active": true,
+        "algorithm": "xy",
+        "knee": [
+          0.0,
+          1.0,
+          6.0
+        ]
+      },
+      "stops_above_midgray": null,
+      "output_gamut_compress": {
+        "algorithm": "cam16ucs",
+        "knee": [
+          0.0,
+          1.0,
+          6.0
+        ],
+        "lightness_compression": [
+          0.7,
+          1.0,
+          2.2
+        ]
+      },
+      "ocio_config": false,
+      "include_combinations": false
+    },
+    "fujifilm_xtra_400": {
+      "film_profile": "fujifilm_xtra_400",
+      "print_profiles": [
+        "fujifilm_crystal_archive_typeii"
+      ],
+      "input_color_space": "sRGB",
+      "output_color_space": "sRGB",
+      "name": "spektrafilm_v034_xtra400_crystalarchive_1lut_srgb_srgb",
+      "topology": "1lut",
+      "resolution": 33,
+      "target": null,
+      "container": "directory",
+      "qa": true,
+      "qa_print_index": null,
+      "input_gamut_compress": {
+        "active": true,
+        "algorithm": "xy",
+        "knee": [
+          0.0,
+          1.0,
+          6.0
+        ]
+      },
+      "stops_above_midgray": null,
+      "output_gamut_compress": {
+        "algorithm": "cam16ucs",
+        "knee": [
+          0.0,
+          1.0,
+          6.0
+        ],
+        "lightness_compression": [
+          0.7,
+          1.0,
+          2.2
+        ]
+      },
+      "ocio_config": false,
+      "include_combinations": false
+    },
+    "kodak_ektachrome_100": {
+      "film_profile": "kodak_ektachrome_100",
+      "print_profiles": [
+        "kodak_portra_endura"
+      ],
+      "input_color_space": "sRGB",
+      "output_color_space": "sRGB",
+      "name": "spektrafilm_v034_ektachrome100_portraendura_1lut_srgb_srgb",
+      "topology": "1lut",
+      "resolution": 33,
+      "target": null,
+      "container": "directory",
+      "qa": true,
+      "qa_print_index": null,
+      "input_gamut_compress": {
+        "active": true,
+        "algorithm": "xy",
+        "knee": [
+          0.0,
+          1.0,
+          6.0
+        ]
+      },
+      "stops_above_midgray": null,
+      "output_gamut_compress": {
+        "algorithm": "cam16ucs",
+        "knee": [
+          0.0,
+          1.0,
+          6.0
+        ],
+        "lightness_compression": [
+          0.7,
+          1.0,
+          2.2
+        ]
+      },
+      "ocio_config": false,
+      "include_combinations": false
+    },
+    "kodak_kodachrome_64": {
+      "film_profile": "kodak_kodachrome_64",
+      "print_profiles": [
+        "kodak_portra_endura"
+      ],
+      "input_color_space": "sRGB",
+      "output_color_space": "sRGB",
+      "name": "spektrafilm_v034_kodachrome64_portraendura_1lut_srgb_srgb",
+      "topology": "1lut",
+      "resolution": 33,
+      "target": null,
+      "container": "directory",
+      "qa": true,
+      "qa_print_index": null,
+      "input_gamut_compress": {
+        "active": true,
+        "algorithm": "xy",
+        "knee": [
+          0.0,
+          1.0,
+          6.0
+        ]
+      },
+      "stops_above_midgray": null,
+      "output_gamut_compress": {
+        "algorithm": "cam16ucs",
+        "knee": [
+          0.0,
+          1.0,
+          6.0
+        ],
+        "lightness_compression": [
+          0.7,
+          1.0,
+          2.2
+        ]
+      },
+      "ocio_config": false,
+      "include_combinations": false
+    },
+    "fujifilm_velvia_100": {
+      "film_profile": "fujifilm_velvia_100",
+      "print_profiles": [
+        "kodak_portra_endura"
+      ],
+      "input_color_space": "sRGB",
+      "output_color_space": "sRGB",
+      "name": "spektrafilm_v034_velvia100_portraendura_1lut_srgb_srgb",
+      "topology": "1lut",
+      "resolution": 33,
+      "target": null,
+      "container": "directory",
+      "qa": true,
+      "qa_print_index": null,
+      "input_gamut_compress": {
+        "active": true,
+        "algorithm": "xy",
+        "knee": [
+          0.0,
+          1.0,
+          6.0
+        ]
+      },
+      "stops_above_midgray": null,
+      "output_gamut_compress": {
+        "algorithm": "cam16ucs",
+        "knee": [
+          0.0,
+          1.0,
+          6.0
+        ],
+        "lightness_compression": [
+          0.7,
+          1.0,
+          2.2
+        ]
+      },
+      "ocio_config": false,
+      "include_combinations": false
+    },
+    "fujifilm_provia_100f": {
+      "film_profile": "fujifilm_provia_100f",
+      "print_profiles": [
+        "kodak_portra_endura"
+      ],
+      "input_color_space": "sRGB",
+      "output_color_space": "sRGB",
+      "name": "spektrafilm_v034_provia100f_portraendura_1lut_srgb_srgb",
+      "topology": "1lut",
+      "resolution": 33,
+      "target": null,
+      "container": "directory",
+      "qa": true,
+      "qa_print_index": null,
+      "input_gamut_compress": {
+        "active": true,
+        "algorithm": "xy",
+        "knee": [
+          0.0,
+          1.0,
+          6.0
+        ]
+      },
+      "stops_above_midgray": null,
+      "output_gamut_compress": {
+        "algorithm": "cam16ucs",
+        "knee": [
+          0.0,
+          1.0,
+          6.0
+        ],
+        "lightness_compression": [
+          0.7,
+          1.0,
+          2.2
+        ]
+      },
+      "ocio_config": false,
+      "include_combinations": false
     }
   },
   "presets": [
@@ -145,6 +831,7 @@
       "sha256": "c5ec5786d1ada6d9347cb6ee47c87249643bfa2eb758037fc1cd18215688ed85",
       "filmProfile": "kodak_portra_400",
       "printProfile": "kodak_portra_endura",
+      "scanFilm": false,
       "inputColorSpace": "sRGB",
       "outputColorSpace": "sRGB",
       "resolution": 33,
@@ -167,6 +854,7 @@
       "sha256": "e8729012ef0fb83f3c4c30f422da73b16af5acd99fe960dd1e0dc545fcd2ddc6",
       "filmProfile": "kodak_gold_200",
       "printProfile": "kodak_portra_endura",
+      "scanFilm": false,
       "inputColorSpace": "sRGB",
       "outputColorSpace": "sRGB",
       "resolution": 33,
@@ -189,6 +877,398 @@
       "sha256": "e01828450e028c30f65d6bff3be8838bdc2de7ea7235a2f8d77e68c9795aa697",
       "filmProfile": "kodak_ektar_100",
       "printProfile": "kodak_portra_endura",
+      "scanFilm": false,
+      "inputColorSpace": "sRGB",
+      "outputColorSpace": "sRGB",
+      "resolution": 33,
+      "domainMin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "domainMax": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "attribution": "Generated from spektrafilm by Andrea Volpato and contributors; https://github.com/andreavolpato/spektrafilm. See LICENSE.txt."
+    },
+    {
+      "id": "kodak_portra_160",
+      "displayName": "Kodak Portra 160",
+      "assetPath": "presets/kodak_portra_160.cube",
+      "sha256": "caf3fa1518e9da5e5eea52f352445504f4313e62444d95eb21ba66f6c060684b",
+      "filmProfile": "kodak_portra_160",
+      "printProfile": "kodak_portra_endura",
+      "scanFilm": false,
+      "inputColorSpace": "sRGB",
+      "outputColorSpace": "sRGB",
+      "resolution": 33,
+      "domainMin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "domainMax": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "attribution": "Generated from spektrafilm by Andrea Volpato and contributors; https://github.com/andreavolpato/spektrafilm. See LICENSE.txt."
+    },
+    {
+      "id": "kodak_portra_800",
+      "displayName": "Kodak Portra 800",
+      "assetPath": "presets/kodak_portra_800.cube",
+      "sha256": "9dc6c65691e61720ef717b464549139c4390cad3a5418b1d94788f6fb42cf949",
+      "filmProfile": "kodak_portra_800",
+      "printProfile": "kodak_portra_endura",
+      "scanFilm": false,
+      "inputColorSpace": "sRGB",
+      "outputColorSpace": "sRGB",
+      "resolution": 33,
+      "domainMin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "domainMax": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "attribution": "Generated from spektrafilm by Andrea Volpato and contributors; https://github.com/andreavolpato/spektrafilm. See LICENSE.txt."
+    },
+    {
+      "id": "kodak_portra_800_push1",
+      "displayName": "Kodak Portra 800 (Push 1)",
+      "assetPath": "presets/kodak_portra_800_push1.cube",
+      "sha256": "125c683f3532f761eb1286f693d4c983e3b9eff61855dd578b4f087d83e34b6b",
+      "filmProfile": "kodak_portra_800_push1",
+      "printProfile": "kodak_portra_endura",
+      "scanFilm": false,
+      "inputColorSpace": "sRGB",
+      "outputColorSpace": "sRGB",
+      "resolution": 33,
+      "domainMin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "domainMax": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "attribution": "Generated from spektrafilm by Andrea Volpato and contributors; https://github.com/andreavolpato/spektrafilm. See LICENSE.txt."
+    },
+    {
+      "id": "kodak_portra_800_push2",
+      "displayName": "Kodak Portra 800 (Push 2)",
+      "assetPath": "presets/kodak_portra_800_push2.cube",
+      "sha256": "8dfe3f555c03b36567ebf1d37a90fae49e2c44d394f7be43814581e1cf2a173d",
+      "filmProfile": "kodak_portra_800_push2",
+      "printProfile": "kodak_portra_endura",
+      "scanFilm": false,
+      "inputColorSpace": "sRGB",
+      "outputColorSpace": "sRGB",
+      "resolution": 33,
+      "domainMin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "domainMax": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "attribution": "Generated from spektrafilm by Andrea Volpato and contributors; https://github.com/andreavolpato/spektrafilm. See LICENSE.txt."
+    },
+    {
+      "id": "kodak_ultramax_400",
+      "displayName": "Kodak Ultramax 400",
+      "assetPath": "presets/kodak_ultramax_400.cube",
+      "sha256": "c8404eefbd61f2f9bf2cc654dd6879e153daff3f88b870041048657eb92517eb",
+      "filmProfile": "kodak_ultramax_400",
+      "printProfile": "kodak_portra_endura",
+      "scanFilm": false,
+      "inputColorSpace": "sRGB",
+      "outputColorSpace": "sRGB",
+      "resolution": 33,
+      "domainMin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "domainMax": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "attribution": "Generated from spektrafilm by Andrea Volpato and contributors; https://github.com/andreavolpato/spektrafilm. See LICENSE.txt."
+    },
+    {
+      "id": "kodak_vision3_50d",
+      "displayName": "Kodak Vision3 50D",
+      "assetPath": "presets/kodak_vision3_50d.cube",
+      "sha256": "043367b4a0cf18e2b606ff465786e281123ec5af606f8d65bcd03a776ffb77ae",
+      "filmProfile": "kodak_vision3_50d",
+      "printProfile": "kodak_2383",
+      "scanFilm": false,
+      "inputColorSpace": "sRGB",
+      "outputColorSpace": "sRGB",
+      "resolution": 33,
+      "domainMin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "domainMax": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "attribution": "Generated from spektrafilm by Andrea Volpato and contributors; https://github.com/andreavolpato/spektrafilm. See LICENSE.txt."
+    },
+    {
+      "id": "kodak_vision3_250d",
+      "displayName": "Kodak Vision3 250D",
+      "assetPath": "presets/kodak_vision3_250d.cube",
+      "sha256": "e3e6e5777a0787306b9807a6e8a065777b406b356d9cda07e6318c588b0fd0fa",
+      "filmProfile": "kodak_vision3_250d",
+      "printProfile": "kodak_2383",
+      "scanFilm": false,
+      "inputColorSpace": "sRGB",
+      "outputColorSpace": "sRGB",
+      "resolution": 33,
+      "domainMin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "domainMax": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "attribution": "Generated from spektrafilm by Andrea Volpato and contributors; https://github.com/andreavolpato/spektrafilm. See LICENSE.txt."
+    },
+    {
+      "id": "kodak_verita_200d",
+      "displayName": "Kodak Verita 200D",
+      "assetPath": "presets/kodak_verita_200d.cube",
+      "sha256": "59b79318ae12f01a5b408a75198fc77b96509edbe4fe2fd25f14cb46fd43f46f",
+      "filmProfile": "kodak_verita_200d",
+      "printProfile": "kodak_2383",
+      "scanFilm": false,
+      "inputColorSpace": "sRGB",
+      "outputColorSpace": "sRGB",
+      "resolution": 33,
+      "domainMin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "domainMax": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "attribution": "Generated from spektrafilm by Andrea Volpato and contributors; https://github.com/andreavolpato/spektrafilm. See LICENSE.txt."
+    },
+    {
+      "id": "kodak_vision3_200t",
+      "displayName": "Kodak Vision3 200T",
+      "assetPath": "presets/kodak_vision3_200t.cube",
+      "sha256": "fb380e6bc9033aaf42b62937ff726846e26aea9e7ebbd6321e05049fec2c943e",
+      "filmProfile": "kodak_vision3_200t",
+      "printProfile": "kodak_2383",
+      "scanFilm": false,
+      "inputColorSpace": "sRGB",
+      "outputColorSpace": "sRGB",
+      "resolution": 33,
+      "domainMin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "domainMax": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "attribution": "Generated from spektrafilm by Andrea Volpato and contributors; https://github.com/andreavolpato/spektrafilm. See LICENSE.txt."
+    },
+    {
+      "id": "kodak_vision3_500t",
+      "displayName": "Kodak Vision3 500T",
+      "assetPath": "presets/kodak_vision3_500t.cube",
+      "sha256": "644d402eadcfcbb832c99111f72fa158cdef1b0f1cf864715d1f5481ac58b3b4",
+      "filmProfile": "kodak_vision3_500t",
+      "printProfile": "kodak_2383",
+      "scanFilm": false,
+      "inputColorSpace": "sRGB",
+      "outputColorSpace": "sRGB",
+      "resolution": 33,
+      "domainMin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "domainMax": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "attribution": "Generated from spektrafilm by Andrea Volpato and contributors; https://github.com/andreavolpato/spektrafilm. See LICENSE.txt."
+    },
+    {
+      "id": "fujifilm_pro_400h",
+      "displayName": "Fujifilm Pro 400H",
+      "assetPath": "presets/fujifilm_pro_400h.cube",
+      "sha256": "216e455e47f9756b1cd538bee8668213a2ddc31eef64666b5820bc798d6fca73",
+      "filmProfile": "fujifilm_pro_400h",
+      "printProfile": "fujifilm_crystal_archive_typeii",
+      "scanFilm": false,
+      "inputColorSpace": "sRGB",
+      "outputColorSpace": "sRGB",
+      "resolution": 33,
+      "domainMin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "domainMax": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "attribution": "Generated from spektrafilm by Andrea Volpato and contributors; https://github.com/andreavolpato/spektrafilm. See LICENSE.txt."
+    },
+    {
+      "id": "fujifilm_c200",
+      "displayName": "Fujifilm C200",
+      "assetPath": "presets/fujifilm_c200.cube",
+      "sha256": "34f8241c134b0e156c3063038c2a5bafb23e11f24ae0df4c8707aa8bd64e5215",
+      "filmProfile": "fujifilm_c200",
+      "printProfile": "fujifilm_crystal_archive_typeii",
+      "scanFilm": false,
+      "inputColorSpace": "sRGB",
+      "outputColorSpace": "sRGB",
+      "resolution": 33,
+      "domainMin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "domainMax": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "attribution": "Generated from spektrafilm by Andrea Volpato and contributors; https://github.com/andreavolpato/spektrafilm. See LICENSE.txt."
+    },
+    {
+      "id": "fujifilm_xtra_400",
+      "displayName": "Fujifilm X-Tra 400",
+      "assetPath": "presets/fujifilm_xtra_400.cube",
+      "sha256": "542ec07dcac6a9a543896eb414a952683b7cfeddb888e315e36212524cbc284d",
+      "filmProfile": "fujifilm_xtra_400",
+      "printProfile": "fujifilm_crystal_archive_typeii",
+      "scanFilm": false,
+      "inputColorSpace": "sRGB",
+      "outputColorSpace": "sRGB",
+      "resolution": 33,
+      "domainMin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "domainMax": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "attribution": "Generated from spektrafilm by Andrea Volpato and contributors; https://github.com/andreavolpato/spektrafilm. See LICENSE.txt."
+    },
+    {
+      "id": "kodak_ektachrome_100",
+      "displayName": "Kodak Ektachrome 100",
+      "assetPath": "presets/kodak_ektachrome_100.cube",
+      "sha256": "578b37f68b601f503974543d0d398a9394302e921f3f68103e0a7e0bade0ea98",
+      "filmProfile": "kodak_ektachrome_100",
+      "printProfile": "reversal-scan",
+      "scanFilm": true,
+      "inputColorSpace": "sRGB",
+      "outputColorSpace": "sRGB",
+      "resolution": 33,
+      "domainMin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "domainMax": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "attribution": "Generated from spektrafilm by Andrea Volpato and contributors; https://github.com/andreavolpato/spektrafilm. See LICENSE.txt."
+    },
+    {
+      "id": "kodak_kodachrome_64",
+      "displayName": "Kodak Kodachrome 64",
+      "assetPath": "presets/kodak_kodachrome_64.cube",
+      "sha256": "3933841483631dea699c60526c09ddfbe1b3bbfe486adeba9fbbdf7f416b0478",
+      "filmProfile": "kodak_kodachrome_64",
+      "printProfile": "reversal-scan",
+      "scanFilm": true,
+      "inputColorSpace": "sRGB",
+      "outputColorSpace": "sRGB",
+      "resolution": 33,
+      "domainMin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "domainMax": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "attribution": "Generated from spektrafilm by Andrea Volpato and contributors; https://github.com/andreavolpato/spektrafilm. See LICENSE.txt."
+    },
+    {
+      "id": "fujifilm_velvia_100",
+      "displayName": "Fujifilm Velvia 100",
+      "assetPath": "presets/fujifilm_velvia_100.cube",
+      "sha256": "39dc080c896f05199f8ba5927f901350c0ffc35338fed27f9b8c34b326003091",
+      "filmProfile": "fujifilm_velvia_100",
+      "printProfile": "reversal-scan",
+      "scanFilm": true,
+      "inputColorSpace": "sRGB",
+      "outputColorSpace": "sRGB",
+      "resolution": 33,
+      "domainMin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "domainMax": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "attribution": "Generated from spektrafilm by Andrea Volpato and contributors; https://github.com/andreavolpato/spektrafilm. See LICENSE.txt."
+    },
+    {
+      "id": "fujifilm_provia_100f",
+      "displayName": "Fujifilm Provia 100F",
+      "assetPath": "presets/fujifilm_provia_100f.cube",
+      "sha256": "5d78b24760435450dec729e080605979264dea48bbdaa9c494da71a9988f83fd",
+      "filmProfile": "fujifilm_provia_100f",
+      "printProfile": "reversal-scan",
+      "scanFilm": true,
       "inputColorSpace": "sRGB",
       "outputColorSpace": "sRGB",
       "resolution": 33,

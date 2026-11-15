@@ -5,11 +5,12 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts"))
 from android_v1_report import resource_report
+from build_android_presets import PRESETS
 
 
 def evidence():
     return dict(device=dict(physical=True, profileable=True, debuggable=False), warmupExports=1,
-                warmedPresets=["kodak_portra_400", "kodak_gold_200", "kodak_ektar_100"],
+                warmedPresets=list(PRESETS),
                 resourceSamples=[dict(index=i, phase="baseline" if i == 0 else "import" if i <= 20 else "export",
                     javaBytes=1_000_000 + i * 1024, nativeBytes=2_000_000, graphicsPssBytes=3_000_000,
                     threads=10, fileDescriptors=40) for i in range(31)])

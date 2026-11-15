@@ -333,6 +333,16 @@ def _bundle_output_paths(out_path: Path, container: str) -> tuple[Path, Path | N
 
 
 
+def finalize_lut_params(params):
+    """Digest a LUT bake. Reversal stocks are scanned, matching the GUI."""
+    from spektrafilm.runtime.params_builder import digest_params
+
+    params = digest_params(params)
+    if params.film.is_positive:
+        params.io.scan_film = True
+    return params
+
+
 class BundleBuilder:
     """Build a LUT bundle by driving the spektrafilm pipeline.
 
@@ -780,7 +790,7 @@ class BundleBuilder:
         False because the LUT creator owns the transport encoding.
         """
         # Deferred runtime imports per the README boundary contract.
-        from spektrafilm.runtime.params_builder import digest_params, init_params
+        from spektrafilm.runtime.params_builder import init_params
         from spektrafilm.runtime.pipeline import SimulationPipeline
 
         params = init_params(film_profile=spec.film_profile, print_profile=print_stock)
@@ -791,7 +801,7 @@ class BundleBuilder:
         params.io.output_cctf_encoding = False
         params.io.input_gamut_compress = spec.input_gamut_compress
         params.io.output_gamut_compress = spec.output_gamut_compress
-        params = digest_params(params)
+        params = finalize_lut_params(params)
         return SimulationPipeline(params)
 
     def _compute_density_wire(self, pipeline, spec) -> DensityWire:

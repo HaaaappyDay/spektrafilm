@@ -15,6 +15,7 @@ import io.github.haaaappyday.filmeditor.MainActivity
 import io.github.haaaappyday.filmeditor.R
 import io.github.haaaappyday.filmeditor.core.EditParams
 import io.github.haaaappyday.filmeditor.export.AndroidMediaStoreGateway
+import io.github.haaaappyday.filmeditor.render.ShippedFilmCatalog
 import io.github.haaaappyday.filmeditor.testsupport.*
 import io.github.haaaappyday.filmeditor.ui.editor.EditorViewModel
 import org.json.JSONArray
@@ -58,7 +59,9 @@ class PhotoEditingFlowTest {
             val source = checkNotNull(editor.state.value.source)
             val original = hash(File(source.localPath))
             val results = JSONArray()
-            assertEquals(3, editor.state.value.presets.size)
+            assertEquals(ShippedFilmCatalog.printById.size, editor.state.value.presets.size)
+            val exportedPrints = mutableSetOf<String>()
+            val lastId = editor.state.value.presets.last().id
             for (preset in editor.state.value.presets) {
                 compose.onNodeWithTag("tab-adjust").performClick()
                 slider("strength", .43f); slider("exposure", .6f); slider("temperature", -35f)
@@ -74,21 +77,27 @@ class PhotoEditingFlowTest {
                 compose.onNodeWithTag("reset").performScrollTo().performClick()
                 compose.waitUntil(30_000) { editor.state.value.previewValid }
                 assertEquals(EditParams(preset.id), editor.state.value.params)
-                compose.onNodeWithTag("tab-export").performClick()
-                compose.onNodeWithTag("export").performScrollTo().assertIsEnabled().performClick()
-                compose.waitUntil(90_000) { !editor.state.value.exporting }
-                assertNull(editor.state.value.error)
-                val saved = checkNotNull(editor.state.value.exportResult)
-                outputs.add(saved.uri)
-                assertEquals(4000, saved.width); assertEquals(3000, saved.height)
-                val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
-                context.contentResolver.openInputStream(saved.uri)!!.use { BitmapFactory.decodeStream(it, null, bounds) }
-                assertEquals(4000, bounds.outWidth); assertEquals(3000, bounds.outHeight)
+                val print = ShippedFilmCatalog.printById.getValue(preset.id)
+                val record = JSONObject().put("preset", preset.id).put("manualValuesPreservedOnPresetChange", true)
+                    .put("originalToggle", true).put("resetKeptPreset", true)
+                if (exportedPrints.add(print) || preset.id == lastId) {
+                    compose.onNodeWithTag("tab-export").performClick()
+                    compose.onNodeWithTag("export").performScrollTo().assertIsEnabled().performClick()
+                    compose.waitUntil(90_000) { !editor.state.value.exporting }
+                    assertNull(editor.state.value.error)
+                    val saved = checkNotNull(editor.state.value.exportResult)
+                    outputs.add(saved.uri)
+                    assertEquals(4000, saved.width); assertEquals(3000, saved.height)
+                    val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+                    context.contentResolver.openInputStream(saved.uri)!!.use { BitmapFactory.decodeStream(it, null, bounds) }
+                    assertEquals(4000, bounds.outWidth); assertEquals(3000, bounds.outHeight)
+                    record.put("width", saved.width).put("height", saved.height).put("exported", true)
+                }
                 assertEquals(original, hash(File(source.localPath)))
-                results.put(JSONObject().put("preset", preset.id).put("manualValuesPreservedOnPresetChange", true)
-                    .put("originalToggle", true).put("resetKeptPreset", true).put("width", saved.width).put("height", saved.height))
+                results.put(record)
             }
-            assertEquals(3, outputs.toSet().size)
+            assertEquals(ShippedFilmCatalog.printById.values.toSet().size, exportedPrints.size)
+            assertTrue(outputs.toSet().size >= exportedPrints.size)
             val saved = editor.state.value.exportResult!!
             val bitmap = context.contentResolver.openInputStream(saved.uri)!!.use {
                 BitmapFactory.decodeStream(it, null, BitmapFactory.Options().apply { inSampleSize = 32 })!!

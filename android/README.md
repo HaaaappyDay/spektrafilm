@@ -6,7 +6,7 @@ is tracked in [issue #9](https://github.com/HaaaappyDay/spektrafilm/issues/9).
 ## Current milestone
 
 Editor and gallery export (#13/#14, dependent on renderer #12): import a static SDR JPEG/PNG, choose
-Portra 400, Gold 200 or Ektar 100, adjust film strength/exposure/temperature,
+any shipped camera stock, adjust film strength/exposure/temperature,
 compare with the normalized original and reset the selected film's controls.
 Gain-map JPEGs use their SDR base; direct HLG/PQ inputs are rejected. The source
 is copied privately without modifying the original. Failed/cancelled imports

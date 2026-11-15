@@ -1,6 +1,9 @@
-Android v1 generated assets, schema 1
+Android v2 generated assets, schema 1
 Generated from spektrafilm by Andrea Volpato and contributors; https://github.com/andreavolpato/spektrafilm. See LICENSE.txt.
-Generated/modified artifact: three 33^3 sRGB-to-sRGB combined film/print LUTs.
+Generated/modified artifact: 33^3 sRGB-to-sRGB film LUTs for every FilmStocks camera stock.
+Portra 400, Gold 200, and Ektar 100 cube bytes are preserved from f37a1604c24abe60d14731754fc0d36abcb2e238.
+Other negatives and cine stocks use each profile target_print. Reversal stocks are scanned;
+their BundleSpec names kodak_portra_endura only as an unused carrier profile.
 Explicit native SDR headroom (stops_above_midgray=None); no automatic, spatial or stochastic effects.
-Runtime/model source unchanged. Full effective settings, source commit and dependency versions: manifest.json.
+Full effective settings, source commit and dependency versions: manifest.json.
 The project source uses GPLv3; this directory preserves the separate asset license verbatim in LICENSE.txt.

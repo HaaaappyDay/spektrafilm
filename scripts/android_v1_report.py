@@ -1,7 +1,20 @@
 """Conservative acceptance reporting for measured Android v1 traces."""
 
+import json
 import math
+from pathlib import Path
 import statistics
+
+MANIFEST = Path(__file__).resolve().parents[1] / "android/app/src/main/assets/presets/manifest.json"
+
+
+def shipped_preset_ids():
+    """Ids committed in the app, without importing the color engine."""
+    presets = json.loads(MANIFEST.read_text())["presets"]
+    ids = [preset["id"] for preset in presets]
+    if not ids or len(ids) != len(set(ids)):
+        raise ValueError("committed preset manifest has no unique film ids")
+    return ids
 
 
 def resource_report(evidence):
@@ -15,8 +28,8 @@ def resource_report(evidence):
     warmed = evidence.get("warmedPresets", [])
     if type(evidence.get("warmupExports")) is not int or evidence["warmupExports"] < 1:
         reasons.append("A completed 12MP export must warm export caches before baseline")
-    if len(warmed) != 3 or set(warmed) != {"kodak_portra_400", "kodak_gold_200", "kodak_ektar_100"}:
-        reasons.append("All three preset caches must be warm before baseline")
+    if set(warmed) != set(shipped_preset_ids()):
+        reasons.append("Every shipped preset cache must be warm before baseline")
     samples = evidence.get("resourceSamples", [])
     if len(samples) != 31:
         reasons.append("Baseline, twenty import/edit cycles and ten exports are required")

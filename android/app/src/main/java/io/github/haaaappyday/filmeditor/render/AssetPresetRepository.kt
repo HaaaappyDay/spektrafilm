@@ -40,19 +40,21 @@ class AssetPresetRepository(
     }
     private fun loadManifest(): List<FilmPreset> {
         presets?.let { return it }
-        val manifest = JSONObject(readBounded("presets/manifest.json", 256 * 1024).toString(Charsets.UTF_8))
+        val manifest = JSONObject(readBounded("presets/manifest.json", 1024 * 1024).toString(Charsets.UTF_8))
         if (manifest.getInt("schemaVersion") != 1) unavailable()
         val entries = manifest.getJSONArray("presets")
-        if (entries.length() != 3) unavailable()
+        if (entries.length() != ShippedFilmCatalog.printById.size) unavailable()
         val parsed = (0 until entries.length()).map { index ->
             val item = entries.getJSONObject(index)
             val id = item.getString("id")
             val path = item.getString("assetPath")
             val hash = item.getString("sha256")
-            if (id !in expectedIds || path != "presets/$id.cube" || !hash.matches(Regex("[0-9a-f]{64}")) ||
+            val print = ShippedFilmCatalog.printById[id]
+            if (print == null || path != "presets/$id.cube" || !hash.matches(Regex("[0-9a-f]{64}")) ||
                 item.getString("inputColorSpace") != "sRGB" || item.getString("outputColorSpace") != "sRGB" ||
                 item.getInt("resolution") != 33 || item.getString("filmProfile") != id ||
-                item.getString("printProfile") != "kodak_portra_endura") unavailable()
+                item.getString("printProfile") != print || item.getString("displayName") != ShippedFilmCatalog.displayNames[id] ||
+                !item.has("scanFilm") || item.getBoolean("scanFilm") != (print == ShippedFilmCatalog.REVERSAL_SCAN)) unavailable()
             for ((key, value) in listOf("domainMin" to 0.0, "domainMax" to 1.0)) {
                 val domain = item.getJSONArray(key)
                 if (domain.length() != 3 || (0..2).any { domain.getDouble(it) != value }) unavailable()
@@ -61,7 +63,7 @@ class AssetPresetRepository(
             if (name.isBlank() || name.length > 120) unavailable()
             FilmPreset(id, name, path, hash)
         }
-        if (parsed.map { it.id }.toSet() != expectedIds) unavailable()
+        if (parsed.map { it.id } != ShippedFilmCatalog.printById.keys.toList()) unavailable()
         presets = parsed
         return parsed
     }
@@ -77,7 +79,6 @@ class AssetPresetRepository(
         output.toByteArray()
     }
     private companion object {
-        val expectedIds = setOf("kodak_portra_400", "kodak_gold_200", "kodak_ektar_100")
         fun unavailable(): Nothing = throw EditorException(EditorErrorCode.PRESET_UNAVAILABLE)
     }
 }

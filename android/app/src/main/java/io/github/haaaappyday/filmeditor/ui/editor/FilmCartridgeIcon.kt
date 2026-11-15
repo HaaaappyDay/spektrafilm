@@ -19,12 +19,7 @@ import androidx.compose.ui.platform.testTag
 /** Original, decorative cartridge illustrations; the selector supplies accessible stock names. */
 @Composable
 internal fun FilmCartridgeIcon(id: String, modifier: Modifier = Modifier) {
-    val stock = when (id) {
-        "kodak_portra_400" -> Cartridge("PORTRA", "400", Color(0xFFD7C39D), Color(0xFF7D3844), Color(0xFF373129))
-        "kodak_gold_200" -> Cartridge("GOLD", "200", Color(0xFFF0C335), Color(0xFFAD302A), Color(0xFF382E1E))
-        "kodak_ektar_100" -> Cartridge("EKTAR", "100", Color(0xFFAE343E), Color(0xFFE0BC65), Color(0xFFFFF8EB))
-        else -> Cartridge("FILM", "", Color(0xFFCBCDC8), Color(0xFF68756C), Color(0xFF30342F))
-    }
+    val stock = cartridgeArt(id)
     val text = remember { Paint(Paint.ANTI_ALIAS_FLAG).apply {
         typeface = Typeface.create("sans-serif", Typeface.BOLD)
         textAlign = Paint.Align.CENTER
@@ -58,4 +53,30 @@ internal fun FilmCartridgeIcon(id: String, modifier: Modifier = Modifier) {
     }
 }
 
-private data class Cartridge(val name: String, val iso: String, val paper: Color, val band: Color, val ink: Color)
+internal data class Cartridge(val name: String, val iso: String, val paper: Color, val band: Color, val ink: Color)
+
+internal fun cartridgeArt(id: String): Cartridge = CARTRIDGES[id]
+    ?: Cartridge("FILM", "", Color(0xFFCBCDC8), Color(0xFF68756C), Color(0xFF30342F))
+
+private val CARTRIDGES = mapOf(
+    "kodak_portra_400" to Cartridge("PORTRA", "400", Color(0xFFD7C39D), Color(0xFF7D3844), Color(0xFF373129)),
+    "kodak_gold_200" to Cartridge("GOLD", "200", Color(0xFFF0C335), Color(0xFFAD302A), Color(0xFF382E1E)),
+    "kodak_ektar_100" to Cartridge("EKTAR", "100", Color(0xFFAE343E), Color(0xFFE0BC65), Color(0xFFFFF8EB)),
+    "kodak_portra_160" to Cartridge("PORTRA", "160", Color(0xFFE4D2B0), Color(0xFF8C4A3A), Color(0xFF373129)),
+    "kodak_portra_800" to Cartridge("PORTRA", "800", Color(0xFFC4A882), Color(0xFF6E3140), Color(0xFF373129)),
+    "kodak_portra_800_push1" to Cartridge("800", "+1", Color(0xFFB89468), Color(0xFF5C2838), Color(0xFFFFF4E4)),
+    "kodak_portra_800_push2" to Cartridge("800", "+2", Color(0xFF9A7048), Color(0xFF4A2030), Color(0xFFFFF4E4)),
+    "kodak_ultramax_400" to Cartridge("ULTRA", "400", Color(0xFFF08A2A), Color(0xFF1F4E9A), Color(0xFF2A2118)),
+    "kodak_vision3_50d" to Cartridge("50D", "", Color(0xFFD6E4F0), Color(0xFF1E4D8C), Color(0xFF1A2430)),
+    "kodak_vision3_250d" to Cartridge("250D", "", Color(0xFFB7D0EA), Color(0xFF163E78), Color(0xFF1A2430)),
+    "kodak_verita_200d" to Cartridge("VERITA", "200", Color(0xFFE7D7C2), Color(0xFF2F5E4A), Color(0xFF241C16)),
+    "kodak_vision3_200t" to Cartridge("200T", "", Color(0xFFF0D7A4), Color(0xFF8A3B12), Color(0xFF2A1C12)),
+    "kodak_vision3_500t" to Cartridge("500T", "", Color(0xFFE2B56A), Color(0xFF6A2C10), Color(0xFFFFF6E6)),
+    "fujifilm_pro_400h" to Cartridge("PRO", "400H", Color(0xFFD7E2C8), Color(0xFF1F6B45), Color(0xFF1C241C)),
+    "fujifilm_c200" to Cartridge("C200", "", Color(0xFFE7F0D8), Color(0xFF3E8F4A), Color(0xFF1C241C)),
+    "fujifilm_xtra_400" to Cartridge("X-TRA", "400", Color(0xFFB7D45A), Color(0xFF207A38), Color(0xFF172016)),
+    "kodak_ektachrome_100" to Cartridge("EKTA", "100", Color(0xFFE8EEF2), Color(0xFF3A6EA5), Color(0xFF1C2430)),
+    "kodak_kodachrome_64" to Cartridge("K64", "", Color(0xFFF4E27A), Color(0xFFC4372C), Color(0xFF2A1A14)),
+    "fujifilm_velvia_100" to Cartridge("VELVIA", "100", Color(0xFF2E8B57), Color(0xFFE23B2F), Color(0xFFFFF8EF)),
+    "fujifilm_provia_100f" to Cartridge("PROVIA", "100", Color(0xFFD5DDE3), Color(0xFF5C6B73), Color(0xFF1E2428)),
+)
