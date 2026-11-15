@@ -139,7 +139,6 @@ class PerformanceScenario {
     }
     private fun change(index: Int): JSONObject {
         // Navigation is setup, outside the measured slider input/presentation span.
-        selectControl(R.string.tab_adjust)
         selectControl(R.string.film_strength)
         val label = context.getString(R.string.film_strength)
         var slider = visible { it.contentDescription?.toString() == label }
@@ -201,7 +200,6 @@ class PerformanceScenario {
     }
 
     private fun exportOnce(sampler: MemorySampler): JSONObject {
-        selectControl(R.string.tab_export)
         val label = context.getString(R.string.export_photo)
         var node = visible { it.text?.toString() == label }
         while (!node.isClickable) node = checkNotNull(node.parent)
@@ -230,10 +228,7 @@ class PerformanceScenario {
             await("initialization") { !editor.state.value.initializing }
             importFixture()
             val before = editor.state.value.params
-            repeat(2) {
-                selectControl(R.string.tab_adjust)
-                selectControl(R.string.film_strength)
-            }
+            repeat(2) { selectControl(R.string.film_strength) }
             check(editor.state.value.params == before)
         }
     }
