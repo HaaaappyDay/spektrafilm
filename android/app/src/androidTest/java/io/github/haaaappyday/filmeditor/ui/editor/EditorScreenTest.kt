@@ -128,7 +128,8 @@ class EditorScreenTest {
         compose.setContent { FilmEditorTheme { EditorScreen(ready(), {}, {}, {}, {}, {}, {}, {}, {}, {}, {}) } }
         val root = compose.onRoot().fetchSemanticsNode().boundsInRoot
         val preview = compose.onNodeWithTag("photo-workspace").fetchSemanticsNode().boundsInRoot
-        assertTrue("Photo workspace $preview in $root", preview.height >= root.height * .55f)
+        assertTrue("Photo workspace $preview in $root", preview.height >= root.height * .5f)
+        compose.onNodeWithTag("strength").assertIsDisplayed()
         compose.onNodeWithTag("preset-kodak_portra_400").assertIsDisplayed().assertIsSelected()
         screenshot("editor-workspace")
     }

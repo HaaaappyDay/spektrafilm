@@ -26,10 +26,10 @@ fun PresetSelector(presets: List<FilmPreset>, selected: String, enabled: Boolean
     Row(modifier.fillMaxWidth().horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         for (preset in presets) {
             val chosen = preset.id == selected
-            Column(Modifier.width(84.dp).selectable(chosen, enabled = enabled, role = Role.RadioButton,
+            Column(Modifier.width(72.dp).selectable(chosen, enabled = enabled, role = Role.RadioButton,
                 onClick = { onSelect(preset.id) }).testTag("preset-${preset.id}"),
                 horizontalAlignment = Alignment.CenterHorizontally) {
-                Box(Modifier.fillMaxWidth().height(52.dp).clip(shape)
+                Box(Modifier.fillMaxWidth().height(40.dp).clip(shape)
                     .background(MaterialTheme.colorScheme.surfaceContainerLow)
                     .border(if (chosen) 2.dp else 1.dp, if (chosen) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant, shape),
                     contentAlignment = Alignment.Center) {
